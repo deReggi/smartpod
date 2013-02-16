@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Conf>
+	<Environment>
+		<width>500</width>
+		<height>500</height>
+		<roadBelongingType>inbound</roadBelongingType><!--(inbound ali outgoing) inbound - cesta pripada vozlišču v katerega se izteka; outgoing - cesta pripada vozlišču iz katerega izhaja-->
+	</Environment>
+	<Nodes>
+		<Stations>
+			<Station>
+				<name>Postaja1</name>
+				<x>100</x>
+				<y>100</y>
+				<podCapacity>3</podCapacity>
+				<peopleCapacity>100</peopleCapacity>
+			</Station>
+			<Station>
+				<name>Postaja2</name>
+				<x>200</x>
+				<y>100</y>
+				<podCapacity>3</podCapacity>
+				<peopleCapacity>100</peopleCapacity>
+			</Station>
+		</Stations>
+		<Junctions>
+			<Junction>
+				<name>Križišče1</name>
+				<x>150</x>
+				<y>150</y>
+			</Junction>
+		</Junctions>
+	</Nodes>
+	<Roads>
+		<Road>
+			<name>Pot1</name>
+			<start>Postaja1</start>
+			<end>Križišče1</end>
+		</Road>
+		<Road>
+			<name>Pot2</name>
+			<start>Križišče1</start>
+			<end>Postaja1</end>
+		</Road>
+		<Road>
+			<name>Pot3</name>
+			<start>Postaja2</start>
+			<end>Križišče1</end>
+		</Road>
+			<name>Pot4</name>
+			<start>Križišče1</start>
+			<end>Postaja2</end>
+		</Roads>
+	<Pods>
+		<startPosition>Postaja1</startPosition>
+		<numPods>5</numPods>
+		<capacity>1,2,3</capacity><!--Vzame številke po vrsti za vsak pod posebaj. Če število številk ni enako številu podov je zadnja številka za vse nadalnje pode.-->
+	</Pods>
+</Conf>
