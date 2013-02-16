@@ -18,5 +18,7 @@ public class SmartPod
 	{
 		// TODO code application logic here
 		System.out.println("Hello GIT!");
+                System.out.println("Hello to yu to");
+                System.out.println("Hello again...");
 	}
 }
