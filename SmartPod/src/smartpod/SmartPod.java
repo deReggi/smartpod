@@ -16,10 +16,6 @@ public class SmartPod
 	 */
 	public static void main(String[] args)
 	{
-		// TODO code application logic here
-		System.out.println("Hello GIT!");
-                System.out.println("Hello to yu to");
-                System.out.println("Hello again...");
-                System.out.println("Playing with git in netbeans...");
+            jade.Boot.main(args);
 	}
 }
