@@ -15,7 +15,7 @@ import jade.domain.FIPAAgentManagement.SearchConstraints;
  */
 public class UISAgent extends Agent
 {
-    
+	
     public AMSAgentDescription[] getAllAgents()
     {
         SearchConstraints sc = new SearchConstraints();
@@ -31,7 +31,7 @@ public class UISAgent extends Agent
         {
             System.out.println(e.toString());
             return null;
-        }
+		}
     }
 
     public AMSAgentDescription[] getAllAgentsContaining(String name)
@@ -64,7 +64,7 @@ public class UISAgent extends Agent
         return result;
     }
 
-    public AMSAgentDescription getAgentByName(String name)
+	public AMSAgentDescription getAgentByName(String name)
     {
         AMSAgentDescription[] allAgents = getAllAgents();
 
