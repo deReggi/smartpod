@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package smartpod;
 
 import com.janezfeldin.Math.Point;
@@ -21,7 +17,7 @@ public class StationNodeAgent extends NodeAgent
     private int peopleOnStation;
 
 	/**
-	 * Method that retuns the int representing the maximum number of pods, that can be on this station at a given moment.
+	 * Method that returns the int representing the maximum number of pods, that can be on this station at a given moment.
 	 * @return int stations pod capacity
 	 */
     public int getPodsCapacity()
@@ -30,7 +26,7 @@ public class StationNodeAgent extends NodeAgent
     }
 
 	/**
-	 * Mehtod used to set the maximum number of pods, that can be on this station at a given moment.
+	 * Method used to set the maximum number of pods, that can be on this station at a given moment.
 	 * @param podsCapacity int representing the maximum number of pods.
 	 */
     public void setPodsCapacity(int podsCapacity)
@@ -77,7 +73,7 @@ public class StationNodeAgent extends NodeAgent
 	/**
 	 * Method used for adding people to the station.
 	 * @param n int number of people to be added, if the station has the sufficient capacity
-	 * @return true if the adding operation succeded or false if it failed.
+	 * @return true if the adding operation succeeded or false if it failed.
 	 */
     public boolean addPeopleToStation(int n)
     {
@@ -95,7 +91,7 @@ public class StationNodeAgent extends NodeAgent
 	/**
 	 * Method used for removing people off the station.
 	 * @param n int number of people to be removed, if the station has enough people on it.
-	 * @return true if the adding operation succeded or  false if it failed
+	 * @return true if the adding operation succeeded or  false if it failed
 	 */
     public boolean removePeopleFromStation(int n)
     {
@@ -131,20 +127,20 @@ public class StationNodeAgent extends NodeAgent
     protected void setup()
     {
 		//adds the desired behaviour to the agent
-        addBehaviour(new StationAgentBehaviout(this));
+        addBehaviour(new StationAgentBehaviour(this));
     }
 
 	/**
 	 * Behaviour class for StationAgent.
 	 * It extends CyclicBehaviour.
 	 */
-    public class StationAgentBehaviout extends CyclicBehaviour
+    public class StationAgentBehaviour extends CyclicBehaviour
     {
 		/**
 		 * Constructor for Station's agent behaviour class.
 		 * @param a the agent to which behaviour is being applied.
 		 */
-        public StationAgentBehaviout(Agent a)
+        public StationAgentBehaviour(Agent a)
         {
             super(a);
         }

@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package smartpod;
 
 import com.janezfeldin.Math.Point;
@@ -50,7 +46,7 @@ public class PodAgent extends SPAgent
 	/**
 	 * This method returns the location of the current destination.
 	 *
-	 * @return Point that represents the current destionation (next station or
+	 * @return Point that represents the current destination (next station or
 	 * junction).
 	 */
 	public Point getCurrentDestination()
@@ -61,7 +57,7 @@ public class PodAgent extends SPAgent
 	/**
 	 * This method returns the name of the current destination's node.
 	 *
-	 * @return String that represents the name of the current destionation (next
+	 * @return String that represents the name of the current destination (next
 	 * station or junction).
 	 */
 	public String getCurrentDestinationNodeName()
@@ -85,7 +81,7 @@ public class PodAgent extends SPAgent
 	/**
 	 * This method returns the final destination's position.
 	 *
-	 * @return Point that represents the position of the final destionation
+	 * @return Point that represents the position of the final destination
 	 * (final station).
 	 */
 	public Point getFinalDestination()
@@ -96,7 +92,7 @@ public class PodAgent extends SPAgent
 	/**
 	 * This method is used to set the final destination of the pod.
 	 *
-	 * @param name String that represents the neme of the final pod's destination
+	 * @param name String that represents the name of the final pod's destination
 	 * (station name).
 	 */
 	public void setFinalDestinationNodeName(String name)
@@ -109,7 +105,7 @@ public class PodAgent extends SPAgent
 	/**
 	 * This method returns the final destination's station name.
 	 *
-	 * @return String that represents the name of the final destionation (final
+	 * @return String that represents the name of the final destination (final
 	 * station).
 	 */
 	public String getFinalDestinationNodeName()
@@ -120,7 +116,7 @@ public class PodAgent extends SPAgent
 	/**
 	 * This method is used to set the pod's maximum capacity for people.
 	 *
-	 * @param n int that represents the neme of the final pod's destination
+	 * @param n int that represents the name of the final pod's destination
 	 * (station name).
 	 */
 	public void setPeopleCapacity(int n)
@@ -159,7 +155,7 @@ public class PodAgent extends SPAgent
 	}
 
 	/**
-	 * This method is used to add a passanger on the pod.
+	 * This method is used to add a passenger on the pod.
 	 *
 	 * @return boolean that indicates the success of the operation. If the pod is already full, false get's returned.
 	 */
@@ -177,7 +173,7 @@ public class PodAgent extends SPAgent
 	}
 
 	/**
-	 * This method is used to remove a passanger from the people on board the pod.
+	 * This method is used to remove a passenger from the people on board the pod.
 	 *
 	 * @return boolean that indicates the success of the operation. If the pod is already empty, false get's returned.
 	 */
@@ -195,7 +191,7 @@ public class PodAgent extends SPAgent
 	}
 
 	/**
-	 * This method is used to remove all the passengets currently on board the pod.
+	 * This method is used to remove all the passengers currently on board the pod.
 	 */
 	public void removeAllPassangers()
 	{
@@ -253,7 +249,7 @@ public class PodAgent extends SPAgent
 
 		/**
 		 * Method that performs actions in PodAgentBehaviour class.
-		 * It get's called each time Jade platform has spare resources.
+		 * It gets called each time Jade platform has spare resources.
 		 */
 		@Override
 		public void action()

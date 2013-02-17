@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package smartpod;
 
 import com.janezfeldin.Math.Point;
@@ -27,7 +23,7 @@ public class RoadAgent extends SPAgent
 	 * @param startNode String containing the name of the starting node
 	 * @param endNode String containing the name of the ending node
 	 * @param startPosition Point of the starting position
-	 * @param endPosition Point of the end's location
+	 * @param endPosition Point of the end location
 	 * @param roadBelongingType String containing two possible values: inbound/outgoing. inbound - the road belongs to the node at the end; outgoing - road belongs to the node at the start.
 	 */
 	public RoadAgent(String startNode, String endNode, Point startPosition, Point endPosition, String roadBelongingType)
@@ -40,8 +36,8 @@ public class RoadAgent extends SPAgent
 	}
 	
 	/**
-	 * Method that returns the name of the node at the begining of the road.
-	 * @return String containing the name of the node at the begininig.
+	 * Method that returns the name of the node at the beginning of the road.
+	 * @return String containing the name of the node at the beginning.
 	 */
 	public String getStartNode()
 	{
@@ -59,7 +55,7 @@ public class RoadAgent extends SPAgent
 
 	/**
 	 * Method that returns the start position of the road.
-	 * @return Point containing the position of the begining of the road.
+	 * @return Point containing the position of the beginning of the road.
 	 */
 	public Point getStartPosition()
 	{
@@ -94,7 +90,7 @@ public class RoadAgent extends SPAgent
 	/**
 	 * This method sets the name of the road's starting node.
 	 *
-	 * @param startNode String representing the name of node at the begining of the road.
+	 * @param startNode String representing the name of node at the beginning of the road.
 	 */
 	public void setStartNode(String startNode)
 	{
@@ -134,7 +130,7 @@ public class RoadAgent extends SPAgent
 	}
 	
 	/**
-	 * This method is used to set the method that is used to determain to which node the road belongs.
+	 * This method is used to set the method that is used to determine to which node the road belongs.
 	 * 
 	 * @param roadBelongingType String containing either "inbound" or "outgoing". inbound - the road belongs to the node at the end; outgoing - road belongs to the node at the start
 	 */
@@ -172,7 +168,7 @@ public class RoadAgent extends SPAgent
 
 		/**
 		 * Method that performs actions in RoadAgentBehaviour class.
-		 * It get's called each time Jade platform has spare resources.
+		 * It gets called each time Jade platform has spare resources.
 		 */
 		@Override
 		public void action()

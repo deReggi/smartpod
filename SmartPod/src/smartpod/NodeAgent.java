@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package smartpod;
 
 import com.janezfeldin.Math.Point;
@@ -74,7 +70,7 @@ public class NodeAgent extends SPAgent
 
 		/**
 		 * Method that performs actions in NodeAgentBehaviour class.
-		 * It get's called each time Jade platform has spare resources.
+		 * It gets called each time Jade platform has spare resources.
 		 */
         @Override
         public void action()

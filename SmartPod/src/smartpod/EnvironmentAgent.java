@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package smartpod;
 
 import com.janezfeldin.Display.ImageWindow;
@@ -191,7 +187,7 @@ public class EnvironmentAgent extends SPAgent
 
 		/**
 		 * Method that performs actions in EnvironmentAgentBehaviour class.
-		 * It get's called each time Jade platform has spare resources.
+		 * It gets called each time Jade platform has spare resources.
 		 */
         @Override
         public void action()

@@ -1,6 +1,4 @@
-/SmartPod/nbproject/private/
-
-# NetBeans specific #
+## NetBeans specific
 build/
 nbbuild/
 dist/
@@ -8,16 +6,20 @@ nbdist/
 nbactions.xml
 nb-configuration.xml
 
-#java specific
+## Java specific
 *.class
 
-#netbeans ignore personal stuff 
-nbproject/private/
+## netbeans ignore personal stuff 
+/SmartPod/nbproject/private/
 
-
-## generic files to ignore
+## Generic files to ignore
 *~
 *.lock
 *.DS_Store
 *.swp
 *.out
+
+## Jade
+SmartPod/APDescription.txt
+SmartPod/MTPs-Main-Container.txt
+
