@@ -5,12 +5,17 @@ import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 
 /**
- *
+ * Class for creating PodCommunicator. It extends Communicator.
+ * 
  * @author Andreas
  */
 public class RoadCommunicator extends Communicator
 {
 		
+	/**
+	 * RoadCommunicator constructor initializes the messageTemplate.
+	 * @param road the parent agent
+	 */
 	public RoadCommunicator(RoadAgent road)
 	{
 		this.agent = road;
@@ -24,6 +29,10 @@ public class RoadCommunicator extends Communicator
 						MessageTemplate.MatchOntology(ONTOLOGY_POD_ROAD)));
 	}
 	
+	/**
+	 * Sends the INFORM response message to road weight request.
+	 * @param requestMessage
+	 */
 	public void informRoadWeightRequest(ACLMessage requestMessage)
 	{
 		ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
@@ -33,6 +42,9 @@ public class RoadCommunicator extends Communicator
 		agent.send(msg);
 	}
 	
+	/**
+	 * Sends the INFORM message of road weight to all nodes.
+	 */
 	public void iformRoadWeight()
 	{
 		for (NodeAgent nodeAgent : agent.nodeList)

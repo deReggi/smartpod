@@ -5,12 +5,20 @@ import jade.lang.acl.MessageTemplate;
 import java.util.ArrayList;
 
 /**
- *
+ * The base Communicator class.
+ * 
  * @author Andreas
  */
 public class Communicator
 {
-	// unused
+	/**
+	 * The message ontology.
+	 */
+	public final String ONTOLOGY_NODE_POD	= "node_pod";
+	public final String ONTOLOGY_POD_NODE	= "pod_node";
+	public final String ONTOLOGY_POD_ROAD	= "pod_road";
+	
+	// not yet ussed
 	public final String ONTOLOGY_NODE_NODE	= "co_nn";
 	public final String ONTOLOGY_NODE_ENV	= "co_ne";
 	public final String ONTOLOGY_ENV_NODE	= "co_en";
@@ -22,14 +30,20 @@ public class Communicator
 	public final String ONTOLOGY_ROAD_NODE	= "road_node";
 	public final String ONTOLOGY_NODE_ROAD	= "node_road";
 	
-	// used
-	public final String ONTOLOGY_NODE_POD	= "node_pod";
-	public final String ONTOLOGY_POD_NODE	= "pod_node";
-	public final String ONTOLOGY_POD_ROAD	= "pod_road";
-	
+	/**
+	 * The message template for receiving messages.
+	 */
 	public MessageTemplate messageTemplate	= null;
+	
+	/**
+	 * The parent agent.
+	 */
 	public SPAgent agent = null;
 	
+	/**
+	 * Checks for received messages.
+	 * @return ArrayList of received ACLMessages.
+	 */
 	public ArrayList<ACLMessage> checkMessageBox()
 	{
 		ArrayList<ACLMessage> messages = new ArrayList<ACLMessage>();
@@ -46,6 +60,10 @@ public class Communicator
 		return messages;
 	}
 	
+	/**
+	 * Receives an ACL message from the agent message queue.
+	 * @return A new ACL message, or null if no message is present.
+	 */
 	public ACLMessage receiveMessage()
 	{
 		return agent.receive(messageTemplate);
