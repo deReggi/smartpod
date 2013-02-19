@@ -23,3 +23,6 @@ nb-configuration.xml
 SmartPod/APDescription.txt
 SmartPod/MTPs-Main-Container.txt
 
+## Cross platform project ignore
+SmartPod/nbproject/project.properties
+

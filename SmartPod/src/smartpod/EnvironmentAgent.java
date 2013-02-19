@@ -30,6 +30,8 @@ public class EnvironmentAgent extends SPAgent
     private int mapWidth = 500;
     private int mapHeight = 500;
     private String roadBelongingType = "inbound";
+	
+	
     
 	//Variable declaration for storing lists of agents.
     private ArrayList<PodAgent> podsList = new ArrayList<PodAgent>();
@@ -68,9 +70,7 @@ public class EnvironmentAgent extends SPAgent
 
             //settings for junctions
             tempList = doc.getElementsByTagName("Junction");
-            for (int i = 0;
-                    i < tempList.getLength();
-                    i++)
+            for (int i = 0;i < tempList.getLength();i++)
             {
                 temp = (Element) tempList.item(i);
                 Point tempPoint = new Point(Integer.parseInt(temp.getElementsByTagName("x").item(0).getTextContent()), Integer.parseInt(temp.getElementsByTagName("y").item(0).getTextContent()));
