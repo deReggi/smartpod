@@ -1,5 +1,6 @@
 package smartpod;
 
+import jade.core.AID;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 
@@ -44,12 +45,12 @@ public class PodCommunicator extends Communicator
 	 * Sends the INFORM message that the pod was transfered to the road.
 	 * @param road the road that pod was transferred to.
 	 */
-	public void informPodToRoadTransfer(RoadAgent road)
+	public void informPodToRoadTransfer(AID road)
 	{
 		ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
 		msg.setOntology(ONTOLOGY_POD_ROAD);
 		msg.setContent("add");
-		msg.addReceiver(road.getAID());
+		msg.addReceiver(road);
 		agent.send(msg);
 	}
 	
@@ -57,12 +58,12 @@ public class PodCommunicator extends Communicator
 	 * Sends the INFORM message that the pod was transfered to the node.
 	 * @param road the road that pod was transferred to.
 	 */
-	public void informPodToNodeTransfer(RoadAgent road)
+	public void informPodToNodeTransfer(AID road)
 	{
 		ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
 		msg.setOntology(ONTOLOGY_POD_ROAD);
 		msg.setContent("remove");
-		msg.addReceiver(road.getAID());
+		msg.addReceiver(road);
 		agent.send(msg);
 	}
 	
@@ -70,12 +71,12 @@ public class PodCommunicator extends Communicator
 	 * Sends the REQUEST message for pod transfer to the (destination) node.
 	 * @param node the (destination) node the pod arrives at.
 	 */
-	public void requestPodToNodeTransfer(NodeAgent node)
+	public void requestPodToNodeTransfer(AID node)
 	{
 		ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
 		msg.setOntology(ONTOLOGY_POD_NODE);
-		msg.setContent("request");
-		msg.addReceiver(node.getAID());
+		msg.setContent("pod to node transfer request");
+		msg.addReceiver(node);
 		agent.send(msg);
 	}
 }

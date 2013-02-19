@@ -36,9 +36,9 @@ public class NodeCommunicator extends Communicator
 	{
 		ACLMessage msg = new ACLMessage(ACLMessage.PROPOSE);
 		msg.setOntology(ONTOLOGY_NODE_POD);
-		msg.setContent("go to");
+		msg.setContent("pod to road transfer proposal");
 		msg.addReceiver(pod.getAID());
-		msg.addUserDefinedParameter("road", road.getName());
+		msg.addUserDefinedParameter("road", road.getLocalName());
 		agent.send(msg);
 	}
 	
@@ -50,7 +50,7 @@ public class NodeCommunicator extends Communicator
 	{
 		ACLMessage msg = new ACLMessage(ACLMessage.CONFIRM);
 		msg.setOntology(ONTOLOGY_NODE_POD);
-		msg.setContent("confirm");
+		msg.setContent("pod to node transfer confirm");
 		msg.addReceiver(requestMessage.getSender());
 		agent.send(msg);
 	}

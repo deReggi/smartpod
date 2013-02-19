@@ -181,9 +181,9 @@ public class RoadAgent extends SPAgent
 		{
 			// checks message box
 			ArrayList<ACLMessage> messages = communicator.checkMessageBox();
-			for (ACLMessage message : messages)
+			for (ACLMessage msg : messages)
 			{
-				System.out.println("com-road : "+message.getContent());
+				System.out.println("com-road : "+msg.getContent());
 			}
 //            throw new UnsupportedOperationException("Not supported yet.");
 		}

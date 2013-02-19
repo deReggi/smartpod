@@ -1,6 +1,7 @@
 package smartpod;
 
 import com.janezfeldin.Math.Point;
+import jade.core.AID;
 import jade.core.Agent;
 import jade.core.behaviours.CyclicBehaviour;
 import jade.lang.acl.ACLMessage;
@@ -260,9 +261,24 @@ public class PodAgent extends SPAgent
 		{
 			// checks message box
 			ArrayList<ACLMessage> messages = communicator.checkMessageBox();
-			for (ACLMessage message : messages)
+			for (ACLMessage msg : messages)
 			{
-				System.out.println("com-pod : "+message.getContent());
+				System.out.println("com-pod : "+msg.getContent());
+				
+				if (msg.getContent().equals("pod to road transfer proposal"))
+				{
+					communicator.acceptPodToRoadTransfer(msg);
+					// after a while
+					String roadName = msg.getUserDefinedParameter("road");
+					AID roadAID = getAgentByName(roadName).getName();
+					communicator.informPodToRoadTransfer(roadAID);
+				}
+				else if (msg.getContent().equals("pod to node transfer confirm"))
+				{
+					String roadName = msg.getUserDefinedParameter("road");
+					AID roadAID = getAgentByName(roadName).getName();
+					communicator.informPodToNodeTransfer(roadAID);
+				}
 			}
 			
 			
@@ -277,6 +293,12 @@ public class PodAgent extends SPAgent
 		{
 			if (!arrived)
 			{
+				
+			}
+			else
+			{
+				AID nodeAID = getAgentByName(currentDestinationNodeName).getName();
+				communicator.requestPodToNodeTransfer(nodeAID);
 			}
 		}
 	}
