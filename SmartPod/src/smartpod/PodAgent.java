@@ -3,6 +3,8 @@ package smartpod;
 import com.janezfeldin.Math.Point;
 import jade.core.Agent;
 import jade.core.behaviours.CyclicBehaviour;
+import jade.lang.acl.ACLMessage;
+import java.util.ArrayList;
 
 /**
  * Class for creating pod agent. It extends SPAgent.
@@ -11,6 +13,8 @@ import jade.core.behaviours.CyclicBehaviour;
  */
 public class PodAgent extends SPAgent
 {
+	// agent communicator
+	private PodCommunicator communicator = new PodCommunicator(this);
 
 	//variable declaration for agents properties
 	private Point position;
@@ -254,7 +258,14 @@ public class PodAgent extends SPAgent
 		@Override
 		public void action()
 		{
-
+			// checks message box
+			ArrayList<ACLMessage> messages = communicator.checkMessageBox();
+			for (ACLMessage message : messages)
+			{
+				System.out.println("com-pod : "+message.getContent());
+			}
+			
+			
 			//calls the method for moving the PodAgent
 			move();
 		}

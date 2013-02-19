@@ -3,6 +3,8 @@ package smartpod;
 import com.janezfeldin.Math.Point;
 import jade.core.Agent;
 import jade.core.behaviours.CyclicBehaviour;
+import jade.lang.acl.ACLMessage;
+import java.util.ArrayList;
 
 /**
  * Class for creating junction agent. It extends NodeAgent.
@@ -10,6 +12,9 @@ import jade.core.behaviours.CyclicBehaviour;
  */
 public class JunctionNodeAgent extends NodeAgent
 {
+	// agent communicator
+	private NodeCommunicator communicator = new NodeCommunicator(this);
+	
 	/**
 	 * Constructor for junction agent.
 	 * @param position Point that contains the desired position.
@@ -52,6 +57,12 @@ public class JunctionNodeAgent extends NodeAgent
         @Override
         public void action()
         {
+			// checks message box
+			ArrayList<ACLMessage> messages = communicator.checkMessageBox();
+			for (ACLMessage message : messages)
+			{
+				System.out.println("com-node : "+message.getContent());
+			}
         }
     }
     

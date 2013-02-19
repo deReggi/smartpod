@@ -31,17 +31,9 @@ public class EnvironmentAgent extends SPAgent
     private int mapHeight = 500;
     private String roadBelongingType = "inbound";
 	
-	
-    
-	//Variable declaration for storing lists of agents.
-    private ArrayList<PodAgent> podsList = new ArrayList<PodAgent>();
-    private ArrayList<StationNodeAgent> stationsList = new ArrayList<StationNodeAgent>();
-    private ArrayList<JunctionNodeAgent> junctionList = new ArrayList<JunctionNodeAgent>();
-    private ArrayList<RoadAgent> roadsList = new ArrayList<RoadAgent>();
-
 	/**
 	 * This method gets called when agent is started.
-	 * It loads all the settings from conf.xml file and starts necessary agents. It also adds the desired behvaiour to the agent.
+	 * It loads all the settings from conf.xml file and starts necessary agents. It also adds the desired behaviour to the agent.
 	 */
     @Override
     protected void setup()
@@ -89,8 +81,11 @@ public class EnvironmentAgent extends SPAgent
                 Point tempPoint = new Point(Integer.parseInt(temp.getElementsByTagName("x").item(0).getTextContent()), Integer.parseInt(temp.getElementsByTagName("y").item(0).getTextContent()));
                 StationNodeAgent tempAgent = new StationNodeAgent(tempPoint, Integer.parseInt(temp.getElementsByTagName("podCapacity").item(0).getTextContent()), Integer.parseInt(temp.getElementsByTagName("peopleCapacity").item(0).getTextContent()));
                 ((AgentController) getContainerController().acceptNewAgent(temp.getElementsByTagName("name").item(0).getTextContent(), tempAgent)).start();
-                stationsList.add(tempAgent);
+                stationList.add(tempAgent);
             }
+			
+			nodeList.addAll(junctionList);
+			nodeList.addAll(stationList);
 			
             //settings for roads
             tempList = doc.getElementsByTagName("Road");
@@ -101,7 +96,7 @@ public class EnvironmentAgent extends SPAgent
                 String tempEnd = temp.getElementsByTagName("end").item(0).getTextContent();
                 RoadAgent tempAgent = new RoadAgent(tempStart, tempEnd, getNodesPosition(tempStart), getNodesPosition(tempEnd), roadBelongingType);
                 ((AgentController) getContainerController().acceptNewAgent(temp.getElementsByTagName("name").item(0).getTextContent(), tempAgent)).start();
-                roadsList.add(tempAgent);
+                roadList.add(tempAgent);
             }
 
             //settings for pods
@@ -120,7 +115,7 @@ public class EnvironmentAgent extends SPAgent
                 PodAgent tempAgent = new PodAgent(getNodesPosition(temp.getElementsByTagName("startPosition").item(0).getTextContent()), Integer.parseInt(tempPodsCapacity[j]), 0);
 
                 ((AgentController) getContainerController().acceptNewAgent("Pod" + (i + 1), tempAgent)).start();
-                podsList.add(tempAgent);
+                podList.add(tempAgent);
 
                 j++;
             }
@@ -150,11 +145,11 @@ public class EnvironmentAgent extends SPAgent
     private Point getNodesPosition(String name)
     {
 		//searches for the node with specified name between stations
-        for (int i = 0; i < stationsList.size(); i++)
+        for (int i = 0; i < stationList.size(); i++)
         {
-            if (stationsList.get(i).getLocalName().equals(name))
+            if (stationList.get(i).getLocalName().equals(name))
             {
-                return stationsList.get(i).getPosition();
+                return stationList.get(i).getPosition();
             }
         }
 		
@@ -203,16 +198,16 @@ public class EnvironmentAgent extends SPAgent
             Graphics g = image.getGraphics();
             //representation of pods
             g.setColor(Color.blue);
-            for(int i=0;i<podsList.size();i++)
+            for(int i=0;i<podList.size();i++)
             {
-                Point tempPosition = podsList.get(i).getPosition();
+                Point tempPosition = podList.get(i).getPosition();
                 g.fillRoundRect((int)tempPosition.x-2, (int)tempPosition.y-2, 3, 3, 3, 3);
             }
             //representations of stations
             g.setColor(Color.black);
-            for(int i=0;i<stationsList.size();i++)
+            for(int i=0;i<stationList.size();i++)
             {
-                Point tempPosition = stationsList.get(i).getPosition();
+                Point tempPosition = stationList.get(i).getPosition();
                 g.fillRect((int)tempPosition.x-8, (int)tempPosition.y-8, 15, 15);
             }
             //representation of junctions
@@ -224,10 +219,10 @@ public class EnvironmentAgent extends SPAgent
             }
             //representation of roads
             g.setColor(Color.green);
-            for(int i=0;i<roadsList.size();i++)
+            for(int i=0;i<roadList.size();i++)
             {
-                Point p1 = roadsList.get(i).getStartPosition();
-                Point p2 = roadsList.get(i).getEndPosition();
+                Point p1 = roadList.get(i).getStartPosition();
+                Point p2 = roadList.get(i).getEndPosition();
                 g.drawLine((int)p1.x, (int)p1.y, (int)p2.x, (int)p2.y);
             }
 

@@ -3,6 +3,8 @@ package smartpod;
 import com.janezfeldin.Math.Point;
 import jade.core.Agent;
 import jade.core.behaviours.CyclicBehaviour;
+import jade.lang.acl.ACLMessage;
+import java.util.ArrayList;
 
 /**
  * Class for creating StationAgent. It extends NodeAgent.
@@ -11,6 +13,9 @@ import jade.core.behaviours.CyclicBehaviour;
  */
 public class StationNodeAgent extends NodeAgent
 {
+	// agent communicator
+	private NodeCommunicator communicator = new NodeCommunicator(this);
+	
 	//variable declaration for all the agent's properties
     private int podsCapacity;
     private int peopleCapacity;
@@ -147,11 +152,17 @@ public class StationNodeAgent extends NodeAgent
 		
 		/**
 		 * Method that performs actions in StationAgentBehaviour class.
-		 * It get's called each time Jade platform has spare resources.
+		 * It gets called each time Jade platform has spare resources.
 		 */
         @Override
         public void action()
         {
+			// checks message box
+			ArrayList<ACLMessage> messages = communicator.checkMessageBox();
+			for (ACLMessage message : messages)
+			{
+				System.out.println("com-node : "+message.getContent());
+			}
         }
     }
 }

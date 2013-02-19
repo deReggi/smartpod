@@ -3,6 +3,8 @@ package smartpod;
 import com.janezfeldin.Math.Point;
 import jade.core.Agent;
 import jade.core.behaviours.CyclicBehaviour;
+import jade.lang.acl.ACLMessage;
+import java.util.ArrayList;
 
 /**
  * Class for creating road agent. It extends SPAgent.
@@ -11,12 +13,16 @@ import jade.core.behaviours.CyclicBehaviour;
  */
 public class RoadAgent extends SPAgent
 {
+	// agent communicator
+	private RoadCommunicator communicator = new RoadCommunicator(this);
+	
 	//variable declarations for road's properties
-	private String startNode = "";
-	private String endNode = "";
-	private Point startPosition;
-	private Point endPosition;
-	private String roadBelongingType = "";//(inbound ali outgoing) inbound - the road belongs to the node at the end; outgoing - road belongs to the node at the start
+	public	double	weight	= 0.0;
+	public String startNode = "";
+	public String endNode = "";
+	public Point startPosition;
+	public Point endPosition;
+	public String roadBelongingType = "";//(inbound ali outgoing) inbound - the road belongs to the node at the end; outgoing - road belongs to the node at the start
 
 	/**
 	 * Constructor for road agent.
@@ -173,6 +179,12 @@ public class RoadAgent extends SPAgent
 		@Override
 		public void action()
 		{
+			// checks message box
+			ArrayList<ACLMessage> messages = communicator.checkMessageBox();
+			for (ACLMessage message : messages)
+			{
+				System.out.println("com-road : "+message.getContent());
+			}
 //            throw new UnsupportedOperationException("Not supported yet.");
 		}
 	}
