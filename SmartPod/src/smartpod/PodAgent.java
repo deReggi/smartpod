@@ -259,29 +259,37 @@ public class PodAgent extends SPAgent
 		@Override
 		public void action()
 		{
-			// checks message box
-			ArrayList<ACLMessage> messages = communicator.checkMessageBox();
-			for (ACLMessage msg : messages)
+			// check departure message box
+			ArrayList<ACLMessage> departureMessages = communicator.checkPodDepartureMessages();
+			for (ACLMessage msg : departureMessages)
 			{
-				System.out.println("com-pod : "+msg.getContent());
+				System.out.println("com-node : "+msg.getContent());
 				
-				if (msg.getContent().equals("pod to road transfer proposal"))
-				{
-					communicator.acceptPodToRoadTransfer(msg);
-					// after a while
-					String roadName = msg.getUserDefinedParameter("road");
-					AID roadAID = getAgentByName(roadName).getName();
-					communicator.informPodToRoadTransfer(roadAID);
-				}
-				else if (msg.getContent().equals("pod to node transfer confirm"))
-				{
-					String roadName = msg.getUserDefinedParameter("road");
-					AID roadAID = getAgentByName(roadName).getName();
-					communicator.informPodToNodeTransfer(roadAID);
-				}
+				communicator.acceptPodToRoadDeparture(msg);
+				// after a while
+				String roadName = msg.getUserDefinedParameter("road");
+				AID roadAID = getAgentByName(roadName).getName();
+				communicator.informPodToRoadTransfer(roadAID);
 			}
 			
+			// check arrival message box
+			ArrayList<ACLMessage> arrivalMessages = communicator.checkPodArrivalRequestMessages();
+			for (ACLMessage msg : arrivalMessages)
+			{
+				System.out.println("com-node : "+msg.getContent());
+				
+				String roadName = msg.getUserDefinedParameter("road");
+				AID roadAID = getAgentByName(roadName).getName();
+				communicator.informPodToNodeTransfer(roadAID);
+			}
 			
+			// check other messages
+			ArrayList<ACLMessage> messages = communicator.checkMessageBox(null);
+			for (ACLMessage msg : messages)
+			{
+				System.out.println("com-node : "+msg.getContent());
+			}
+						
 			//calls the method for moving the PodAgent
 			move();
 		}
@@ -298,7 +306,7 @@ public class PodAgent extends SPAgent
 			else
 			{
 				AID nodeAID = getAgentByName(currentDestinationNodeName).getName();
-				communicator.requestPodToNodeTransfer(nodeAID);
+				communicator.requestPodToNodeArrival(nodeAID);
 			}
 		}
 	}

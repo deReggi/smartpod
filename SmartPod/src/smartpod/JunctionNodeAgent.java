@@ -57,16 +57,27 @@ public class JunctionNodeAgent extends NodeAgent
         @Override
         public void action()
         {
-			// checks message box
-			ArrayList<ACLMessage> messages = communicator.checkMessageBox();
-			for (ACLMessage msg : messages)
+			// check departure message box
+			ArrayList<ACLMessage> departureMessages = communicator.checkPodDepartureMessages();
+			for (ACLMessage msg : departureMessages)
+			{
+				System.out.println("com-node : "+msg.getContent());
+			}
+			
+			// check arrival message box
+			ArrayList<ACLMessage> arrivalMessages = communicator.checkPodArrivalRequestMessages();
+			for (ACLMessage msg : arrivalMessages)
 			{
 				System.out.println("com-node : "+msg.getContent());
 				
-				if (msg.getContent().equals("pod to node transfer request"))
-				{
-					communicator.confirmPodToNodeTransfer(msg);
-				}
+				communicator.confirmPodToNodeArrival(msg);
+			}
+			
+			// check other messages
+			ArrayList<ACLMessage> messages = communicator.checkMessageBox(null);
+			for (ACLMessage msg : messages)
+			{
+				System.out.println("com-node : "+msg.getContent());
 			}
         }
     }

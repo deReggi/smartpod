@@ -180,7 +180,7 @@ public class RoadAgent extends SPAgent
 		public void action()
 		{
 			// checks message box
-			ArrayList<ACLMessage> messages = communicator.checkMessageBox();
+			ArrayList<ACLMessage> messages = communicator.checkMessageBox(null);
 			for (ACLMessage msg : messages)
 			{
 				System.out.println("com-road : "+msg.getContent());

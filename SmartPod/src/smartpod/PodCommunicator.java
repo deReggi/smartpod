@@ -12,69 +12,71 @@ import jade.lang.acl.MessageTemplate;
 public class PodCommunicator extends Communicator
 {
 	/**
+	 * The message templates for receiving messages.
+	 */
+	public MessageTemplate podArrivalTemplate	= MessageTemplate.and(
+													MessageTemplate.MatchPerformative(ACLMessage.CONFIRM),
+													MessageTemplate.MatchOntology(ONTOLOGY_POD_NODE_ARRIVAL));
+	public MessageTemplate podDepartureTemplate = MessageTemplate.and(
+													MessageTemplate.MatchPerformative(ACLMessage.REQUEST),
+													MessageTemplate.MatchOntology(ONTOLOGY_POD_NODE_DEPARTURE));
+	
+	/**
 	 * PodCommunicator constructor initializes the messageTemplate.
 	 * @param pod the parent agent
 	 */
 	public PodCommunicator(PodAgent pod)
 	{
 		this.agent = pod;
-		this.messageTemplate = 
-				MessageTemplate.and(
-					MessageTemplate.or(
-						MessageTemplate.MatchPerformative(ACLMessage.PROPOSE),
-						MessageTemplate.MatchPerformative(ACLMessage.CONFIRM)),
-					MessageTemplate.or(
-						MessageTemplate.MatchOntology(ONTOLOGY_NODE_POD), 
-						MessageTemplate.MatchOntology(ONTOLOGY_ROAD_POD)));
 	}
 	
 	/**
-	 * Sends the ACCEPT_PROPOSAL response to pod to road transfer proposal.
+	 * Sends the INFORM response to pod departure to road request.
 	 * @param requestMessage the request message from (source) node.
 	 */
-	public void acceptPodToRoadTransfer(ACLMessage requestMessage)
+	public void acceptPodToRoadDeparture(ACLMessage requestMessage)
 	{
-		ACLMessage msg = new ACLMessage(ACLMessage.ACCEPT_PROPOSAL);
-		msg.setOntology(ONTOLOGY_POD_NODE);
+		ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
+		msg.setOntology(ONTOLOGY_POD_NODE_DEPARTURE);
 		msg.setContent("accept proposal");
 		msg.addReceiver(requestMessage.getSender());
 		agent.send(msg);
 	}
 	
 	/**
-	 * Sends the INFORM message that the pod was transfered to the road.
+	 * Sends the INFORM message that the pod has been transfered to the road.
 	 * @param road the road that pod was transferred to.
 	 */
 	public void informPodToRoadTransfer(AID road)
 	{
 		ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
-		msg.setOntology(ONTOLOGY_POD_ROAD);
-		msg.setContent("add");
+		msg.setOntology(ONTOLOGY_POD_ROAD_ATTACH);
+		msg.setContent("pod attached");
 		msg.addReceiver(road);
 		agent.send(msg);
 	}
 	
 	/**
-	 * Sends the INFORM message that the pod was transfered to the node.
-	 * @param road the road that pod was transferred to.
+	 * Sends the INFORM message that the pod has been transfered to the node.
+	 * @param road the road that pod was transferred from.
 	 */
 	public void informPodToNodeTransfer(AID road)
 	{
 		ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
-		msg.setOntology(ONTOLOGY_POD_ROAD);
-		msg.setContent("remove");
+		msg.setOntology(ONTOLOGY_POD_ROAD_DETACH);
+		msg.setContent("pod detached");
 		msg.addReceiver(road);
 		agent.send(msg);
 	}
 	
 	/**
-	 * Sends the REQUEST message for pod transfer to the (destination) node.
-	 * @param node the (destination) node the pod arrives at.
+	 * Sends the REQUEST message for pod arrival to the node.
+	 * @param node the node the pod arrives at.
 	 */
-	public void requestPodToNodeTransfer(AID node)
+	public void requestPodToNodeArrival(AID node)
 	{
 		ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
-		msg.setOntology(ONTOLOGY_POD_NODE);
+		msg.setOntology(ONTOLOGY_POD_NODE_ARRIVAL);
 		msg.setContent("pod to node transfer request");
 		msg.addReceiver(node);
 		agent.send(msg);
