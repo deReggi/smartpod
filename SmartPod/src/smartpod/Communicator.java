@@ -18,22 +18,8 @@ public class Communicator
 	public final String ONTOLOGY_POD_NODE_DEPARTURE	= "pod_node_departure";
 	public final String ONTOLOGY_POD_ROAD_ATTACH	= "pod_road_attach";
 	public final String ONTOLOGY_POD_ROAD_DETACH	= "pod_road_detach";
-	
-	// not yet ussed
-	public final String ONTOLOGY_NODE_POD	= "node_pod";
-	public final String ONTOLOGY_POD_NODE	= "pod_node";
-	public final String ONTOLOGY_POD_ROAD	= "pod_road";
-	
-	public final String ONTOLOGY_NODE_NODE	= "co_nn";
-	public final String ONTOLOGY_NODE_ENV	= "co_ne";
-	public final String ONTOLOGY_ENV_NODE	= "co_en";
-	public final String ONTOLOGY_ENV_ROAD	= "co_er";
-	public final String ONTOLOGY_ROAD_ENV	= "co_re";
-	
-	public final String ONTOLOGY_POD_ENV	= "pod_environment";
-	public final String ONTOLOGY_ROAD_POD	= "road_pod";
-	public final String ONTOLOGY_ROAD_NODE	= "road_node";
-	public final String ONTOLOGY_NODE_ROAD	= "node_road";
+	public final String ONTOLOGY_ROAD_WEIGHT_UPDATE	= "road_weight_update";
+	public final String ONTOLOGY_PATH_FINDING		= "path_finding";
 		
 	/**
 	 * The parent agent.

@@ -14,13 +14,6 @@ import java.util.ArrayList;
  */
 public class SPAgent extends Agent
 {
-	//Variable declaration for storing lists of agents.
-    protected ArrayList<PodAgent>			podList			= new ArrayList<PodAgent>();
-	protected ArrayList<NodeAgent>			nodeList		= new ArrayList<NodeAgent>();
-    protected ArrayList<StationNodeAgent>	stationList		= new ArrayList<StationNodeAgent>();
-    protected ArrayList<JunctionNodeAgent>	junctionList	= new ArrayList<JunctionNodeAgent>();
-    protected ArrayList<RoadAgent>			roadList		= new ArrayList<RoadAgent>();
-	
 	/**
 	 * This method is used to get all the Agents from the jade's container containing this agent.
 	 * @return AMSAgentDescription array that contains all AMSDescriptions of all the agents.

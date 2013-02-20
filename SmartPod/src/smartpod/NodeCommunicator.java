@@ -25,7 +25,7 @@ public class NodeCommunicator extends Communicator
 	
 	
 	/**
-	 * NodeCommunicator constructor initializes the messageTemplate.
+	 * NodeCommunicator constructor.
 	 * @param node the parent agent.
 	 */
 	public NodeCommunicator(NodeAgent node)

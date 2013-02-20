@@ -19,6 +19,7 @@ public class RoadAgent extends SPAgent
 	
 	//variable declarations for road's properties
 	public ArrayList<AID> registeredPods = new ArrayList<AID>();
+	public AID		weightUpdateDelegate;
 	public double	weight		= 0.0;
 	public String	startNode	= "";
 	public String	endNode		= "";
@@ -219,7 +220,7 @@ public class RoadAgent extends SPAgent
 			boolean wheightHasChanged = recalculateWeight();
 			if (wheightHasChanged)
 			{
-				communicator.iformRoadWeight();
+				communicator.informRoadWeight();
 			}
 		}
 	}

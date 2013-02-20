@@ -263,7 +263,7 @@ public class PodAgent extends SPAgent
 			ArrayList<ACLMessage> departureMessages = communicator.checkPodDepartureMessages();
 			for (ACLMessage msg : departureMessages)
 			{
-				System.out.println("com-node : "+msg.getContent());
+				System.out.println("com-pod : "+msg.getContent());
 				
 				communicator.acceptPodToRoadDeparture(msg);
 				// after a while
@@ -276,7 +276,7 @@ public class PodAgent extends SPAgent
 			ArrayList<ACLMessage> arrivalMessages = communicator.checkPodArrivalRequestMessages();
 			for (ACLMessage msg : arrivalMessages)
 			{
-				System.out.println("com-node : "+msg.getContent());
+				System.out.println("com-pod : "+msg.getContent());
 				
 				String roadName = msg.getUserDefinedParameter("road");
 				AID roadAID = getAgentByName(roadName).getName();
@@ -287,7 +287,7 @@ public class PodAgent extends SPAgent
 			ArrayList<ACLMessage> messages = communicator.checkMessageBox(null);
 			for (ACLMessage msg : messages)
 			{
-				System.out.println("com-node : "+msg.getContent());
+				System.out.println("com-pod : "+msg.getContent());
 			}
 						
 			//calls the method for moving the PodAgent

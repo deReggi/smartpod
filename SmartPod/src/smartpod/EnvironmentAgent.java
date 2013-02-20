@@ -2,8 +2,10 @@ package smartpod;
 
 import com.janezfeldin.Display.ImageWindow;
 import com.janezfeldin.Math.Point;
+import jade.core.AID;
 import jade.core.Agent;
 import jade.core.behaviours.CyclicBehaviour;
+import jade.lang.acl.ACLMessage;
 import jade.wrapper.AgentController;
 import java.awt.Color;
 import java.awt.Graphics;
@@ -23,6 +25,14 @@ import org.w3c.dom.NodeList;
  */
 public class EnvironmentAgent extends SPAgent
 {
+	// agent communicator
+	private EnvironmentCommunicator communicator = new EnvironmentCommunicator(this);
+	
+	//Variable declaration for storing lists of agents.
+    private ArrayList<PodAgent>				podList			= new ArrayList<PodAgent>();
+    private ArrayList<StationNodeAgent>		stationList		= new ArrayList<StationNodeAgent>();
+    private ArrayList<JunctionNodeAgent>	junctionList	= new ArrayList<JunctionNodeAgent>();
+    private ArrayList<RoadAgent>			roadList		= new ArrayList<RoadAgent>();
 
     private ImageWindow window = new ImageWindow();
     private BufferedImage image;
@@ -84,9 +94,6 @@ public class EnvironmentAgent extends SPAgent
                 stationList.add(tempAgent);
             }
 			
-			nodeList.addAll(junctionList);
-			nodeList.addAll(stationList);
-			
             //settings for roads
             tempList = doc.getElementsByTagName("Road");
             for (int i = 0; i < tempList.getLength(); i++)
@@ -96,7 +103,8 @@ public class EnvironmentAgent extends SPAgent
                 String tempEnd = temp.getElementsByTagName("end").item(0).getTextContent();
                 RoadAgent tempAgent = new RoadAgent(tempStart, tempEnd, getNodesPosition(tempStart), getNodesPosition(tempEnd), roadBelongingType);
                 ((AgentController) getContainerController().acceptNewAgent(temp.getElementsByTagName("name").item(0).getTextContent(), tempAgent)).start();
-                roadList.add(tempAgent);
+				tempAgent.weightUpdateDelegate = this.getAID();
+				roadList.add(tempAgent);
             }
 
             //settings for pods
@@ -187,6 +195,36 @@ public class EnvironmentAgent extends SPAgent
         @Override
         public void action()
         {
+			// check road weight update messages
+			ArrayList<ACLMessage> weightMessages = communicator.checkRoadWeightUpdates();
+			for (ACLMessage msg : weightMessages)
+			{
+				System.out.println("com-env : "+msg.getContent());
+			}
+			
+			// check path finding request messages
+			ArrayList<ACLMessage> pathFindingMessages = communicator.checkPathFindingRequests();
+			for (ACLMessage msg : pathFindingMessages)
+			{
+				System.out.println("com-env : "+msg.getContent());
+				
+				// find path
+				RoadAgent dummyRoadToTake = roadList.get(0);
+				communicator.informPathFindingResult(msg, dummyRoadToTake);
+			}
+			
+			// check remaining messages
+			ArrayList<ACLMessage> messages = communicator.checkMessageBox(null);
+			for (ACLMessage msg : messages)
+			{
+				System.out.println("com-env : "+msg.getContent());
+			}
+			
+			
+			/**************************************************
+			 * Drawing
+			 */
+			
             //draws empty background for graphic's representation.
             drawBackground();
 

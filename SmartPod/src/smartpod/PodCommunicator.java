@@ -23,7 +23,7 @@ public class PodCommunicator extends Communicator
 													MessageTemplate.MatchOntology(ONTOLOGY_POD_NODE_DEPARTURE));
 	
 	/**
-	 * PodCommunicator constructor initializes the messageTemplate.
+	 * PodCommunicator constructor.
 	 * @param pod the parent agent
 	 */
 	public PodCommunicator(PodAgent pod)
