@@ -1,6 +1,7 @@
 package smartpod;
 
 import com.janezfeldin.Math.Point;
+import jade.core.AID;
 import jade.core.Agent;
 import jade.core.behaviours.CyclicBehaviour;
 import jade.lang.acl.ACLMessage;
@@ -17,12 +18,13 @@ public class RoadAgent extends SPAgent
 	private RoadCommunicator communicator = new RoadCommunicator(this);
 	
 	//variable declarations for road's properties
-	public	double	weight	= 0.0;
-	public String startNode = "";
-	public String endNode = "";
-	public Point startPosition;
-	public Point endPosition;
-	public String roadBelongingType = "";//(inbound ali outgoing) inbound - the road belongs to the node at the end; outgoing - road belongs to the node at the start
+	public ArrayList<AID> registeredPods = new ArrayList<AID>();
+	public double	weight		= 0.0;
+	public String	startNode	= "";
+	public String	endNode		= "";
+	public Point	startPosition;
+	public Point	endPosition;
+	public String	roadBelongingType = "";//(inbound ali outgoing) inbound - the road belongs to the node at the end; outgoing - road belongs to the node at the start
 
 	/**
 	 * Constructor for road agent.
@@ -144,6 +146,17 @@ public class RoadAgent extends SPAgent
 	{
 		this.roadBelongingType = roadBelongingType;
 	}
+	
+	/**
+	 * This method recalculates road weight.
+	 * @return returns true if weight has been changed. 
+	 */
+	public boolean recalculateWeight()
+	{
+		double oldWeight = weight;
+		weight = 0.5*registeredPods.size();
+		return (oldWeight != weight);
+	}
 
 	/**
 	 * This method gets called when agent is started.
@@ -179,13 +192,35 @@ public class RoadAgent extends SPAgent
 		@Override
 		public void action()
 		{
-			// checks message box
+			// check pod attach messages
+			ArrayList<ACLMessage> attachMessages = communicator.checkPodAttachMessages();
+			for (ACLMessage msg : attachMessages)
+			{
+				System.out.println("com-road : "+msg.getContent());
+				registeredPods.add(msg.getSender());
+			}
+			
+			// check pod detach messages
+			ArrayList<ACLMessage> detachMessages = communicator.checkPodDetachMessages();
+			for (ACLMessage msg : detachMessages)
+			{
+				System.out.println("com-road : "+msg.getContent());
+				registeredPods.remove(msg.getSender());
+			}
+			
+			// check remaining messages
 			ArrayList<ACLMessage> messages = communicator.checkMessageBox(null);
 			for (ACLMessage msg : messages)
 			{
 				System.out.println("com-road : "+msg.getContent());
 			}
-//            throw new UnsupportedOperationException("Not supported yet.");
+			
+			// inform weight change
+			boolean wheightHasChanged = recalculateWeight();
+			if (wheightHasChanged)
+			{
+				communicator.iformRoadWeight();
+			}
 		}
 	}
 }

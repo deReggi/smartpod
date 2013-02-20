@@ -3,6 +3,7 @@ package smartpod;
 import jade.core.AID;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
+import java.util.ArrayList;
 
 /**
  * Class for creating PodCommunicator. It extends Communicator.
@@ -28,6 +29,24 @@ public class PodCommunicator extends Communicator
 	public PodCommunicator(PodAgent pod)
 	{
 		this.agent = pod;
+	}
+	
+	/**
+	 * Checks for received pod departure messages.
+	 * @return ArrayList of received pod departure ACLMessages.
+	 */
+	public ArrayList<ACLMessage> checkPodDepartureMessages()
+	{
+		return checkMessageBox(podDepartureTemplate);
+	}
+	
+	/**
+	 * Checks for received pod arrival messages.
+	 * @return ArrayList of received pod arrival ACLMessages.
+	 */
+	public ArrayList<ACLMessage> checkPodArrivalRequestMessages()
+	{
+		return checkMessageBox(podArrivalTemplate);
 	}
 	
 	/**
