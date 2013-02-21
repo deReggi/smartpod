@@ -98,6 +98,7 @@ public class PodCommunicator extends Communicator
 		msg.setOntology(ONTOLOGY_POD_NODE_ARRIVAL);
 		msg.setContent("pod to node transfer request");
 		msg.addReceiver(node);
+		msg.addUserDefinedParameter("destination", ((PodAgent)agent).getFinalDestinationNodeName());
 		agent.send(msg);
 	}
 }

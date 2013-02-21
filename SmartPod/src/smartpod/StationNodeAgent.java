@@ -1,6 +1,7 @@
 package smartpod;
 
 import com.janezfeldin.Math.Point;
+import jade.core.AID;
 import jade.core.Agent;
 import jade.core.behaviours.CyclicBehaviour;
 import jade.lang.acl.ACLMessage;
@@ -162,6 +163,8 @@ public class StationNodeAgent extends NodeAgent
 			for (ACLMessage msg : departureMessages)
 			{
 				System.out.println("com-node : "+msg.getContent());
+				
+				registeredPods.remove(msg.getSender());
 			}
 			
 			// check arrival message box
@@ -169,8 +172,33 @@ public class StationNodeAgent extends NodeAgent
 			for (ACLMessage msg : arrivalMessages)
 			{
 				System.out.println("com-node : "+msg.getContent());
-				
+								
 				communicator.confirmPodToNodeArrival(msg);
+				
+				registeredPods.add(msg.getSender());
+
+				// check whether final destination has been reached
+				String destination = msg.getUserDefinedParameter("destination");
+				if (destination.equals(getLocalName()))
+				{
+					// the pod has reached the final destination
+				}
+				else
+				{
+					communicator.requestPathFinding(msg.getSender().getLocalName(), destination);
+				}
+				
+			}
+			
+			// check path finding result message box
+			ArrayList<ACLMessage> pathFinding = communicator.checkPathFindingResultMessages();
+			for (ACLMessage msg : pathFinding)
+			{
+				System.out.println("com-node : "+msg.getContent());
+				
+				AID podAID = getAgentByName(msg.getUserDefinedParameter("pod")).getName();
+				AID roadAID = getAgentByName(msg.getUserDefinedParameter("road_to_take")).getName();
+				communicator.proposePodToRoadDeparture(podAID, roadAID);
 			}
 			
 			// check other messages

@@ -59,6 +59,7 @@ public class EnvironmentCommunicator extends Communicator
 		msg.setOntology(ONTOLOGY_PATH_FINDING);
 		msg.setContent("optimal path found");
 		msg.addReceiver(requestMessage.getSender());
+		msg.addUserDefinedParameter("pod", msg.getUserDefinedParameter("pod"));
 		msg.addUserDefinedParameter("road_to_take", roadToTake.getLocalName());
 		agent.send(msg);
 	}

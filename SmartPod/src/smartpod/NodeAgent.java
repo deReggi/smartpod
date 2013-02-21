@@ -1,8 +1,10 @@
 package smartpod;
 
 import com.janezfeldin.Math.Point;
+import jade.core.AID;
 import jade.core.Agent;
 import jade.core.behaviours.CyclicBehaviour;
+import java.util.ArrayList;
 
 /**
  * Class for creating node agent.
@@ -12,7 +14,9 @@ import jade.core.behaviours.CyclicBehaviour;
 public class NodeAgent extends SPAgent
 {
 	//declaration of variables
-    private Point position;
+	public ArrayList<AID> registeredPods = new ArrayList<AID>();
+	protected AID pathFindingAgent;
+    protected Point position;
     
 	/**
 	 * This method returns the position of this node.

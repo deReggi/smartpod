@@ -78,7 +78,8 @@ public class EnvironmentAgent extends SPAgent
                 Point tempPoint = new Point(Integer.parseInt(temp.getElementsByTagName("x").item(0).getTextContent()), Integer.parseInt(temp.getElementsByTagName("y").item(0).getTextContent()));
                 JunctionNodeAgent tempAgent = new JunctionNodeAgent(tempPoint);
                 ((AgentController) getContainerController().acceptNewAgent(temp.getElementsByTagName("name").item(0).getTextContent(), tempAgent)).start();
-                junctionList.add(tempAgent);
+                tempAgent.pathFindingAgent = this.getAID();
+				junctionList.add(tempAgent);
             }
 			
             //settings for stations
@@ -91,7 +92,8 @@ public class EnvironmentAgent extends SPAgent
                 Point tempPoint = new Point(Integer.parseInt(temp.getElementsByTagName("x").item(0).getTextContent()), Integer.parseInt(temp.getElementsByTagName("y").item(0).getTextContent()));
                 StationNodeAgent tempAgent = new StationNodeAgent(tempPoint, Integer.parseInt(temp.getElementsByTagName("podCapacity").item(0).getTextContent()), Integer.parseInt(temp.getElementsByTagName("peopleCapacity").item(0).getTextContent()));
                 ((AgentController) getContainerController().acceptNewAgent(temp.getElementsByTagName("name").item(0).getTextContent(), tempAgent)).start();
-                stationList.add(tempAgent);
+                tempAgent.pathFindingAgent = this.getAID();
+				stationList.add(tempAgent);
             }
 			
             //settings for roads
@@ -275,7 +277,7 @@ public class EnvironmentAgent extends SPAgent
         }
 
 		/**
-		 * Method, used for clearing the graphics and creating enmpty background.
+		 * Method, used for clearing the graphics and creating empty background.
 		 */
         private void drawBackground()
         {
