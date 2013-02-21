@@ -34,7 +34,7 @@ public class EnvironmentAgent extends SPAgent
 	private ArrayList<RoadAgent>			roadList		= new ArrayList<RoadAgent>();
 
 	// path finding agent
-	private PathFindingAgent pathFndingAgent;
+	private PathFindingAgent pathFndingAgent = new PathFindingAgent(nodeList, roadList);;
 
 	private ImageWindow window = new ImageWindow();
 	private BufferedImage image;
@@ -57,6 +57,10 @@ public class EnvironmentAgent extends SPAgent
 		//Loading of conf.xml file and start of all other agents, this agent is started from argument when starting application or manually from GUI.
 		try
 		{
+			// path finding agent
+			((AgentController) getContainerController().acceptNewAgent("mainPathFindingAgent", pathFndingAgent)).start();
+
+			
 			File xmlFile = new File("conf.xml");
 			DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
@@ -131,12 +135,10 @@ public class EnvironmentAgent extends SPAgent
 				j++;
 			}
 			
-			// path finding agent
+			// load path finding agent map
 			nodeList.addAll(stationList);
 			nodeList.addAll(junctionList);
-			pathFndingAgent = new PathFindingAgent(nodeList, roadList);
-			((AgentController) getContainerController().acceptNewAgent("mainPathFindingAgent", pathFndingAgent)).start();
-
+			pathFndingAgent.loadMap(nodeList,roadList);
 		}
 		catch (Exception ex)
 		{

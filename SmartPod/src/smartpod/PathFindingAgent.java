@@ -22,12 +22,12 @@ public class PathFindingAgent extends SPAgent
 	private Map<String,ArrayList<String>> roadMap = new HashMap<String,ArrayList<String>>();
 			
 	/**
-	 * Constructor for path finding agent.
+	 * Loads maps for path finding agent.
 	 * @param nodeList the ArrayList containing NodeAgents.
 	 * @param roadList the ArrayList containing RoadAgents.
 	 */
-    public PathFindingAgent(ArrayList<NodeAgent> nodeList, ArrayList<RoadAgent> roadList)
-    {
+	void loadMap(ArrayList<NodeAgent> nodeList, ArrayList<RoadAgent> roadList)
+	{
 		for (NodeAgent node : nodeList)
 		{
 			roadMap.put(node.getLocalName(), new ArrayList<String>());
@@ -41,7 +41,7 @@ public class PathFindingAgent extends SPAgent
 			ArrayList<String> roads = roadMap.get(road.startNode);
 			roads.add(roadName);
 		}
-    }
+	}
     
 	/**
 	 * This method gets called when agent is started.
