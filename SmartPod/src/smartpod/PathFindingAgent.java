@@ -37,13 +37,9 @@ public class PathFindingAgent extends SPAgent
 			String roadName = road.getLocalName();
 			weightMap.put(roadName, 0.5);
 			endNodeMap.put(roadName, road.endNode);
-			
-<<<<<<< HEAD
-			ArrayList<String> roadList = roadMap.get(roadName);
-=======
+
 			ArrayList<String> roads = roadMap.get(road.startNode);
 			roads.add(roadName);
->>>>>>> Added PathFindingAgent.
 		}
     }
     
