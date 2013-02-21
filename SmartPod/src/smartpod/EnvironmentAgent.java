@@ -32,7 +32,11 @@ public class EnvironmentAgent extends SPAgent
     private ArrayList<PodAgent>				podList			= new ArrayList<PodAgent>();
     private ArrayList<StationNodeAgent>		stationList		= new ArrayList<StationNodeAgent>();
     private ArrayList<JunctionNodeAgent>	junctionList	= new ArrayList<JunctionNodeAgent>();
+	private ArrayList<NodeAgent>			nodeList		= new ArrayList<NodeAgent>();
     private ArrayList<RoadAgent>			roadList		= new ArrayList<RoadAgent>();
+	
+	// path finding agent
+	private PathFindingAgent pathFndingAgent;
 
     private ImageWindow window = new ImageWindow();
     private BufferedImage image;
@@ -60,7 +64,7 @@ public class EnvironmentAgent extends SPAgent
             Document doc = dBuilder.parse(xmlFile);
 
             doc.getDocumentElement().normalize();
-
+			
             //settings for Environment agent
             Element temp;
             NodeList tempList;
@@ -78,7 +82,7 @@ public class EnvironmentAgent extends SPAgent
                 Point tempPoint = new Point(Integer.parseInt(temp.getElementsByTagName("x").item(0).getTextContent()), Integer.parseInt(temp.getElementsByTagName("y").item(0).getTextContent()));
                 JunctionNodeAgent tempAgent = new JunctionNodeAgent(tempPoint);
                 ((AgentController) getContainerController().acceptNewAgent(temp.getElementsByTagName("name").item(0).getTextContent(), tempAgent)).start();
-                tempAgent.pathFindingAgent = this.getAID();
+                tempAgent.pathFindingAgent = pathFndingAgent.getAID();
 				junctionList.add(tempAgent);
             }
 			
@@ -92,7 +96,7 @@ public class EnvironmentAgent extends SPAgent
                 Point tempPoint = new Point(Integer.parseInt(temp.getElementsByTagName("x").item(0).getTextContent()), Integer.parseInt(temp.getElementsByTagName("y").item(0).getTextContent()));
                 StationNodeAgent tempAgent = new StationNodeAgent(tempPoint, Integer.parseInt(temp.getElementsByTagName("podCapacity").item(0).getTextContent()), Integer.parseInt(temp.getElementsByTagName("peopleCapacity").item(0).getTextContent()));
                 ((AgentController) getContainerController().acceptNewAgent(temp.getElementsByTagName("name").item(0).getTextContent(), tempAgent)).start();
-                tempAgent.pathFindingAgent = this.getAID();
+                tempAgent.pathFindingAgent = pathFndingAgent.getAID();
 				stationList.add(tempAgent);
             }
 			
@@ -105,7 +109,7 @@ public class EnvironmentAgent extends SPAgent
                 String tempEnd = temp.getElementsByTagName("end").item(0).getTextContent();
                 RoadAgent tempAgent = new RoadAgent(tempStart, tempEnd, getNodesPosition(tempStart), getNodesPosition(tempEnd), roadBelongingType);
                 ((AgentController) getContainerController().acceptNewAgent(temp.getElementsByTagName("name").item(0).getTextContent(), tempAgent)).start();
-				tempAgent.weightUpdateDelegate = this.getAID();
+				tempAgent.weightUpdateDelegate = pathFndingAgent.getAID();
 				roadList.add(tempAgent);
             }
 
@@ -129,6 +133,13 @@ public class EnvironmentAgent extends SPAgent
 
                 j++;
             }
+			
+			// path finding agent
+			nodeList.addAll(stationList);
+			nodeList.addAll(junctionList);
+			pathFndingAgent = new PathFindingAgent(nodeList, roadList);
+			((AgentController) getContainerController().acceptNewAgent("mainPathFindingAgent", pathFndingAgent)).start();
+
         }
         catch (Exception ex)
         {
@@ -197,30 +208,30 @@ public class EnvironmentAgent extends SPAgent
         @Override
         public void action()
         {
-			// check road weight update messages
-			ArrayList<ACLMessage> weightMessages = communicator.checkRoadWeightUpdates();
-			for (ACLMessage msg : weightMessages)
-			{
-				System.out.println("com-env : "+msg.getContent());
-			}
-			
-			// check path finding request messages
-			ArrayList<ACLMessage> pathFindingMessages = communicator.checkPathFindingRequests();
-			for (ACLMessage msg : pathFindingMessages)
-			{
-				System.out.println("com-env : "+msg.getContent());
-				
-				// find path
-				RoadAgent dummyRoadToTake = roadList.get(0);
-				communicator.informPathFindingResult(msg, dummyRoadToTake);
-			}
-			
-			// check remaining messages
-			ArrayList<ACLMessage> messages = communicator.checkMessageBox(null);
-			for (ACLMessage msg : messages)
-			{
-				System.out.println("com-env : "+msg.getContent());
-			}
+//			// check road weight update messages
+//			ArrayList<ACLMessage> weightMessages = communicator.checkRoadWeightUpdates();
+//			for (ACLMessage msg : weightMessages)
+//			{
+//				System.out.println("com-env : "+msg.getContent());
+//			}
+//			
+//			// check path finding request messages
+//			ArrayList<ACLMessage> pathFindingMessages = communicator.checkPathFindingRequests();
+//			for (ACLMessage msg : pathFindingMessages)
+//			{
+//				System.out.println("com-env : "+msg.getContent());
+//				
+//				// find path
+//				RoadAgent dummyRoadToTake = roadList.get(0);
+//				communicator.informPathFindingResult(msg, dummyRoadToTake);
+//			}
+//			
+//			// check remaining messages
+//			ArrayList<ACLMessage> messages = communicator.checkMessageBox(null);
+//			for (ACLMessage msg : messages)
+//			{
+//				System.out.println("com-env : "+msg.getContent());
+//			}
 			
 			
 			/**************************************************
