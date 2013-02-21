@@ -305,8 +305,8 @@ public class PodAgent extends SPAgent
 			}
 			else
 			{
-				AID nodeAID = getAgentByName(currentDestinationNodeName).getName();
-				communicator.requestPodToNodeArrival(nodeAID);
+//				AID nodeAID = getAgentByName(currentDestinationNodeName).getName();
+//				communicator.requestPodToNodeArrival(nodeAID);
 			}
 		}
 	}

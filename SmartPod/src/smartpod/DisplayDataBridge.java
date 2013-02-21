@@ -92,7 +92,7 @@ public class DisplayDataBridge
 		message += "stations:";
 		for(int i=0;i<stationsList.size();i++)
 		{
-			message += stationsList.get(i).getLocalName()+","+stationsList.get(i).getPosition().x+","+stationsList.get(i).getPosition().y+stationsList.get(i).getPodsCapacity()+","+stationsList.get(i).getPosition().y+stationsList.get(i).getPeopleCapacity();
+			message += stationsList.get(i).getLocalName()+","+stationsList.get(i).getPosition().x+","+stationsList.get(i).getPosition().y+","+stationsList.get(i).getPodsCapacity()+","+stationsList.get(i).getPeopleCapacity();
 			if ( i < podsList.size()-1)
 			{
 				message+=",";
