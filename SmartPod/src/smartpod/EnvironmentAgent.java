@@ -34,7 +34,7 @@ public class EnvironmentAgent extends SPAgent
 	private ArrayList<RoadAgent>			roadList		= new ArrayList<RoadAgent>();
 
 	// path finding agent
-	private PathFindingAgent pathFndingAgent = new PathFindingAgent(nodeList, roadList);;
+	private PathFindingAgent pathFndingAgent = new PathFindingAgent();
 
 	private ImageWindow window = new ImageWindow();
 	private BufferedImage image;
