@@ -263,6 +263,8 @@ public class EnvironmentAgent extends SPAgent
 			//displays the image of the current state.
 			window.showImage(image);
 
+			//sends data to SmartPodDisplay
+			DisplayDataBridge.sendUpdateMessage(podList, stationList, junctionList);
 
 //			sleep();
 		}

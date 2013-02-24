@@ -70,7 +70,7 @@ public class DisplayDataBridge
 		return msg;
 	}
 	
-	public static void sendInitialMessage(int mapWidth,int mapHeight,ArrayList<PodAgent> podsList,ArrayList<StationNodeAgent> stationsList,ArrayList<JunctionNodeAgent> junctionsList,ArrayList<RoadAgent> roadsList)
+	public static void sendInitialMessage(int mapWidth,int mapHeight,ArrayList<PodAgent> podList,ArrayList<StationNodeAgent> stationList,ArrayList<JunctionNodeAgent> junctionList,ArrayList<RoadAgent> roadList)
 	{
 		String message = "(initial)";
 		//map settings
@@ -78,10 +78,10 @@ public class DisplayDataBridge
 		
 		//sending pods
 		message += "pods:";
-		for(int i=0;i<podsList.size();i++)
+		for(int i=0;i<podList.size();i++)
 		{
-			message += podsList.get(i).getLocalName()+","+podsList.get(i).getPosition().x+","+podsList.get(i).getPosition().y;
-			if ( i < podsList.size()-1)
+			message += podList.get(i).getLocalName()+","+podList.get(i).getPosition().x+","+podList.get(i).getPosition().y;
+			if ( i < podList.size()-1)
 			{
 				message+=",";
 			}
@@ -90,10 +90,10 @@ public class DisplayDataBridge
 		
 		//sending stations
 		message += "stations:";
-		for(int i=0;i<stationsList.size();i++)
+		for(int i=0;i<stationList.size();i++)
 		{
-			message += stationsList.get(i).getLocalName()+","+stationsList.get(i).getPosition().x+","+stationsList.get(i).getPosition().y+","+stationsList.get(i).getPodsCapacity()+","+stationsList.get(i).getPeopleCapacity();
-			if ( i < podsList.size()-1)
+			message += stationList.get(i).getLocalName()+","+stationList.get(i).getPosition().x+","+stationList.get(i).getPosition().y+","+stationList.get(i).getPodsCapacity()+","+stationList.get(i).getPeopleCapacity();
+			if ( i < podList.size()-1)
 			{
 				message+=",";
 			}
@@ -101,10 +101,10 @@ public class DisplayDataBridge
 		message += ";";
 //		sending roads
 		message += "roads:";
-		for(int i=0;i<roadsList.size();i++)
+		for(int i=0;i<roadList.size();i++)
 		{
-			message += roadsList.get(i).getLocalName()+","+roadsList.get(i).getStartPosition().x+","+roadsList.get(i).getStartPosition().y+","+roadsList.get(i).getEndPosition().x+","+roadsList.get(i).getEndPosition().y;
-			if ( i < podsList.size()-1)
+			message += roadList.get(i).getLocalName()+","+roadList.get(i).getStartPosition().x+","+roadList.get(i).getStartPosition().y+","+roadList.get(i).getEndPosition().x+","+roadList.get(i).getEndPosition().y;
+			if ( i < podList.size()-1)
 			{
 				message+=",";
 			}
@@ -112,10 +112,10 @@ public class DisplayDataBridge
 		message += ";";
 //		sending junctions
 		message += "junctions:";
-		for(int i=0;i<junctionsList.size();i++)
+		for(int i=0;i<junctionList.size();i++)
 		{
-			message += junctionsList.get(i).getLocalName()+","+junctionsList.get(i).getPosition().x+","+junctionsList.get(i).getPosition().y;
-			if ( i < podsList.size()-1)
+			message += junctionList.get(i).getLocalName()+","+junctionList.get(i).getPosition().x+","+junctionList.get(i).getPosition().y;
+			if ( i < podList.size()-1)
 			{
 				message+=",";
 			}
@@ -131,16 +131,16 @@ public class DisplayDataBridge
 		}
 	}
 	
-	public static void sendUpdateMessage(ArrayList<PodAgent> podsList,ArrayList<StationNodeAgent> stationsList,ArrayList<JunctionNodeAgent> junctionsList)
+	public static void sendUpdateMessage(ArrayList<PodAgent> podList,ArrayList<StationNodeAgent> stationList,ArrayList<JunctionNodeAgent> junctionList)
 	{
 		String message = "(update)";
 		
 		//sending pods
 		message += "pods:";
-		for(int i=0;i<podsList.size();i++)
+		for(int i=0;i<podList.size();i++)
 		{
-			message += podsList.get(i).getLocalName()+","+podsList.get(i).getPosition().x+","+podsList.get(i).getPosition().y;
-			if ( i < podsList.size()-1)
+			message += podList.get(i).getLocalName()+","+podList.get(i).getPosition().x+","+podList.get(i).getPosition().y;
+			if ( i < podList.size()-1)
 			{
 				message+=",";
 			}
@@ -149,10 +149,10 @@ public class DisplayDataBridge
 		
 		//sending stations
 		message += "stations:";
-		for(int i=0;i<stationsList.size();i++)
+		for(int i=0;i<stationList.size();i++)
 		{
-			message += stationsList.get(i).getLocalName()+","+stationsList.get(i).getPeopleOnStation();
-			if ( i < podsList.size()-1)
+			message += stationList.get(i).getLocalName()+","+stationList.get(i).getPeopleOnStation();
+			if ( i < podList.size()-1)
 			{
 				message+=",";
 			}
