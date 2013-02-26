@@ -14,6 +14,9 @@ import java.util.Map;
  */
 public class PathFindingAgent extends SPAgent
 {
+	private int dummy = 0;
+	
+	
 	// agent communicator
 	private PathFindingCommunicator communicator = new PathFindingCommunicator(this);
 	
@@ -91,7 +94,17 @@ public class PathFindingAgent extends SPAgent
 				System.out.println("com-env : "+msg.getContent());
 				
 				// find path
-				communicator.informPathFindingResult(msg, "dummyRoad");
+//				communicator.informPathFindingResult(msg, "dummyRoad");
+				
+				if (dummy%2 == 0)
+				{
+					communicator.informPathFindingResult(msg, "Pot1");
+				}
+				else
+				{
+					communicator.informPathFindingResult(msg, "Pot4");
+				}
+				dummy++;
 			}
 			
 			// check remaining messages

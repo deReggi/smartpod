@@ -30,7 +30,7 @@ public class Point
         this.x = x;
         this.y = y;
     }
-    
+	
     public double getX()
     {
         return x;
@@ -74,7 +74,7 @@ public class Point
     {
         return Math.abs(Math.pow(p.y-y,2));
     }
-    
+	
     @Override
     public String toString()
     {

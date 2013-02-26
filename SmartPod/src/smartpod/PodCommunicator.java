@@ -21,6 +21,9 @@ public class PodCommunicator extends Communicator
 	public MessageTemplate podDepartureTemplate = MessageTemplate.and(
 													MessageTemplate.MatchPerformative(ACLMessage.REQUEST),
 													MessageTemplate.MatchOntology(ONTOLOGY_POD_NODE_DEPARTURE));
+	public MessageTemplate podRoadAttachTemplate = MessageTemplate.and(
+													MessageTemplate.MatchPerformative(ACLMessage.INFORM),
+													MessageTemplate.MatchOntology(ONTOLOGY_POD_ROAD_ATTACH));
 	
 	/**
 	 * PodCommunicator constructor.
@@ -47,6 +50,15 @@ public class PodCommunicator extends Communicator
 	public ArrayList<ACLMessage> checkPodArrivalRequestMessages()
 	{
 		return checkMessageBox(podArrivalTemplate);
+	}
+	
+	/**
+	 * Checks for received road attach messages.
+	 * @return ArrayList of received road attach ACLMessages.
+	 */
+	public ArrayList<ACLMessage> checkRoadAttachMessages()
+	{
+		return checkMessageBox(podRoadAttachTemplate);
 	}
 	
 	/**

@@ -1,6 +1,6 @@
 package smartpod;
 
-import com.janezfeldin.Math.Point;
+import com.janezfeldin.Math.Vector2D;
 import jade.core.AID;
 import jade.core.Agent;
 import jade.core.behaviours.CyclicBehaviour;
@@ -16,31 +16,31 @@ public class NodeAgent extends SPAgent
 	//declaration of variables
 	public ArrayList<AID> registeredPods = new ArrayList<AID>();
 	protected AID pathFindingAgent;
-    protected Point position;
+    protected Vector2D position;
     
 	/**
 	 * This method returns the position of this node.
-	 * @return Point that represents the position of the node location.
+	 * @return Vector2D that represents the position of the node location.
 	 */
-    public Point getPosition()
+    public Vector2D getPosition()
     {
         return position;
     }
 	
 	/**
 	 * Method used for setting the node's position.
-	 * @param position Point that contains the desired position.
+	 * @param position Vector2D that contains the desired position.
 	 */
-    public void setPosition(Point position)
+    public void setPosition(Vector2D position)
     {
         this.position = position;
     }
     
 	/**
 	 * Constructor for node agent.
-	 * @param position Point that contains the desired position.
+	 * @param position Vector2D that contains the desired position.
 	 */
-    public NodeAgent(Point position)
+    public NodeAgent(Vector2D position)
     {
         this.position = position;
     }

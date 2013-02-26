@@ -1,6 +1,6 @@
 package smartpod;
 
-import com.janezfeldin.Math.Point;
+import com.janezfeldin.Math.Vector2D;
 import jade.core.AID;
 import jade.core.Agent;
 import jade.core.behaviours.CyclicBehaviour;
@@ -18,9 +18,9 @@ public class JunctionNodeAgent extends NodeAgent
 	
 	/**
 	 * Constructor for junction agent.
-	 * @param position Point that contains the desired position.
+	 * @param position Vector2D that contains the desired position.
 	 */
-    public JunctionNodeAgent(Point position)
+    public JunctionNodeAgent(Vector2D position)
     {
 		super(position);
     }

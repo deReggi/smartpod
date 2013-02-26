@@ -1,6 +1,6 @@
 package smartpod;
 
-import com.janezfeldin.Math.Point;
+import com.janezfeldin.Math.Vector2D;
 import jade.core.AID;
 import jade.core.Agent;
 import jade.core.behaviours.CyclicBehaviour;
@@ -23,19 +23,19 @@ public class RoadAgent extends SPAgent
 	public double	weight		= 0.0;
 	public String	startNode	= "";
 	public String	endNode		= "";
-	public Point	startPosition;
-	public Point	endPosition;
+	public Vector2D	startPosition;
+	public Vector2D	endPosition;
 	public String	roadBelongingType = "";//(inbound ali outgoing) inbound - the road belongs to the node at the end; outgoing - road belongs to the node at the start
 
 	/**
 	 * Constructor for road agent.
 	 * @param startNode String containing the name of the starting node
 	 * @param endNode String containing the name of the ending node
-	 * @param startPosition Point of the starting position
-	 * @param endPosition Point of the end location
+	 * @param startPosition Vector2D of the starting position
+	 * @param endPosition Vector2D of the end location
 	 * @param roadBelongingType String containing two possible values: inbound/outgoing. inbound - the road belongs to the node at the end; outgoing - road belongs to the node at the start.
 	 */
-	public RoadAgent(String startNode, String endNode, Point startPosition, Point endPosition, String roadBelongingType)
+	public RoadAgent(String startNode, String endNode, Vector2D startPosition, Vector2D endPosition, String roadBelongingType)
 	{
 		this.startNode = startNode;
 		this.endNode = endNode;
@@ -64,18 +64,18 @@ public class RoadAgent extends SPAgent
 
 	/**
 	 * Method that returns the start position of the road.
-	 * @return Point containing the position of the beginning of the road.
+	 * @return Vector2D containing the position of the beginning of the road.
 	 */
-	public Point getStartPosition()
+	public Vector2D getStartPosition()
 	{
 		return startPosition;
 	}
 
 	/**
 	 * Method that returns the end position of the road.
-	 * @return Point containing the position of the road's end.
+	 * @return Vector2D containing the position of the road's end.
 	 */
-	public Point getEndPosition()
+	public Vector2D getEndPosition()
 	{
 		return endPosition;
 	}
@@ -119,9 +119,9 @@ public class RoadAgent extends SPAgent
 
 	/**
 	 * This method is used to set the starting position of the road.
-	 * @param startPosition Point containing the desired starting position.
+	 * @param startPosition Vector2D containing the desired starting position.
 	 */
-	public void setStartPosition(Point startPosition)
+	public void setStartPosition(Vector2D startPosition)
 	{
 		this.startPosition = startPosition;
 		throw new UnsupportedOperationException("Še ne dela, poišči še ime vozlišča na lokaciji" + startPosition);
@@ -130,9 +130,9 @@ public class RoadAgent extends SPAgent
 	/**
 	 * This method is used to set the ending position of the road.
 	 * 
-	 * @param endPosition Point containing the desired ending position.
+	 * @param endPosition Vector2D containing the desired ending position.
 	 */
-	public void setEndPosition(Point endPosition)
+	public void setEndPosition(Vector2D endPosition)
 	{
 		this.endPosition = endPosition;
 		throw new UnsupportedOperationException("Še ne dela, poišči še ime vozlišča na lokaciji" + endPosition);
@@ -199,6 +199,7 @@ public class RoadAgent extends SPAgent
 			{
 				System.out.println("com-road : "+msg.getContent());
 				registeredPods.add(msg.getSender());
+				communicator.informRoadData(msg);
 			}
 			
 			// check pod detach messages

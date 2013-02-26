@@ -63,6 +63,21 @@ public class RoadCommunicator extends Communicator
 	}
 	
 	/**
+	 * Sends the INFORM response message containing the road data.
+	 */
+	public void informRoadData(ACLMessage requestMessage)
+	{
+		ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
+		msg.setOntology(ONTOLOGY_POD_ROAD_ATTACH);
+		msg.setContent("my road data");
+		msg.addReceiver(requestMessage.getSender());
+		msg.addUserDefinedParameter("end_node", ((RoadAgent)agent).endNode);
+		msg.addUserDefinedParameter("start_position", ((RoadAgent)agent).startPosition.stringRepresentation());
+		msg.addUserDefinedParameter("end_position", ((RoadAgent)agent).endPosition.stringRepresentation());
+		agent.send(msg);
+	}
+	
+	/**
 	 * Sends the INFORM message of road weight to all nodes.
 	 */
 //	public void informRoadWeight()

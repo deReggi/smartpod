@@ -1,6 +1,6 @@
 package smartpod;
 
-import com.janezfeldin.Math.Point;
+import com.janezfeldin.Math.Vector2D;
 import jade.core.AID;
 import jade.core.Agent;
 import jade.core.behaviours.CyclicBehaviour;
@@ -23,8 +23,8 @@ public class StationNodeAgent extends NodeAgent
     private int peopleOnStation;
 
 	/**
-	 * Method that returns the int representing the maximum number of pods, that can be on this station at a given moment.
-	 * @return int stations pod capacity
+	 * Method that returns the integer value representing the maximum number of pods, that can be on this station at a given moment.
+	 * @return integer value representing stations pod capacity
 	 */
     public int getPodsCapacity()
     {
@@ -33,7 +33,7 @@ public class StationNodeAgent extends NodeAgent
 
 	/**
 	 * Method used to set the maximum number of pods, that can be on this station at a given moment.
-	 * @param podsCapacity int representing the maximum number of pods.
+	 * @param podsCapacity integer value representing the maximum number of pods.
 	 */
     public void setPodsCapacity(int podsCapacity)
     {
@@ -42,7 +42,7 @@ public class StationNodeAgent extends NodeAgent
 
 	/**
 	 * Method that returns the maximum number of people, that can be on this station at a given moment.
-	 * @return int representing the maximum number of people
+	 * @return integer value representing the maximum number of people
 	 */
     public int getPeopleCapacity()
     {
@@ -51,7 +51,7 @@ public class StationNodeAgent extends NodeAgent
 
 	/**
 	 * Method used to set the maximum number of people, that can be on this station at a given moment.
-	 * @param peopleCapacity int representing the maximum number of people
+	 * @param peopleCapacity integer value representing the maximum number of people
 	 */
     public void setPeopleCapacity(int peopleCapacity)
     {
@@ -60,7 +60,7 @@ public class StationNodeAgent extends NodeAgent
 
 	/**
 	 * Method that returns the current number of people on this station.
-	 * @return int current number of people waiting on this station
+	 * @return current number of people waiting on this station
 	 */
     public int getPeopleOnStation()
     {
@@ -69,7 +69,7 @@ public class StationNodeAgent extends NodeAgent
 	
 	/**
 	 * Method used to set the current number of people waiting on this station.
-	 * @param peopleOnStation int number of people, that are currently waiting on the station.
+	 * @param peopleOnStation number of people, that are currently waiting on the station.
 	 */
     public void setPeopleOnStation(int peopleOnStation)
     {
@@ -78,7 +78,7 @@ public class StationNodeAgent extends NodeAgent
 
 	/**
 	 * Method used for adding people to the station.
-	 * @param n int number of people to be added, if the station has the sufficient capacity
+	 * @param n integer value representing the number of people to be added, if the station has the sufficient capacity
 	 * @return true if the adding operation succeeded or false if it failed.
 	 */
     public boolean addPeopleToStation(int n)
@@ -96,7 +96,7 @@ public class StationNodeAgent extends NodeAgent
 
 	/**
 	 * Method used for removing people off the station.
-	 * @param n int number of people to be removed, if the station has enough people on it.
+	 * @param n integer value representing the number of people to be removed, if the station has enough people on it.
 	 * @return true if the adding operation succeeded or  false if it failed
 	 */
     public boolean removePeopleFromStation(int n)
@@ -114,11 +114,11 @@ public class StationNodeAgent extends NodeAgent
 	
 	/**
 	 * Constructor method for the StationNodeAgent.
-	 * @param position Point containing the position of the station
+	 * @param position Vector2D containing the position of the station
 	 * @param podsCapacity maximum allowed pods on the station at a given moment
 	 * @param peopleCapacity maximum allowed people waiting on the station at a given moment
 	 */
-    public StationNodeAgent(Point position, int podsCapacity, int peopleCapacity)
+    public StationNodeAgent(Vector2D position, int podsCapacity, int peopleCapacity)
     {
         super(position);
         this.podsCapacity = podsCapacity;

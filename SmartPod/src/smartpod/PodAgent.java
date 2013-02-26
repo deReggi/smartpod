@@ -1,6 +1,6 @@
 package smartpod;
 
-import com.janezfeldin.Math.Point;
+import com.janezfeldin.Math.Vector2D;
 import jade.core.AID;
 import jade.core.Agent;
 import jade.core.behaviours.CyclicBehaviour;
@@ -18,22 +18,27 @@ public class PodAgent extends SPAgent
 	private PodCommunicator communicator = new PodCommunicator(this);
 
 	//variable declaration for agents properties
-	private Point position;
-	private Point currentDestination;
+	private Vector2D position;
+	private Vector2D currentDestination;
 	private String currentDestinationNodeName;
-	private Point finalDestination;
+	private Vector2D finalDestination;
 	private String finalDestinationNodeName;
 	private int peopleCapacity;
 	private int peopleOnBoard;
 	private double priority;
-	private boolean arrived = true;
+	
+	private boolean arrived = false;
+	private boolean onTheRoad = false;
+	private double currentRoadLength = 0.0;
+	private Vector2D currentSource;
+	private long currentTime = 0;
 
 	/**
 	 * This method returns the position of this pod.
 	 *
-	 * @return Point that represents the position of the pod's location.
+	 * @return Vector2D that represents the position of the pod's location.
 	 */
-	public Point getPosition()
+	public Vector2D getPosition()
 	{
 		return position;
 	}
@@ -41,9 +46,9 @@ public class PodAgent extends SPAgent
 	/**
 	 * This method is used to set the position of the pod.
 	 *
-	 * @param position Point that contains the desired position.
+	 * @param position Vector2D that contains the desired position.
 	 */
-	public void setPosition(Point position)
+	public void setPosition(Vector2D position)
 	{
 		this.position = position;
 	}
@@ -51,10 +56,10 @@ public class PodAgent extends SPAgent
 	/**
 	 * This method returns the location of the current destination.
 	 *
-	 * @return Point that represents the current destination (next station or
+	 * @return Vector2D that represents the current destination (next station or
 	 * junction).
 	 */
-	public Point getCurrentDestination()
+	public Vector2D getCurrentDestination()
 	{
 		return currentDestination;
 	}
@@ -73,10 +78,10 @@ public class PodAgent extends SPAgent
 	/**
 	 * This method is used to set the final destination of the pod.
 	 *
-	 * @param destination the Point that represents the position of the final pod's destination
+	 * @param destination the Vector2D that represents the position of the final pod's destination
 	 * (final station).
 	 */
-	public void setFinalDestination(Point destination)
+	public void setFinalDestination(Vector2D destination)
 	{
 		arrived = false;
 		this.finalDestination = destination;
@@ -86,10 +91,10 @@ public class PodAgent extends SPAgent
 	/**
 	 * This method returns the final destination's position.
 	 *
-	 * @return Point that represents the position of the final destination
+	 * @return Vector2D that represents the position of the final destination
 	 * (final station).
 	 */
-	public Point getFinalDestination()
+	public Vector2D getFinalDestination()
 	{
 		return finalDestination;
 	}
@@ -121,7 +126,7 @@ public class PodAgent extends SPAgent
 	/**
 	 * This method is used to set the pod's maximum capacity for people.
 	 *
-	 * @param n int that represents the name of the final pod's destination
+	 * @param n integer value that represents the name of the final pod's destination
 	 * (station name).
 	 */
 	public void setPeopleCapacity(int n)
@@ -132,7 +137,7 @@ public class PodAgent extends SPAgent
 	/**
 	 * This method returns the pod's maximum capacity for people.
 	 *
-	 * @return int that represents the maximum capacity for people.
+	 * @return integer value that represents the maximum capacity for people.
 	 */
 	public int getPeopleCapacity()
 	{
@@ -142,7 +147,7 @@ public class PodAgent extends SPAgent
 	/**
 	 * This method is used to set the number of people currently on board.
 	 *
-	 * @param n int that represents the current number of people on board.
+	 * @param n integer value that represents the current number of people on board.
 	 */
 	public void setPeopleOnBoard(int n)
 	{
@@ -152,7 +157,7 @@ public class PodAgent extends SPAgent
 	/**
 	 * This method returns the number of people currently on board.
 	 *
-	 * @return int that represents the maximum capacity for people.
+	 * @return integer value that represents the maximum capacity for people.
 	 */
 	public int getPeopleOnBoard()
 	{
@@ -162,7 +167,7 @@ public class PodAgent extends SPAgent
 	/**
 	 * This method is used to add a passenger on the pod.
 	 *
-	 * @return boolean that indicates the success of the operation. If the pod is already full, false get's returned.
+	 * @return boolean that indicates the success of the operation. If the pod is already full, false gets returned.
 	 */
 	public boolean addPassanger()
 	{
@@ -180,7 +185,7 @@ public class PodAgent extends SPAgent
 	/**
 	 * This method is used to remove a passenger from the people on board the pod.
 	 *
-	 * @return boolean that indicates the success of the operation. If the pod is already empty, false get's returned.
+	 * @return boolean that indicates the success of the operation. If the pod is already empty, false gets returned.
 	 */
 	public boolean removePassanger()
 	{
@@ -205,11 +210,12 @@ public class PodAgent extends SPAgent
 
 	/**
 	 * Constructor for creating PodAgent
-	 * @param position the point containing the x and y desired positions of the pod
-	 * @param peopleCapacity the int that is the desired maximum pod's capacity for people
-	 * @param peopleOnBoard the int that is the current number of people on board the pod
+	 * @param position the Vector2D containing the x and y desired positions of the pod
+	 * @param peopleCapacity integer value that is the desired maximum pod's capacity for people
+	 * @param peopleOnBoard integer value that is the current number of people on board the pod
 	 */
-	public PodAgent(Point position, int peopleCapacity, int peopleOnBoard)
+	public PodAgent(Vector2D
+			position, int peopleCapacity, int peopleOnBoard)
 	{
 		
 		super();
@@ -266,7 +272,7 @@ public class PodAgent extends SPAgent
 				System.out.println("com-pod : "+msg.getContent());
 				
 				communicator.acceptPodToRoadDeparture(msg);
-				// after a while
+				
 				String roadName = msg.getUserDefinedParameter("road");
 				AID roadAID = getAgentByName(roadName).getName();
 				communicator.informPodToRoadTransfer(roadAID);
@@ -281,6 +287,32 @@ public class PodAgent extends SPAgent
 				String roadName = msg.getUserDefinedParameter("road");
 				AID roadAID = getAgentByName(roadName).getName();
 				communicator.informPodToNodeTransfer(roadAID);
+				
+				onTheRoad = false;
+			}
+			
+			// check road attach message box
+			ArrayList<ACLMessage> roadAttachMessages = communicator.checkRoadAttachMessages();
+			for (ACLMessage msg : roadAttachMessages)
+			{
+				System.out.println("com-pod : "+msg.getContent());
+				if (onTheRoad)
+				{
+					// this should never happen!
+					System.out.println("com-pod : ERROR: already on the road!");
+					break;
+				}
+				
+				currentDestinationNodeName = msg.getUserDefinedParameter("end_node");
+				
+				// calculate road length
+				currentSource		= new Vector2D(msg.getUserDefinedParameter("start_position"));
+				currentDestination	= new Vector2D(msg.getUserDefinedParameter("end_position"));
+				currentRoadLength	= currentSource.dist(currentDestination);
+				
+				currentTime = getCurrentTime();
+				
+				onTheRoad = true;
 			}
 			
 			// check other messages
@@ -291,7 +323,10 @@ public class PodAgent extends SPAgent
 			}
 						
 			//calls the method for moving the PodAgent
-			move();
+			if (onTheRoad)
+			{
+				move();
+			}
 		}
 
 		/**
@@ -301,12 +336,50 @@ public class PodAgent extends SPAgent
 		{
 			if (!arrived)
 			{
+				// @todo neka funkcija hitrosti
+				double v = 0.1;
+
+				// the time needed for the whole journey with the given speed v
+				double journeyTime = currentRoadLength/v;
+
+				// the time passed since last update
+				long previousTime = currentTime;
+				currentTime = getCurrentTime();
+				long elapsedTime = currentTime - previousTime;
+
+				// the time percentage of the journey
+				double elapsedPercentage = elapsedTime/journeyTime;
 				
+				System.out.println(getAID().getName()+" elapsedTime = "+elapsedTime+"\telapsedPercentage = "+elapsedPercentage);
+				
+				// the travel vector representing the previously traveled distance
+				Vector2D travelVector = (new Vector2D(position)).sub(currentSource);
+				
+				// the previously traveled distance
+				double travleDistance = travelVector.mag();
+				
+				// the percentage compared to total road length
+				double distancePercentage = travleDistance/currentRoadLength;
+
+				// new percentage as the sum of previous and new
+				double positionPercentage = distancePercentage + elapsedPercentage*currentRoadLength;
+				
+				System.out.println(getAID().getName()+" percentage: "+positionPercentage);
+				
+				// check arrival
+				if (positionPercentage >= 1.0)
+				{
+					positionPercentage = 1.0;
+					arrived = true;
+				}
+
+				// the new position
+				position = travelVector.mul(positionPercentage/distancePercentage).add(currentSource);
 			}
 			else
 			{
-//				AID nodeAID = getAgentByName(currentDestinationNodeName).getName();
-//				communicator.requestPodToNodeArrival(nodeAID);
+				AID nodeAID = getAgentByName(currentDestinationNodeName).getName();
+				communicator.requestPodToNodeArrival(nodeAID);
 			}
 		}
 	}

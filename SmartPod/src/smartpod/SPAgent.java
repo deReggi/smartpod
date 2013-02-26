@@ -95,7 +95,7 @@ public class SPAgent extends Agent
 	 * Calculates current time in seconds within a day.
 	 * @return long value representing seconds.
 	 */
-	public long currentTime()
+	public long getCurrentTime()
 	{
 		long time = System.currentTimeMillis();
 		// for simulation milliseconds represent seconds.

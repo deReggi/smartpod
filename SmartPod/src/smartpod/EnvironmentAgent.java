@@ -1,13 +1,9 @@
 package smartpod;
 
-import com.janezfeldin.Display.ImageWindow;
-import com.janezfeldin.Math.Point;
+import com.janezfeldin.Math.Vector2D;
 import jade.core.Agent;
 import jade.core.behaviours.CyclicBehaviour;
 import jade.wrapper.AgentController;
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.ArrayList;
 import javax.xml.parsers.DocumentBuilder;
@@ -36,8 +32,6 @@ public class EnvironmentAgent extends SPAgent
 	// path finding agent
 	private PathFindingAgent pathFndingAgent = new PathFindingAgent();
 
-	private ImageWindow window = new ImageWindow();
-	private BufferedImage image;
 	//Environment default settings
 	private int mapWidth = 500;
 	private int mapHeight = 500;
@@ -50,13 +44,15 @@ public class EnvironmentAgent extends SPAgent
 	 */
 	@Override
 	protected void setup()
-	{
-		//odpre okno animacije
-		window.setVisible(true);
-
+	{		
 		//Loading of conf.xml file and start of all other agents, this agent is started from argument when starting application or manually from GUI.
 		try
 		{
+			// run DisplayHelper
+//			Runtime r = Runtime.getRuntime();
+//			Process p = r.exec("java -jar SmartPodDisplay.jar");
+//			Thread.sleep(3000);
+		
 			// path finding agent
 			((AgentController) getContainerController().acceptNewAgent("mainPathFindingAgent", pathFndingAgent)).start();
 
@@ -82,8 +78,8 @@ public class EnvironmentAgent extends SPAgent
 			for (int i = 0; i < tempList.getLength(); i++)
 			{
 				temp = (Element) tempList.item(i);
-				Point tempPoint = new Point(Integer.parseInt(temp.getElementsByTagName("x").item(0).getTextContent()), Integer.parseInt(temp.getElementsByTagName("y").item(0).getTextContent()));
-				JunctionNodeAgent tempAgent = new JunctionNodeAgent(tempPoint);
+				Vector2D tVec = new Vector2D(Integer.parseInt(temp.getElementsByTagName("x").item(0).getTextContent()), Integer.parseInt(temp.getElementsByTagName("y").item(0).getTextContent()));
+				JunctionNodeAgent tempAgent = new JunctionNodeAgent(tVec);
 				((AgentController) getContainerController().acceptNewAgent(temp.getElementsByTagName("name").item(0).getTextContent(), tempAgent)).start();
                 tempAgent.pathFindingAgent = pathFndingAgent.getAID();
 				junctionList.add(tempAgent);
@@ -94,8 +90,8 @@ public class EnvironmentAgent extends SPAgent
 			for (int i = 0; i < tempList.getLength(); i++)
 			{
 				temp = (Element) tempList.item(i);
-				Point tempPoint = new Point(Integer.parseInt(temp.getElementsByTagName("x").item(0).getTextContent()), Integer.parseInt(temp.getElementsByTagName("y").item(0).getTextContent()));
-				StationNodeAgent tempAgent = new StationNodeAgent(tempPoint, Integer.parseInt(temp.getElementsByTagName("podCapacity").item(0).getTextContent()), Integer.parseInt(temp.getElementsByTagName("peopleCapacity").item(0).getTextContent()));
+				Vector2D tVec = new Vector2D(Integer.parseInt(temp.getElementsByTagName("x").item(0).getTextContent()), Integer.parseInt(temp.getElementsByTagName("y").item(0).getTextContent()));
+				StationNodeAgent tempAgent = new StationNodeAgent(tVec, Integer.parseInt(temp.getElementsByTagName("podCapacity").item(0).getTextContent()), Integer.parseInt(temp.getElementsByTagName("peopleCapacity").item(0).getTextContent()));
 				((AgentController) getContainerController().acceptNewAgent(temp.getElementsByTagName("name").item(0).getTextContent(), tempAgent)).start();
                 tempAgent.pathFindingAgent = pathFndingAgent.getAID();
 				stationList.add(tempAgent);
@@ -149,10 +145,6 @@ public class EnvironmentAgent extends SPAgent
 		//sending starting positions to SmartPodDisplay program
 		DisplayDataBridge.sendInitialMessage(mapWidth,mapHeight,podList, stationList, junctionList, roadList);
 
-		//settings for graphical representation (setting up the image)
-		image = new BufferedImage(mapWidth, mapHeight, BufferedImage.TYPE_INT_RGB);
-
-
 		//Adding of the Behaviour to the EnvironmentAgent
 		addBehaviour(new EnvironmentAgent.EnvironmentAgentBehaviour(this));
 	}
@@ -162,9 +154,9 @@ public class EnvironmentAgent extends SPAgent
 	 * Method used for getting the Node's position.
 	 * 
 	 * @param name is the name of the desired node's position.
-	 * @return New point that represents the position of the node.
+	 * @return New Vector2D that represents the position of the node.
 	 */
-	private Point getNodesPosition(String name)
+	private Vector2D getNodesPosition(String name)
 	{
 		//searches for the node with specified name between stations
 		for (int i = 0; i < stationList.size(); i++)
@@ -209,90 +201,8 @@ public class EnvironmentAgent extends SPAgent
 		@Override
 		public void action()
 		{
-			//draws empty background for graphic's representation.
-			drawBackground();
-			
-			//Communication with simulation display
-//			try
-//			{
-//				DisplayDataBridge.sendMessage("message number ");
-//			}
-//			catch (IOException ex)
-//			{
-//				Logger.getLogger(EnvironmentAgent.class.getName()).log(Level.SEVERE, null, ex);
-//			}
-
-
-
-
-			//Graphical representation of agents
-			Graphics g = image.getGraphics();
-			//representation of pods
-			g.setColor(Color.blue);
-			for (int i = 0; i < podList.size(); i++)
-			{
-				Point tempPosition = podList.get(i).getPosition();
-				g.fillRoundRect((int)tempPosition.x - 2, (int)tempPosition.y - 2, 3, 3, 3, 3);
-			}
-			//representations of stations
-			g.setColor(Color.black);
-			for (int i = 0; i < stationList.size(); i++)
-			{
-				Point tempPosition = stationList.get(i).getPosition();
-				g.fillRect((int)tempPosition.x - 8, (int)tempPosition.y - 8, 15, 15);
-			}
-			//representation of junctions
-			g.setColor(Color.gray);
-			for (int i = 0; i < junctionList.size(); i++)
-			{
-				Point tempPosition = junctionList.get(i).getPosition();
-				g.fillRect((int)tempPosition.x - 4, (int)tempPosition.y - 4, 7, 7);
-			}
-			//representation of roads
-			g.setColor(Color.green);
-			for (int i = 0; i < roadList.size(); i++)
-			{
-				Point p1 = roadList.get(i).getStartPosition();
-				Point p2 = roadList.get(i).getEndPosition();
-                g.drawLine((int)p1.x, (int)p1.y, (int)p2.x, (int)p2.y);
-			}
-
-
-
-
-			//displays the image of the current state.
-			window.showImage(image);
-
 			//sends data to SmartPodDisplay
 			DisplayDataBridge.sendUpdateMessage(podList, stationList, junctionList);
-
-//			sleep();
-		}
-
-		/**
-		 * Method, used for clearing the graphics and creating empty background.
-		 */
-		private void drawBackground()
-		{
-			//drawing the empty background
-			Graphics g = image.getGraphics();
-			g.setColor(Color.white);
-			g.fillRect(0, 0, image.getWidth(), image.getHeight());
-		}
-
-		/**
-		 * Method, used to create delay at the end of each environment agent's cycle.
-		 */
-		private void sleep()
-		{
-			try
-			{
-				Thread.sleep(100);
-			}
-			catch (InterruptedException e)
-			{
-				System.out.println(e.toString());
-			}
 		}
 	}
 }

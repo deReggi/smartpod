@@ -46,10 +46,12 @@
 			<start>Postaja2</start>
 			<end>Križišče1</end>
 		</Road>
+		<Road>
 			<name>Pot4</name>
 			<start>Križišče1</start>
 			<end>Postaja2</end>
-		</Roads>
+		</Road>
+	</Roads>
 	<Pods>
 		<startPosition>Postaja1</startPosition>
 		<numPods>5</numPods>
