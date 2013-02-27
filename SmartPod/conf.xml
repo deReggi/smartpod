@@ -9,13 +9,13 @@
 		<Stations>
 			<Station>
 				<name>Postaja1</name>
-				<position>(100,100)</position>
+				<position>(100,200)</position>
 				<podCapacity>3</podCapacity>
 				<peopleCapacity>100</peopleCapacity>
 			</Station>
 			<Station>
 				<name>Postaja2</name>
-				<position>(300,100)</position>
+				<position>(300,200)</position>
 				<podCapacity>3</podCapacity>
 				<peopleCapacity>100</peopleCapacity>
 			</Station>
@@ -23,7 +23,11 @@
 		<Junctions>
 			<Junction>
 				<name>Križišče1</name>
-				<position>(200,200)</position>
+				<position>(200,100)</position>
+			</Junction>
+			<Junction>
+				<name>Križišče2</name>
+				<position>(200,300)</position>
 			</Junction>
 		</Junctions>
 	</Nodes>
@@ -36,17 +40,17 @@
 		<Road>
 			<name>Pot2</name>
 			<start>Križišče1</start>
-			<end>Postaja1</end>
+			<end>Postaja2</end>
 		</Road>
 		<Road>
 			<name>Pot3</name>
 			<start>Postaja2</start>
-			<end>Križišče1</end>
+			<end>Križišče2</end>
 		</Road>
 		<Road>
 			<name>Pot4</name>
-			<start>Križišče1</start>
-			<end>Postaja2</end>
+			<start>Križišče2</start>
+			<end>Postaja1</end>
 		</Road>
 	</Roads>
 	<Pods>
