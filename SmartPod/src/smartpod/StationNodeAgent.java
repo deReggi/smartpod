@@ -207,6 +207,15 @@ public class StationNodeAgent extends NodeAgent
 			{
 				System.out.println("com-node : "+msg.getContent());
 			}
+			
+			//testing moving of pod agents
+			if ( getCurrentTime() >5000 && !pathFindingRequestSent && getLocalName().equals("Postaja1"))
+			{
+				pathFindingRequestSent = true;
+				System.out.println("Test");
+				communicator.requestPathFinding("Pod1", "Postaja2");
+			}
         }
+		private boolean pathFindingRequestSent = false;
     }
 }

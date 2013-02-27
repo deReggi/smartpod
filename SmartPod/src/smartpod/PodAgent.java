@@ -285,7 +285,10 @@ public class PodAgent extends SPAgent
 				System.out.println("com-pod : "+msg.getContent());
 				
 				String roadName = msg.getUserDefinedParameter("road");
+				System.out.println("288: "+roadName);
+				System.out.println(msg.getSender());
 				AID roadAID = getAgentByName(roadName).getName();
+				System.out.println("290: "+roadAID.toString());
 				communicator.informPodToNodeTransfer(roadAID);
 				
 				onTheRoad = false;
@@ -360,7 +363,7 @@ public class PodAgent extends SPAgent
 				
 				// the percentage compared to total road length
 				double distancePercentage = travleDistance/currentRoadLength;
-
+				
 				// new percentage as the sum of previous and new
 				double positionPercentage = distancePercentage + elapsedPercentage*currentRoadLength;
 				
@@ -374,7 +377,7 @@ public class PodAgent extends SPAgent
 				}
 
 				// the new position
-				position = travelVector.mul(positionPercentage/distancePercentage).add(currentSource);
+				position = travelVector.mul(((distancePercentage==0)?0:positionPercentage/distancePercentage)).add(currentSource);
 			}
 			else
 			{
