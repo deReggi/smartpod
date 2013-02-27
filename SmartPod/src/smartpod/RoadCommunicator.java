@@ -1,6 +1,5 @@
 package smartpod;
 
-import jade.core.AID;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import java.util.ArrayList;
@@ -54,6 +53,7 @@ public class RoadCommunicator extends Communicator
 	 */
 	public void informRoadWeight()
 	{
+		System.out.println("RoadCommunicator - informRoadWeight()");
 		ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
 		msg.setOntology(ONTOLOGY_ROAD_WEIGHT_UPDATE);
 		msg.setContent("my weight is");
@@ -67,6 +67,7 @@ public class RoadCommunicator extends Communicator
 	 */
 	public void informRoadData(ACLMessage requestMessage)
 	{
+		System.out.println("RoadCommunicator - informRoadData()");
 		ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
 		msg.setOntology(ONTOLOGY_POD_ROAD_ATTACH);
 		msg.setContent("my road data");

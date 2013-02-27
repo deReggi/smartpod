@@ -40,7 +40,7 @@ public class EnvironmentAgent extends SPAgent
 	/**
 	 * This method gets called when agent is started. It loads all the settings
 	 * from conf.xml file and starts necessary agents. It also adds the desired
-	 * behvaiour to the agent.
+	 * behaviour to the agent.
 	 */
 	@Override
 	protected void setup()

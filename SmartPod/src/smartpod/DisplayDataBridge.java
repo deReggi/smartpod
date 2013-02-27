@@ -272,6 +272,6 @@ public class DisplayDataBridge
 		{
 			System.out.println("Error while sending message.\nError code:\n"+ex.toString());
 		}
-		System.out.println("Update msg sent.");
+//		System.out.println("Update msg sent.");
 	}
 }

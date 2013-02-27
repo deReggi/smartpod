@@ -27,6 +27,7 @@ public class PassengerGroupCommunicator extends Communicator
 	 */
 	public void requestTransport(String originName, String destinationName)
 	{
+		System.out.println("PassengerGroupCommunicator - requestTransport("+originName+","+destinationName+")");
 		ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
 		msg.setOntology(ONTOLOGY_PASSENGER_TRANSPORT);
 		msg.setContent("transport request");

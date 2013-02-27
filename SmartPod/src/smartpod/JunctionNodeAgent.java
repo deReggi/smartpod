@@ -1,7 +1,6 @@
 package smartpod;
 
 import com.janezfeldin.Math.Vector2D;
-import jade.core.AID;
 import jade.core.Agent;
 import jade.core.behaviours.CyclicBehaviour;
 import jade.lang.acl.ACLMessage;
@@ -72,13 +71,22 @@ public class JunctionNodeAgent extends NodeAgent
 			for (ACLMessage msg : arrivalMessages)
 			{
 				System.out.println("com-node : "+msg.getContent());
-								
-				communicator.confirmPodToNodeArrival(msg);
 				
-				registeredPods.add(msg.getSender().getLocalName());
+				String podName = msg.getSender().getLocalName();
 
-				String destination = msg.getUserDefinedParameter("destination");
-				communicator.requestPathFinding(msg.getSender().getLocalName(), destination);
+				if (!registeredPods.contains(podName))
+				{
+					registeredPods.add(podName);
+
+					String destination = msg.getUserDefinedParameter("destination");
+
+					communicator.confirmPodToNodeArrival(msg);
+					communicator.requestPathFinding(podName, destination);
+				}
+				else
+				{
+					System.out.println("com-node : pod already registered");
+				}
 			}
 			
 			// check path finding result message box
@@ -96,14 +104,6 @@ public class JunctionNodeAgent extends NodeAgent
 				String destination = msg.getUserDefinedParameter("destination");
 				communicator.requestPodToRoadDeparture(podName, roadName, destination);
 			}
-			
-			// check other messages
-			ArrayList<ACLMessage> messages = communicator.checkMessageBox(null);
-			for (ACLMessage msg : messages)
-			{
-				System.out.println("com-node : "+msg.getContent());
-			}
         }
-    }
-    
+    } 
 }

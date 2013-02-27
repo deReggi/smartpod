@@ -1,6 +1,5 @@
 package smartpod;
 
-import jade.core.AID;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import java.util.ArrayList;
@@ -67,6 +66,7 @@ public class PodCommunicator extends Communicator
 	 */
 	public void acceptPodToRoadDeparture(ACLMessage requestMessage)
 	{
+		System.out.println("PodCommunicator - acceptPodToRoadDeparture()");
 		ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
 		msg.setOntology(ONTOLOGY_POD_NODE_DEPARTURE);
 		msg.setContent("accept proposal");
@@ -76,40 +76,43 @@ public class PodCommunicator extends Communicator
 	
 	/**
 	 * Sends the INFORM message that the pod has been transfered to the road.
-	 * @param road the road that pod was transferred to.
+	 * @param roadName the road that pod was transferred to.
 	 */
-	public void informPodToRoadTransfer(AID road)
+	public void informPodToRoadTransfer(String roadName)
 	{
+		System.out.println("PodCommunicator - informPodToRoadTransfer("+roadName+")");
 		ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
 		msg.setOntology(ONTOLOGY_POD_ROAD_ATTACH);
 		msg.setContent("pod attached");
-		msg.addReceiver(road);
+		msg.addReceiver(agent.getAgentByName(roadName).getName());
 		agent.send(msg);
 	}
 	
 	/**
 	 * Sends the INFORM message that the pod has been transfered to the node.
-	 * @param road the road that pod was transferred from.
+	 * @param roadName the road that pod was transferred from.
 	 */
-	public void informPodToNodeTransfer(AID road)
+	public void informPodToNodeTransfer(String roadName)
 	{
+		System.out.println("PodCommunicator - informPodToNodeTransfer("+roadName+")");
 		ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
 		msg.setOntology(ONTOLOGY_POD_ROAD_DETACH);
 		msg.setContent("pod detached");
-		msg.addReceiver(road);
+		msg.addReceiver(agent.getAgentByName(roadName).getName());
 		agent.send(msg);
 	}
 	
 	/**
 	 * Sends the REQUEST message for pod arrival to the node.
-	 * @param node the node the pod arrives at.
+	 * @param nodeName the node the pod arrives at.
 	 */
-	public void requestPodToNodeArrival(AID node)
+	public void requestPodToNodeArrival(String nodeName)
 	{
+		System.out.println("PodCommunicator - requestPodToNodeArrival("+nodeName+")");
 		ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
 		msg.setOntology(ONTOLOGY_POD_NODE_ARRIVAL);
 		msg.setContent("pod to node transfer request");
-		msg.addReceiver(node);
+		msg.addReceiver(agent.getAgentByName(nodeName).getName());
 		msg.addUserDefinedParameter("destination", ((PodAgent)agent).getFinalDestinationNodeName());
 		agent.send(msg);
 	}

@@ -1,6 +1,5 @@
 package smartpod;
 
-import jade.core.AID;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import java.util.ArrayList;
@@ -80,9 +79,10 @@ public class NodeCommunicator extends Communicator
 	 */
 	public void requestPodToRoadDeparture(String podName, String roadName, String destination)
 	{
+		System.out.println("NodeCommunicator - requestPodToRoadDeparture("+podName+","+roadName+","+destination+")");
 		ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
 		msg.setOntology(ONTOLOGY_POD_NODE_DEPARTURE);
-		msg.setContent("pod to road transfer proposal");
+		msg.setContent("pod to road transfer request");
 		msg.addReceiver(agent.getAgentByName(podName).getName());
 		msg.addUserDefinedParameter("road", roadName);
 		msg.addUserDefinedParameter("destination", destination);
@@ -95,6 +95,7 @@ public class NodeCommunicator extends Communicator
 	 */
 	public void confirmPodToNodeArrival(ACLMessage requestMessage)
 	{
+		System.out.println("NodeCommunicator - confirmPodToNodeArrival()");
 		ACLMessage msg = new ACLMessage(ACLMessage.CONFIRM);
 		msg.setOntology(ONTOLOGY_POD_NODE_ARRIVAL);
 		msg.setContent("pod to node transfer confirm");
@@ -109,6 +110,7 @@ public class NodeCommunicator extends Communicator
 	 */
 	public void requestPathFinding(String podName, String destinationNodeName)
 	{
+		System.out.println("NodeCommunicator - requestPathFinding("+podName+","+destinationNodeName+")");
 		ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
 		msg.setOntology(ONTOLOGY_PATH_FINDING);
 		msg.setContent("path finding request");

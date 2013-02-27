@@ -18,7 +18,7 @@ public class RoadAgent extends SPAgent
 	private RoadCommunicator communicator = new RoadCommunicator(this);
 	
 	//variable declarations for road's properties
-	public ArrayList<AID> registeredPods = new ArrayList<AID>();
+	public ArrayList<String> registeredPods = new ArrayList<String>();
 	public AID		weightUpdateDelegate;
 	public double	weight		= 0.0;
 	public String	startNode	= "";
@@ -198,7 +198,7 @@ public class RoadAgent extends SPAgent
 			for (ACLMessage msg : attachMessages)
 			{
 				System.out.println("com-road : "+msg.getContent());
-				registeredPods.add(msg.getSender());
+				registeredPods.add(msg.getSender().getLocalName());
 				communicator.informRoadData(msg);
 			}
 			
@@ -207,7 +207,7 @@ public class RoadAgent extends SPAgent
 			for (ACLMessage msg : detachMessages)
 			{
 				System.out.println("com-road : "+msg.getContent());
-				registeredPods.remove(msg.getSender());
+				registeredPods.remove(msg.getSender().getLocalName());
 			}
 			
 			// check remaining messages

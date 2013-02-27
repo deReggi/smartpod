@@ -1,7 +1,6 @@
 package smartpod;
 
 import com.janezfeldin.Math.Vector2D;
-import jade.core.AID;
 import jade.core.Agent;
 import jade.core.behaviours.CyclicBehaviour;
 import jade.lang.acl.ACLMessage;
@@ -150,23 +149,32 @@ public class StationNodeAgent extends NodeAgent
 			for (ACLMessage msg : arrivalMessages)
 			{
 				System.out.println("com-node : "+msg.getContent());
-								
-				communicator.confirmPodToNodeArrival(msg);
 				
-				registeredPods.add(msg.getSender().getLocalName());
+				String podName = msg.getSender().getLocalName();
 
-				// check whether final destination has been reached
-				String destination = msg.getUserDefinedParameter("destination");
-				if (destination.equals(getLocalName()))
+				if (!registeredPods.contains(podName))
 				{
-					// the pod has reached the final destination
-					System.out.println("pod "+msg.getSender().getLocalName()+" has reached destination!");
+					registeredPods.add(podName);
+
+					String destination = msg.getUserDefinedParameter("destination");
+
+					communicator.confirmPodToNodeArrival(msg);
+
+					// check whether final destination has been reached
+					if (destination.equals(getLocalName()))
+					{
+						// the pod has reached the final destination
+						System.out.println("=======\nSUCCESS :: "+podName+" has reached destination!\n=======");
+					}
+					else
+					{
+						communicator.requestPathFinding(podName, destination);
+					}
 				}
 				else
 				{
-					communicator.requestPathFinding(msg.getSender().getLocalName(), destination);
+					System.out.println("com-node : pod already registered");
 				}
-				
 			}
 			
 			// check transport request message
@@ -183,7 +191,6 @@ public class StationNodeAgent extends NodeAgent
 				communicator.requestPathFinding(podName, destination);
 			}
 			
-			
 			// check path finding result message box
 			ArrayList<ACLMessage> pathFinding = communicator.checkPathFindingResultMessages();
 			for (ACLMessage msg : pathFinding)
@@ -195,19 +202,13 @@ public class StationNodeAgent extends NodeAgent
 				String destination = msg.getUserDefinedParameter("destination");
 				communicator.requestPodToRoadDeparture(podName, roadName, destination);
 			}
-			
-			// check other messages
-			ArrayList<ACLMessage> messages = communicator.checkMessageBox(null);
-			for (ACLMessage msg : messages)
-			{
-				System.out.println("com-node : "+msg.getContent());
-			}
         }
     }
 	
 	/***************************************************************************
 	 * Getters & setters
 	 **************************************************************************/
+	//<editor-fold defaultstate="collapsed" desc="Getters & setters">
 	
 	/**
 	 * Method that returns the integer value representing the maximum number 
@@ -278,4 +279,5 @@ public class StationNodeAgent extends NodeAgent
     {
         this.peopleOnStation = peopleOnStation;
     }
+	//</editor-fold>
 }

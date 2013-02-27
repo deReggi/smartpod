@@ -1,9 +1,9 @@
 package smartpod;
 
 import com.janezfeldin.Math.Vector2D;
-import jade.core.AID;
 import jade.core.Agent;
 import jade.core.behaviours.CyclicBehaviour;
+import jade.core.behaviours.TickerBehaviour;
 import jade.lang.acl.ACLMessage;
 import java.util.ArrayList;
 
@@ -32,7 +32,6 @@ public class PodAgent extends SPAgent
 	private double priority;
 	
 	private String currentNode;
-	private boolean arrived = false;
 	private boolean onTheRoad = false;
 	private double currentRoadLength = 0.0;
 	private Vector2D currentSource;
@@ -137,8 +136,7 @@ public class PodAgent extends SPAgent
 		this.addBehaviour(new PodAgentBehaviour(this));
 		
 		// send the arrival message to starting node
-		AID nodeAID = getAgentByName(currentNode).getName();
-		communicator.requestPodToNodeArrival(nodeAID);
+		communicator.requestPodToNodeArrival(currentNode);
 	}
 
 	/**
@@ -168,14 +166,12 @@ public class PodAgent extends SPAgent
 			for (ACLMessage msg : departureMessages)
 			{
 				System.out.println("com-pod : "+msg.getContent());
-				
 				finalDestinationNodeName = msg.getUserDefinedParameter("destination");
 
 				communicator.acceptPodToRoadDeparture(msg);
 				
 				currentRoadName = msg.getUserDefinedParameter("road");
-				AID roadAID = getAgentByName(currentRoadName).getName();
-				communicator.informPodToRoadTransfer(roadAID);
+				communicator.informPodToRoadTransfer(currentRoadName);
 			}
 			
 			// check arrival message box
@@ -186,8 +182,7 @@ public class PodAgent extends SPAgent
 				
 				if (currentRoadName != null)
 				{
-					AID roadAID = getAgentByName(currentRoadName).getName();
-					communicator.informPodToNodeTransfer(roadAID);
+					communicator.informPodToNodeTransfer(currentRoadName);
 					currentRoadName = null;
 				}
 				
@@ -217,8 +212,9 @@ public class PodAgent extends SPAgent
 				
 				currentTime = getCurrentTime();
 				
-				onTheRoad = true;
-				arrived = false;
+				onTheRoad = true;				
+				// add the movement behaviour to the agent
+				this.myAgent.addBehaviour(new MovementBehaviour(myAgent, 1));
 			}
 			
 			// check other messages
@@ -227,18 +223,29 @@ public class PodAgent extends SPAgent
 			{
 				System.out.println("com-pod : "+msg.getContent());
 			}
-						
-			//calls the method for moving the PodAgent
-			if (onTheRoad)
-			{
-				move();
-			}
 		}
+	}
+	
+	/**
+	 * Behaviour class for PodAgent.
+	 * It extends TickerBehaviour.
+	 */
+	public class MovementBehaviour extends TickerBehaviour
+	{
+		private boolean arrived = false;
 
 		/**
-		 * Method that performs the move for PodAgent
+		 * Constructor for Pod's movement behaviour class.
+		 * @param a the agent to which behaviour is being applied.
+		 * @param period the period of the tick.
 		 */
-		private void move()
+		public MovementBehaviour(Agent a, long period)
+		{
+			super(a, period);
+		}
+		
+		@Override
+		protected void onTick()
 		{
 			if (!arrived)
 			{
@@ -282,19 +289,21 @@ public class PodAgent extends SPAgent
 				// the new position
 				position = (new Vector2D(currentDestination)).sub(currentSource).mul(positionPercentage).add(currentSource);
 				
-				System.out.println(getAID().getLocalName()+" position = "+position.stringRepresentation());
+//				System.out.println(getAID().getLocalName()+" position = "+position.stringRepresentation());
 			}
 			else
 			{
-				AID nodeAID = getAgentByName(currentDestinationNodeName).getName();
-				communicator.requestPodToNodeArrival(nodeAID);
+				this.myAgent.removeBehaviour(this);
+				communicator.requestPodToNodeArrival(currentDestinationNodeName);
 			}
 		}
+		
 	}
 	
 	/***************************************************************************
 	 * Getters & setters
 	 **************************************************************************/
+	//<editor-fold defaultstate="collapsed" desc="Getters & setters">
 	
 	/**
 	 * This method returns the position of this pod.
@@ -436,4 +445,5 @@ public class PodAgent extends SPAgent
 	{
 		return peopleOnBoard;
 	}
+	// </editor-fold>
 }
