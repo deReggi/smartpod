@@ -82,8 +82,7 @@ public class Vector2D
 	 *
 	 * @return This vector, set to (<TT>x</TT>,<TT>y</TT>).
 	 */
-	public Vector2D assign(double x,
-			double y)
+	public Vector2D assign(double x, double y)
 	{
 		this.x = x;
 		this.y = y;

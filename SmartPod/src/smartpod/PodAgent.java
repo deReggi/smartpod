@@ -32,6 +32,8 @@ public class PodAgent extends SPAgent
 	private double currentRoadLength = 0.0;
 	private Vector2D currentSource;
 	private long currentTime = 0;
+	private double traveledPercentage = 0.0;
+	private String currentRoadName = null;
 
 	/**
 	 * This method returns the position of this pod.
@@ -223,7 +225,7 @@ public class PodAgent extends SPAgent
 		this.peopleCapacity = peopleCapacity;
 		this.peopleOnBoard = peopleOnBoard;
 		this.currentDestinationNodeName = "";
-		this.finalDestinationNodeName = "";
+		this.finalDestinationNodeName = "Postaja2";
 		this.currentDestination = position;
 		this.finalDestination = position;
 	}
@@ -273,8 +275,8 @@ public class PodAgent extends SPAgent
 				
 				communicator.acceptPodToRoadDeparture(msg);
 				
-				String roadName = msg.getUserDefinedParameter("road");
-				AID roadAID = getAgentByName(roadName).getName();
+				currentRoadName = msg.getUserDefinedParameter("road");
+				AID roadAID = getAgentByName(currentRoadName).getName();
 				communicator.informPodToRoadTransfer(roadAID);
 			}
 			
@@ -284,11 +286,7 @@ public class PodAgent extends SPAgent
 			{
 				System.out.println("com-pod : "+msg.getContent());
 				
-				String roadName = msg.getUserDefinedParameter("road");
-				System.out.println("288: "+roadName);
-				System.out.println(msg.getSender());
-				AID roadAID = getAgentByName(roadName).getName();
-				System.out.println("290: "+roadAID.toString());
+				AID roadAID = getAgentByName(currentRoadName).getName();
 				communicator.informPodToNodeTransfer(roadAID);
 				
 				onTheRoad = false;
@@ -340,7 +338,7 @@ public class PodAgent extends SPAgent
 			if (!arrived)
 			{
 				// @todo neka funkcija hitrosti
-				double v = 0.1;
+				double v = 0.001;
 
 				// the time needed for the whole journey with the given speed v
 				double journeyTime = currentRoadLength/v;
@@ -353,7 +351,7 @@ public class PodAgent extends SPAgent
 				// the time percentage of the journey
 				double elapsedPercentage = elapsedTime/journeyTime;
 				
-				System.out.println(getAID().getName()+" elapsedTime = "+elapsedTime+"\telapsedPercentage = "+elapsedPercentage);
+//				System.out.println(getAID().getLocalName()+" position = "+position.stringRepresentation()+" elapsedTime = "+elapsedTime+"\telapsedPercentage = "+elapsedPercentage);
 				
 				// the travel vector representing the previously traveled distance
 				Vector2D travelVector = (new Vector2D(position)).sub(currentSource);
@@ -367,7 +365,7 @@ public class PodAgent extends SPAgent
 				// new percentage as the sum of previous and new
 				double positionPercentage = distancePercentage + elapsedPercentage*currentRoadLength;
 				
-				System.out.println(getAID().getName()+" percentage: "+positionPercentage);
+//				System.out.println("\tpercentage: "+positionPercentage);
 				
 				// check arrival
 				if (positionPercentage >= 1.0)
@@ -377,7 +375,9 @@ public class PodAgent extends SPAgent
 				}
 
 				// the new position
-				position = travelVector.mul(((distancePercentage==0)?0:positionPercentage/distancePercentage)).add(currentSource);
+				position = (new Vector2D(currentDestination)).sub(currentSource).mul(positionPercentage).add(currentSource);
+				
+				System.out.println(getAID().getLocalName()+" position = "+position.stringRepresentation());
 			}
 			else
 			{

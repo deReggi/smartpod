@@ -182,6 +182,7 @@ public class StationNodeAgent extends NodeAgent
 				if (destination.equals(getLocalName()))
 				{
 					// the pod has reached the final destination
+					System.out.println("pod "+msg.getSender().getLocalName()+" has reached destination!");
 				}
 				else
 				{
