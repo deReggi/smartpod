@@ -206,7 +206,7 @@ public class EnvironmentAgent extends SPAgent
 		public void action()
 		{
 			//sends data to SmartPodDisplay
-//			DisplayDataBridge.sendUpdateMessage(podList, stationList, junctionList);
+			DisplayDataBridge.sendUpdateMessage(podList, stationList, junctionList);
 		}
 	}
 }

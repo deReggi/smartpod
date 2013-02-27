@@ -80,7 +80,6 @@ public class DisplayDataBridge
 		message.put("Type", "InitialMessage");
 		message.put("EnvironmentSize", new Vector2D(mapWidth,mapHeight).stringRepresentation());
 		
-		
 		JSONArray tempArray = new JSONArray();
 		for(int i=0;i<podList.size();i++)
 		{
@@ -187,12 +186,11 @@ public class DisplayDataBridge
 		}
 		System.out.println("Initial msg sent.");
 	}
-	private static int abc = 0;
+
 	public static void sendUpdateMessage(ArrayList<PodAgent> podList,ArrayList<StationNodeAgent> stationList,ArrayList<JunctionNodeAgent> junctionList)
 	{
 		JSONObject message = new JSONObject();
 		message.put("Type", "UpdateMessage");
-		
 		
 		JSONArray tempArray = new JSONArray();
 		//pods
@@ -229,8 +227,6 @@ public class DisplayDataBridge
 			tempArray.put(tempObject);
 		}
 		message.put("Junctions", tempArray);
-		
-		System.out.println((abc++)+"   "+message.toString());
 		
 		/*String message = "(update)";
 		
