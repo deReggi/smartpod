@@ -14,6 +14,10 @@ import java.util.ArrayList;
  */
 public class StationNodeAgent extends NodeAgent
 {
+	/***************************************************************************
+	 * Variables
+	 **************************************************************************/
+	
 	// agent communicator
 	private NodeCommunicator communicator = new NodeCommunicator(this);
 	
@@ -21,65 +25,41 @@ public class StationNodeAgent extends NodeAgent
     private int podsCapacity;
     private int peopleCapacity;
     private int peopleOnStation;
-
-	/**
-	 * Method that returns the integer value representing the maximum number of pods, that can be on this station at a given moment.
-	 * @return integer value representing stations pod capacity
-	 */
-    public int getPodsCapacity()
-    {
-        return podsCapacity;
-    }
-
-	/**
-	 * Method used to set the maximum number of pods, that can be on this station at a given moment.
-	 * @param podsCapacity integer value representing the maximum number of pods.
-	 */
-    public void setPodsCapacity(int podsCapacity)
-    {
-        this.podsCapacity = podsCapacity;
-    }
-
-	/**
-	 * Method that returns the maximum number of people, that can be on this station at a given moment.
-	 * @return integer value representing the maximum number of people
-	 */
-    public int getPeopleCapacity()
-    {
-        return peopleCapacity;
-    }
-
-	/**
-	 * Method used to set the maximum number of people, that can be on this station at a given moment.
-	 * @param peopleCapacity integer value representing the maximum number of people
-	 */
-    public void setPeopleCapacity(int peopleCapacity)
-    {
-        this.peopleCapacity = peopleCapacity;
-    }
-
-	/**
-	 * Method that returns the current number of people on this station.
-	 * @return current number of people waiting on this station
-	 */
-    public int getPeopleOnStation()
-    {
-        return peopleOnStation;
-    }
+	
+	/***************************************************************************
+	 * Constructors
+	 **************************************************************************/
 	
 	/**
-	 * Method used to set the current number of people waiting on this station.
-	 * @param peopleOnStation number of people, that are currently waiting on the station.
+	 * Constructor method for the StationNodeAgent.
+	 * 
+	 * @param position 
+	 *		Vector2D containing the position of the station
+	 * @param podsCapacity 
+	 *		maximum allowed pods on the station at a given moment
+	 * @param peopleCapacity 
+	 *		maximum allowed people waiting on the station at a given moment
 	 */
-    public void setPeopleOnStation(int peopleOnStation)
+    public StationNodeAgent(Vector2D position, int podsCapacity, int peopleCapacity)
     {
-        this.peopleOnStation = peopleOnStation;
+        super(position);
+        this.podsCapacity = podsCapacity;
+        this.peopleCapacity = peopleCapacity;
     }
-
+	
+	/***************************************************************************
+	 * Public methods
+	 **************************************************************************/
+	
 	/**
 	 * Method used for adding people to the station.
-	 * @param n integer value representing the number of people to be added, if the station has the sufficient capacity
-	 * @return true if the adding operation succeeded or false if it failed.
+	 * 
+	 * @param n	
+	 *		integer value representing the number of people to be added, 
+	 *		if the station has the sufficient capacity
+	 * 
+	 * @return 
+	 *		true if the adding operation succeeded or false if it failed.
 	 */
     public boolean addPeopleToStation(int n)
     {
@@ -96,8 +76,13 @@ public class StationNodeAgent extends NodeAgent
 
 	/**
 	 * Method used for removing people off the station.
-	 * @param n integer value representing the number of people to be removed, if the station has enough people on it.
-	 * @return true if the adding operation succeeded or  false if it failed
+	 * 
+	 * @param n 
+	 *		integer value representing the number of people to be removed, 
+	 *		if the station has enough people on it.
+	 * 
+	 * @return 
+	 *		true if the adding operation succeeded or  false if it failed
 	 */
     public boolean removePeopleFromStation(int n)
     {
@@ -112,18 +97,9 @@ public class StationNodeAgent extends NodeAgent
         }
     }
 	
-	/**
-	 * Constructor method for the StationNodeAgent.
-	 * @param position Vector2D containing the position of the station
-	 * @param podsCapacity maximum allowed pods on the station at a given moment
-	 * @param peopleCapacity maximum allowed people waiting on the station at a given moment
-	 */
-    public StationNodeAgent(Vector2D position, int podsCapacity, int peopleCapacity)
-    {
-        super(position);
-        this.podsCapacity = podsCapacity;
-        this.peopleCapacity = peopleCapacity;
-    }
+	/***************************************************************************
+	 * JADE setup and behaviors
+	 **************************************************************************/
 
 	/**
 	 * This method gets called when agent is started.
@@ -144,7 +120,9 @@ public class StationNodeAgent extends NodeAgent
     {
 		/**
 		 * Constructor for Station's agent behaviour class.
-		 * @param a the agent to which behaviour is being applied.
+		 * 
+		 * @param a 
+		 *		the agent to which behaviour is being applied.
 		 */
         public StationAgentBehaviour(Agent a)
         {
@@ -164,7 +142,7 @@ public class StationNodeAgent extends NodeAgent
 			{
 				System.out.println("com-node : "+msg.getContent());
 				
-				registeredPods.remove(msg.getSender());
+				departingPods.remove(msg.getSender().getLocalName());
 			}
 			
 			// check arrival message box
@@ -175,7 +153,7 @@ public class StationNodeAgent extends NodeAgent
 								
 				communicator.confirmPodToNodeArrival(msg);
 				
-				registeredPods.add(msg.getSender());
+				registeredPods.add(msg.getSender().getLocalName());
 
 				// check whether final destination has been reached
 				String destination = msg.getUserDefinedParameter("destination");
@@ -191,15 +169,31 @@ public class StationNodeAgent extends NodeAgent
 				
 			}
 			
+			// check transport request message
+			ACLMessage transportRequest = communicator.receiveMessage(communicator.transportRequestTemplate);
+			if (transportRequest != null)
+			{
+				String podName = registeredPods.get(0);
+				
+				departingPods.add(podName);
+				registeredPods.remove(podName);
+				
+				String destination = transportRequest.getUserDefinedParameter("destination");
+				
+				communicator.requestPathFinding(podName, destination);
+			}
+			
+			
 			// check path finding result message box
 			ArrayList<ACLMessage> pathFinding = communicator.checkPathFindingResultMessages();
 			for (ACLMessage msg : pathFinding)
 			{
 				System.out.println("com-node : "+msg.getContent());
 				
-				AID podAID = getAgentByName(msg.getUserDefinedParameter("pod")).getName();
-				AID roadAID = getAgentByName(msg.getUserDefinedParameter("road_to_take")).getName();
-				communicator.proposePodToRoadDeparture(podAID, roadAID);
+				String podName = msg.getUserDefinedParameter("pod");
+				String roadName = msg.getUserDefinedParameter("road_to_take");
+				String destination = msg.getUserDefinedParameter("destination");
+				communicator.requestPodToRoadDeparture(podName, roadName, destination);
 			}
 			
 			// check other messages
@@ -208,15 +202,80 @@ public class StationNodeAgent extends NodeAgent
 			{
 				System.out.println("com-node : "+msg.getContent());
 			}
-			
-			//testing moving of pod agents
-			if ( getCurrentTime() >5000 && !pathFindingRequestSent && getLocalName().equals("Postaja1"))
-			{
-				pathFindingRequestSent = true;
-				System.out.println("Test");
-				communicator.requestPathFinding("Pod1", "Postaja2");
-			}
         }
-		private boolean pathFindingRequestSent = false;
+    }
+	
+	/***************************************************************************
+	 * Getters & setters
+	 **************************************************************************/
+	
+	/**
+	 * Method that returns the integer value representing the maximum number 
+	 * of pods, that can be on this station at a given moment.
+	 * 
+	 * @return
+	 *		Integer value representing stations pod capacity
+	 */
+    public int getPodsCapacity()
+    {
+        return podsCapacity;
+    }
+
+	/**
+	 * Method used to set the maximum number of pods, that can be on this 
+	 * station at a given moment.
+	 * 
+	 * @param podsCapacity
+	 *		Integer value representing the maximum number of pods.
+	 */
+    public void setPodsCapacity(int podsCapacity)
+    {
+        this.podsCapacity = podsCapacity;
+    }
+
+	/**
+	 * Method that returns the maximum number of people, that can be on this 
+	 * station at a given moment.
+	 * 
+	 * @return 
+	 *		Integer value representing the maximum number of people
+	 */
+    public int getPeopleCapacity()
+    {
+        return peopleCapacity;
+    }
+
+	/**
+	 * Method used to set the maximum number of people, that can be on this 
+	 * station at a given moment.
+	 * 
+	 * @param peopleCapacity 
+	 *		Integer value representing the maximum number of people
+	 */
+    public void setPeopleCapacity(int peopleCapacity)
+    {
+        this.peopleCapacity = peopleCapacity;
+    }
+
+	/**
+	 * Method that returns the current number of people on this station.
+	 * 
+	 * @return 
+	 *		Current number of people waiting on this station
+	 */
+    public int getPeopleOnStation()
+    {
+        return peopleOnStation;
+    }
+	
+	/**
+	 * Method used to set the current number of people waiting on this station.
+	 * 
+	 * @param peopleOnStation
+	 *		Number of people, that are currently waiting on the station.
+	 */
+    public void setPeopleOnStation(int peopleOnStation)
+    {
+        this.peopleOnStation = peopleOnStation;
     }
 }

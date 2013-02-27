@@ -20,6 +20,7 @@ public class Communicator
 	public final String ONTOLOGY_POD_ROAD_DETACH	= "pod_road_detach";
 	public final String ONTOLOGY_ROAD_WEIGHT_UPDATE	= "road_weight_update";
 	public final String ONTOLOGY_PATH_FINDING		= "path_finding";
+	public final String ONTOLOGY_PASSENGER_TRANSPORT= "passenger_transport";
 		
 	/**
 	 * The parent agent.

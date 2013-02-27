@@ -27,6 +27,10 @@ public class NodeCommunicator extends Communicator
 			MessageTemplate.and(
 				MessageTemplate.MatchPerformative(ACLMessage.INFORM),
 				MessageTemplate.MatchOntology(ONTOLOGY_PATH_FINDING));
+	public MessageTemplate transportRequestTemplate = 
+			MessageTemplate.and(
+				MessageTemplate.MatchPerformative(ACLMessage.REQUEST),
+				MessageTemplate.MatchOntology(ONTOLOGY_PASSENGER_TRANSPORT));
 	
 	
 	
@@ -69,16 +73,19 @@ public class NodeCommunicator extends Communicator
 	
 	/**
 	 * Sends REQUEST message for the pod departure to the road.
-	 * @param pod	the pod involved in the transfer
-	 * @param road	the road the pod should transfer to
+	 * 
+	 * @param podName	the pod involved in the transfer
+	 * @param roadName	the road the pod should transfer to
+	 * @param destination the final destination
 	 */
-	public void proposePodToRoadDeparture(AID pod, AID road)
+	public void requestPodToRoadDeparture(String podName, String roadName, String destination)
 	{
 		ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
 		msg.setOntology(ONTOLOGY_POD_NODE_DEPARTURE);
 		msg.setContent("pod to road transfer proposal");
-		msg.addReceiver(pod);
-		msg.addUserDefinedParameter("road", road.getLocalName());
+		msg.addReceiver(agent.getAgentByName(podName).getName());
+		msg.addUserDefinedParameter("road", roadName);
+		msg.addUserDefinedParameter("destination", destination);
 		agent.send(msg);
 	}
 	

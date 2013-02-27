@@ -14,7 +14,9 @@ import java.util.ArrayList;
 public class NodeAgent extends SPAgent
 {
 	//declaration of variables
-	public ArrayList<AID> registeredPods = new ArrayList<AID>();
+	public ArrayList<String> registeredPods = new ArrayList<String>();
+	public ArrayList<String> departingPods = new ArrayList<String>();
+	
 	protected AID pathFindingAgent;
     protected Vector2D position;
     

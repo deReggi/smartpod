@@ -9,15 +9,13 @@
 		<Stations>
 			<Station>
 				<name>Postaja1</name>
-				<x>100</x>
-				<y>100</y>
+				<position>(100,100)</position>
 				<podCapacity>3</podCapacity>
 				<peopleCapacity>100</peopleCapacity>
 			</Station>
 			<Station>
 				<name>Postaja2</name>
-				<x>200</x>
-				<y>100</y>
+				<position>(300,100)</position>
 				<podCapacity>3</podCapacity>
 				<peopleCapacity>100</peopleCapacity>
 			</Station>
@@ -25,8 +23,7 @@
 		<Junctions>
 			<Junction>
 				<name>Križišče1</name>
-				<x>150</x>
-				<y>150</y>
+				<position>(200,200)</position>
 			</Junction>
 		</Junctions>
 	</Nodes>

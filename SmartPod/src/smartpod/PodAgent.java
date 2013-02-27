@@ -14,6 +14,10 @@ import java.util.ArrayList;
  */
 public class PodAgent extends SPAgent
 {
+	/***************************************************************************
+	 * Variables
+	 **************************************************************************/
+	
 	// agent communicator
 	private PodCommunicator communicator = new PodCommunicator(this);
 
@@ -27,6 +31,7 @@ public class PodAgent extends SPAgent
 	private int peopleOnBoard;
 	private double priority;
 	
+	private String currentNode;
 	private boolean arrived = false;
 	private boolean onTheRoad = false;
 	private double currentRoadLength = 0.0;
@@ -34,140 +39,47 @@ public class PodAgent extends SPAgent
 	private long currentTime = 0;
 	private double traveledPercentage = 0.0;
 	private String currentRoadName = null;
+	
+	/***************************************************************************
+	 * Constructors
+	 **************************************************************************/
 
 	/**
-	 * This method returns the position of this pod.
-	 *
-	 * @return Vector2D that represents the position of the pod's location.
+	 * Constructor for creating PodAgent
+	 * 
+	 * @param currentNode
+	 *		The current node name.
+	 * @param position
+	 *		The Vector2D containing the x and y desired positions of the pod.
+	 * @param peopleCapacity
+	 *		Integer value that is the desired maximum pod's capacity for people.
+	 * @param peopleOnBoard
+	 *		Integer value that is the current number of people on board the pod.
 	 */
-	public Vector2D getPosition()
+	public PodAgent(String currentNode, Vector2D position, int peopleCapacity, int peopleOnBoard)
 	{
-		return position;
-	}
-
-	/**
-	 * This method is used to set the position of the pod.
-	 *
-	 * @param position Vector2D that contains the desired position.
-	 */
-	public void setPosition(Vector2D position)
-	{
+		super();
+		this.currentNode = currentNode;
 		this.position = position;
+		this.peopleCapacity = peopleCapacity;
+		this.peopleOnBoard = peopleOnBoard;
+		this.currentDestinationNodeName = currentNode;
+		this.finalDestinationNodeName = currentNode;
+		this.currentDestination = position;
+		this.finalDestination = position;
 	}
-
-	/**
-	 * This method returns the location of the current destination.
-	 *
-	 * @return Vector2D that represents the current destination (next station or
-	 * junction).
-	 */
-	public Vector2D getCurrentDestination()
-	{
-		return currentDestination;
-	}
-
-	/**
-	 * This method returns the name of the current destination's node.
-	 *
-	 * @return String that represents the name of the current destination (next
-	 * station or junction).
-	 */
-	public String getCurrentDestinationNodeName()
-	{
-		return currentDestinationNodeName;
-	}
-
-	/**
-	 * This method is used to set the final destination of the pod.
-	 *
-	 * @param destination the Vector2D that represents the position of the final pod's destination
-	 * (final station).
-	 */
-	public void setFinalDestination(Vector2D destination)
-	{
-		this.finalDestination = destination;
-		throw new UnsupportedOperationException("Ni še narejeno, je treba dodat nastavljanje currentDestination in finalDestinationNodeName!!!");
-	}
-
-	/**
-	 * This method returns the final destination's position.
-	 *
-	 * @return Vector2D that represents the position of the final destination
-	 * (final station).
-	 */
-	public Vector2D getFinalDestination()
-	{
-		return finalDestination;
-	}
-
-	/**
-	 * This method is used to set the final destination of the pod.
-	 *
-	 * @param name String that represents the name of the final pod's destination
-	 * (station name).
-	 */
-	public void setFinalDestinationNodeName(String name)
-	{
-		this.finalDestinationNodeName = name;
-		throw new UnsupportedOperationException("Ni še narejeno, je treba dodat nastavljanje currentDestination in finalDestinationNodeName!!!");
-	}
-
-	/**
-	 * This method returns the final destination's station name.
-	 *
-	 * @return String that represents the name of the final destination (final
-	 * station).
-	 */
-	public String getFinalDestinationNodeName()
-	{
-		return finalDestinationNodeName;
-	}
-
-	/**
-	 * This method is used to set the pod's maximum capacity for people.
-	 *
-	 * @param n integer value that represents the name of the final pod's destination
-	 * (station name).
-	 */
-	public void setPeopleCapacity(int n)
-	{
-		this.peopleCapacity = n;
-	}
-
-	/**
-	 * This method returns the pod's maximum capacity for people.
-	 *
-	 * @return integer value that represents the maximum capacity for people.
-	 */
-	public int getPeopleCapacity()
-	{
-		return peopleCapacity;
-	}
-
-	/**
-	 * This method is used to set the number of people currently on board.
-	 *
-	 * @param n integer value that represents the current number of people on board.
-	 */
-	public void setPeopleOnBoard(int n)
-	{
-		this.peopleOnBoard = n;
-	}
-
-	/**
-	 * This method returns the number of people currently on board.
-	 *
-	 * @return integer value that represents the maximum capacity for people.
-	 */
-	public int getPeopleOnBoard()
-	{
-		return peopleOnBoard;
-	}
-
+	
+	
+	/***************************************************************************
+	 * Public methods
+	 **************************************************************************/
+	
 	/**
 	 * This method is used to add a passenger on the pod.
 	 *
-	 * @return boolean that indicates the success of the operation. If the pod is already full, false gets returned.
+	 * @return
+	 *		Boolean that indicates the success of the operation.
+	 *		If the pod is already full, false gets returned.
 	 */
 	public boolean addPassanger()
 	{
@@ -185,7 +97,9 @@ public class PodAgent extends SPAgent
 	/**
 	 * This method is used to remove a passenger from the people on board the pod.
 	 *
-	 * @return boolean that indicates the success of the operation. If the pod is already empty, false gets returned.
+	 * @return
+	 *		Boolean that indicates the success of the operation.
+	 *		If the pod is already empty, false gets returned.
 	 */
 	public boolean removePassanger()
 	{
@@ -207,27 +121,11 @@ public class PodAgent extends SPAgent
 	{
 		peopleOnBoard = 0;
 	}
-
-	/**
-	 * Constructor for creating PodAgent
-	 * @param position the Vector2D containing the x and y desired positions of the pod
-	 * @param peopleCapacity integer value that is the desired maximum pod's capacity for people
-	 * @param peopleOnBoard integer value that is the current number of people on board the pod
-	 */
-	public PodAgent(Vector2D
-			position, int peopleCapacity, int peopleOnBoard)
-	{
-		
-		super();
-		this.position = position;
-		this.peopleCapacity = peopleCapacity;
-		this.peopleOnBoard = peopleOnBoard;
-		this.currentDestinationNodeName = "";
-		this.finalDestinationNodeName = "Postaja2";
-		this.currentDestination = position;
-		this.finalDestination = position;
-	}
-
+	
+	/***************************************************************************
+	 * JADE setup and behaviors
+	 **************************************************************************/
+	
 	/**
 	 * This method gets called when agent is started.
 	 * It adds the desired behaviour to the agent.
@@ -235,12 +133,12 @@ public class PodAgent extends SPAgent
 	@Override
 	protected void setup()
 	{
-
-
-
-
 		//adding the desired behaviour to the agent
 		this.addBehaviour(new PodAgentBehaviour(this));
+		
+		// send the arrival message to starting node
+		AID nodeAID = getAgentByName(currentNode).getName();
+		communicator.requestPodToNodeArrival(nodeAID);
 	}
 
 	/**
@@ -271,6 +169,8 @@ public class PodAgent extends SPAgent
 			{
 				System.out.println("com-pod : "+msg.getContent());
 				
+				finalDestinationNodeName = msg.getUserDefinedParameter("destination");
+
 				communicator.acceptPodToRoadDeparture(msg);
 				
 				currentRoadName = msg.getUserDefinedParameter("road");
@@ -284,9 +184,15 @@ public class PodAgent extends SPAgent
 			{
 				System.out.println("com-pod : "+msg.getContent());
 				
-				AID roadAID = getAgentByName(currentRoadName).getName();
-				communicator.informPodToNodeTransfer(roadAID);
+				if (currentRoadName != null)
+				{
+					AID roadAID = getAgentByName(currentRoadName).getName();
+					communicator.informPodToNodeTransfer(roadAID);
+					currentRoadName = null;
+				}
 				
+				currentNode = currentDestinationNodeName;
+								
 				onTheRoad = false;
 			}
 			
@@ -384,5 +290,150 @@ public class PodAgent extends SPAgent
 				communicator.requestPodToNodeArrival(nodeAID);
 			}
 		}
+	}
+	
+	/***************************************************************************
+	 * Getters & setters
+	 **************************************************************************/
+	
+	/**
+	 * This method returns the position of this pod.
+	 *
+	 * @return
+	 *		Vector2D that represents the position of the pod's location.
+	 */
+	public Vector2D getPosition()
+	{
+		return position;
+	}
+
+	/**
+	 * This method is used to set the position of the pod.
+	 *
+	 * @param position
+	 *		Vector2D that contains the desired position.
+	 */
+	public void setPosition(Vector2D position)
+	{
+		this.position = position;
+	}
+
+	/**
+	 * This method returns the location of the current destination.
+	 *
+	 * @return
+	 *		Vector2D that represents the current destination
+	 *		(next station or junction).
+	 */
+	public Vector2D getCurrentDestination()
+	{
+		return currentDestination;
+	}
+
+	/**
+	 * This method returns the name of the current destination's node.
+	 *
+	 * @return
+	 *		String that represents the name of the current destination
+	 *		(next station or junction).
+	 */
+	public String getCurrentDestinationNodeName()
+	{
+		return currentDestinationNodeName;
+	}
+
+	/**
+	 * This method is used to set the final destination of the pod.
+	 *
+	 * @param destination
+	 *		The Vector2D that represents the position of the final pod's 
+	 *		destination (final station).
+	 */
+	public void setFinalDestination(Vector2D destination)
+	{
+		this.finalDestination = destination;
+		throw new UnsupportedOperationException("Ni še narejeno, je treba dodat nastavljanje currentDestination in finalDestinationNodeName!!!");
+	}
+
+	/**
+	 * This method returns the final destination's position.
+	 *
+	 * @return
+	 *		Vector2D that represents the position of the final destination
+	 *		(final station).
+	 */
+	public Vector2D getFinalDestination()
+	{
+		return finalDestination;
+	}
+
+	/**
+	 * This method is used to set the final destination of the pod.
+	 *
+	 * @param name
+	 *		String that represents the name of the final pod's destination
+	 *		(station name).
+	 */
+	public void setFinalDestinationNodeName(String name)
+	{
+		this.finalDestinationNodeName = name;
+		throw new UnsupportedOperationException("Ni še narejeno, je treba dodat nastavljanje currentDestination in finalDestinationNodeName!!!");
+	}
+
+	/**
+	 * This method returns the final destination's station name.
+	 *
+	 * @return
+	 *		String that represents the name of the final destination
+	 *		(final station).
+	 */
+	public String getFinalDestinationNodeName()
+	{
+		return finalDestinationNodeName;
+	}
+
+	/**
+	 * This method is used to set the pod's maximum capacity for people.
+	 *
+	 * @param n
+	 *		Integer value that represents the name of the final pod's 
+	 *		destination (station name).
+	 */
+	public void setPeopleCapacity(int n)
+	{
+		this.peopleCapacity = n;
+	}
+
+	/**
+	 * This method returns the pod's maximum capacity for people.
+	 *
+	 * @return
+	 *		Integer value that represents the maximum capacity for people.
+	 */
+	public int getPeopleCapacity()
+	{
+		return peopleCapacity;
+	}
+
+	/**
+	 * This method is used to set the number of people currently on board.
+	 *
+	 * @param n
+	 *		Integer value that represents the current number of people on board.
+	 */
+	public void setPeopleOnBoard(int n)
+	{
+		this.peopleOnBoard = n;
+	}
+
+	/**
+	 * This method returns the number of people currently on board.
+	 *
+	 * @return
+	 *		Integer value that represents the maximum capacity for people.
+	 */
+	public int getPeopleOnBoard()
+	{
+		return peopleOnBoard;
 	}
 }

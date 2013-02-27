@@ -78,7 +78,7 @@ public class EnvironmentAgent extends SPAgent
 			for (int i = 0; i < tempList.getLength(); i++)
 			{
 				temp = (Element) tempList.item(i);
-				Vector2D tVec = new Vector2D(Integer.parseInt(temp.getElementsByTagName("x").item(0).getTextContent()), Integer.parseInt(temp.getElementsByTagName("y").item(0).getTextContent()));
+				Vector2D tVec = new Vector2D(temp.getElementsByTagName("position").item(0).getTextContent());				
 				JunctionNodeAgent tempAgent = new JunctionNodeAgent(tVec);
 				((AgentController) getContainerController().acceptNewAgent(temp.getElementsByTagName("name").item(0).getTextContent(), tempAgent)).start();
                 tempAgent.pathFindingAgent = pathFndingAgent.getAID();
@@ -90,7 +90,7 @@ public class EnvironmentAgent extends SPAgent
 			for (int i = 0; i < tempList.getLength(); i++)
 			{
 				temp = (Element) tempList.item(i);
-				Vector2D tVec = new Vector2D(Integer.parseInt(temp.getElementsByTagName("x").item(0).getTextContent()), Integer.parseInt(temp.getElementsByTagName("y").item(0).getTextContent()));
+				Vector2D tVec = new Vector2D(temp.getElementsByTagName("position").item(0).getTextContent());				
 				StationNodeAgent tempAgent = new StationNodeAgent(tVec, Integer.parseInt(temp.getElementsByTagName("podCapacity").item(0).getTextContent()), Integer.parseInt(temp.getElementsByTagName("peopleCapacity").item(0).getTextContent()));
 				((AgentController) getContainerController().acceptNewAgent(temp.getElementsByTagName("name").item(0).getTextContent(), tempAgent)).start();
                 tempAgent.pathFindingAgent = pathFndingAgent.getAID();
@@ -123,9 +123,9 @@ public class EnvironmentAgent extends SPAgent
 					j--;
 				}
 
-				PodAgent tempAgent = new PodAgent(getNodesPosition(temp.getElementsByTagName("startPosition").item(0).getTextContent()), Integer.parseInt(tempPodsCapacity[j]), 0);
-
-				((AgentController) getContainerController().acceptNewAgent("Pod" + (i + 1), tempAgent)).start();
+				String startingNode = temp.getElementsByTagName("startPosition").item(0).getTextContent();
+				PodAgent tempAgent = new PodAgent(startingNode,getNodesPosition(startingNode), Integer.parseInt(tempPodsCapacity[j]), 0);
+				((AgentController) getContainerController().acceptNewAgent("Pod" + (i + 1), tempAgent)).start();		
 				podList.add(tempAgent);
 
 				j++;
@@ -135,6 +135,10 @@ public class EnvironmentAgent extends SPAgent
 			nodeList.addAll(stationList);
 			nodeList.addAll(junctionList);
 			pathFndingAgent.loadMap(nodeList,roadList);
+			
+			// testing moving of pod agents
+			PassengerGroupAgent testAgent = new PassengerGroupAgent("Postaja1", "Postaja2", 8000);
+			((AgentController) getContainerController().acceptNewAgent("Janez", testAgent)).start();
 		}
 		catch (Exception ex)
 		{
@@ -202,7 +206,7 @@ public class EnvironmentAgent extends SPAgent
 		public void action()
 		{
 			//sends data to SmartPodDisplay
-			DisplayDataBridge.sendUpdateMessage(podList, stationList, junctionList);
+//			DisplayDataBridge.sendUpdateMessage(podList, stationList, junctionList);
 		}
 	}
 }

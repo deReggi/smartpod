@@ -61,6 +61,7 @@ public class PathFindingCommunicator extends Communicator
 		msg.addReceiver(requestMessage.getSender());
 		msg.addUserDefinedParameter("pod", requestMessage.getUserDefinedParameter("pod"));
 		msg.addUserDefinedParameter("road_to_take", roadToTake);
+		msg.addUserDefinedParameter("destination", requestMessage.getUserDefinedParameter("destination"));
 		agent.send(msg);
 	}
 }

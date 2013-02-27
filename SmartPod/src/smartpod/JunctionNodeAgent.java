@@ -64,7 +64,7 @@ public class JunctionNodeAgent extends NodeAgent
 			{
 				System.out.println("com-node : "+msg.getContent());
 				
-				registeredPods.remove(msg.getSender());
+				departingPods.remove(msg.getSender().getLocalName());
 			}
 			
 			// check arrival message box
@@ -75,7 +75,7 @@ public class JunctionNodeAgent extends NodeAgent
 								
 				communicator.confirmPodToNodeArrival(msg);
 				
-				registeredPods.add(msg.getSender());
+				registeredPods.add(msg.getSender().getLocalName());
 
 				String destination = msg.getUserDefinedParameter("destination");
 				communicator.requestPathFinding(msg.getSender().getLocalName(), destination);
@@ -87,9 +87,14 @@ public class JunctionNodeAgent extends NodeAgent
 			{
 				System.out.println("com-node : "+msg.getContent());
 				
-				AID podAID = getAgentByName(msg.getUserDefinedParameter("pod")).getName();
-				AID roadAID = getAgentByName(msg.getUserDefinedParameter("road_to_take")).getName();
-				communicator.proposePodToRoadDeparture(podAID, roadAID);
+				String podName = msg.getUserDefinedParameter("pod");
+				
+				departingPods.add(podName);
+				registeredPods.remove(podName);
+				
+				String roadName = msg.getUserDefinedParameter("road_to_take");
+				String destination = msg.getUserDefinedParameter("destination");
+				communicator.requestPodToRoadDeparture(podName, roadName, destination);
 			}
 			
 			// check other messages
