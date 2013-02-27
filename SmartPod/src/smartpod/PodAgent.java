@@ -165,7 +165,7 @@ public class PodAgent extends SPAgent
 			ArrayList<ACLMessage> departureMessages = communicator.checkPodDepartureMessages();
 			for (ACLMessage msg : departureMessages)
 			{
-				System.out.println("com-pod : "+msg.getContent());
+//				System.out.println("com-pod : "+msg.getContent());
 				finalDestinationNodeName = msg.getUserDefinedParameter("destination");
 
 				communicator.acceptPodToRoadDeparture(msg);
@@ -178,7 +178,7 @@ public class PodAgent extends SPAgent
 			ArrayList<ACLMessage> arrivalMessages = communicator.checkPodArrivalRequestMessages();
 			for (ACLMessage msg : arrivalMessages)
 			{
-				System.out.println("com-pod : "+msg.getContent());
+//				System.out.println("com-pod : "+msg.getContent());
 				
 				if (currentRoadName != null)
 				{
@@ -195,7 +195,7 @@ public class PodAgent extends SPAgent
 			ArrayList<ACLMessage> roadAttachMessages = communicator.checkRoadAttachMessages();
 			for (ACLMessage msg : roadAttachMessages)
 			{
-				System.out.println("com-pod : "+msg.getContent());
+//				System.out.println("com-pod : "+msg.getContent());
 				if (onTheRoad)
 				{
 					// this should never happen!
@@ -215,13 +215,6 @@ public class PodAgent extends SPAgent
 				onTheRoad = true;				
 				// add the movement behaviour to the agent
 				this.myAgent.addBehaviour(new MovementBehaviour(myAgent, 1));
-			}
-			
-			// check other messages
-			ArrayList<ACLMessage> messages = communicator.checkMessageBox(null);
-			for (ACLMessage msg : messages)
-			{
-				System.out.println("com-pod : "+msg.getContent());
 			}
 		}
 	}

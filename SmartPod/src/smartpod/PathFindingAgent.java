@@ -81,14 +81,14 @@ public class PathFindingAgent extends SPAgent
 			ArrayList<ACLMessage> weightMessages = communicator.checkRoadWeightUpdates();
 			for (ACLMessage msg : weightMessages)
 			{
-				System.out.println("com-env : "+msg.getContent());
+//				System.out.println("com-env : "+msg.getContent());
 			}
 			
 			// check path finding request messages
 			ArrayList<ACLMessage> pathFindingMessages = communicator.checkPathFindingRequests();
 			for (ACLMessage msg : pathFindingMessages)
 			{
-				System.out.println("com-env : "+msg.getContent());
+//				System.out.println("com-env : "+msg.getContent());
 				
 				// find path
 //				communicator.informPathFindingResult(msg, "dummyRoad");
@@ -119,7 +119,7 @@ public class PathFindingAgent extends SPAgent
 			ArrayList<ACLMessage> messages = communicator.checkMessageBox(null);
 			for (ACLMessage msg : messages)
 			{
-				System.out.println("com-env : "+msg.getContent());
+//				System.out.println("com-env : "+msg.getContent());
 			}
         }
     }

@@ -61,7 +61,7 @@ public class JunctionNodeAgent extends NodeAgent
 			ArrayList<ACLMessage> departureMessages = communicator.checkPodDepartureMessages();
 			for (ACLMessage msg : departureMessages)
 			{
-				System.out.println("com-node : "+msg.getContent());
+//				System.out.println("com-node : "+msg.getContent());
 				
 				departingPods.remove(msg.getSender().getLocalName());
 			}
@@ -70,7 +70,7 @@ public class JunctionNodeAgent extends NodeAgent
 			ArrayList<ACLMessage> arrivalMessages = communicator.checkPodArrivalRequestMessages();
 			for (ACLMessage msg : arrivalMessages)
 			{
-				System.out.println("com-node : "+msg.getContent());
+//				System.out.println("com-node : "+msg.getContent());
 				
 				String podName = msg.getSender().getLocalName();
 
@@ -93,7 +93,7 @@ public class JunctionNodeAgent extends NodeAgent
 			ArrayList<ACLMessage> pathFinding = communicator.checkPathFindingResultMessages();
 			for (ACLMessage msg : pathFinding)
 			{
-				System.out.println("com-node : "+msg.getContent());
+//				System.out.println("com-node : "+msg.getContent());
 				
 				String podName = msg.getUserDefinedParameter("pod");
 				

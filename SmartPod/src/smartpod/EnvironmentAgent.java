@@ -3,6 +3,7 @@ package smartpod;
 import com.janezfeldin.Math.Vector2D;
 import jade.core.Agent;
 import jade.core.behaviours.CyclicBehaviour;
+import jade.core.behaviours.TickerBehaviour;
 import jade.wrapper.AgentController;
 import java.io.File;
 import java.util.ArrayList;
@@ -137,8 +138,13 @@ public class EnvironmentAgent extends SPAgent
 			pathFndingAgent.loadMap(nodeList,roadList);
 			
 			// testing moving of pod agents
-			PassengerGroupAgent testAgent = new PassengerGroupAgent("Postaja1", "Postaja2", 8000);
-			((AgentController) getContainerController().acceptNewAgent("Janez", testAgent)).start();
+			for (int i = 0; i < 5; i++)
+			{
+				PassengerGroupAgent testAgent1 = new PassengerGroupAgent("Postaja1", "Postaja2", 5000+i*1000);
+				((AgentController) getContainerController().acceptNewAgent("Janez"+i, testAgent1)).start();
+				PassengerGroupAgent testAgent2 = new PassengerGroupAgent("Postaja2", "Postaja1", 11000+i*1000);
+				((AgentController) getContainerController().acceptNewAgent("Andreas"+i, testAgent2)).start();
+			}
 		}
 		catch (Exception ex)
 		{
@@ -146,13 +152,39 @@ public class EnvironmentAgent extends SPAgent
 		}
 
 		
-		//sending starting positions to SmartPodDisplay program
+		// send starting positions to SmartPodDisplay program
 		DisplayDataBridge.sendInitialMessage(mapWidth,mapHeight,podList, stationList, junctionList, roadList);
 
-		//Adding of the Behaviour to the EnvironmentAgent
-		addBehaviour(new EnvironmentAgent.EnvironmentAgentBehaviour(this));
+		// add ticker behaviour for updating SmartPodDisplay on 1ms
+		addBehaviour(new EnvironmentAgent.UpdateDisplayDataBridge(this,1));
 	}
 
+	/**
+	 * Behaviour class for updating SmartPodDisplay. It extends TickerBehaviour.
+	 */
+	public class UpdateDisplayDataBridge extends TickerBehaviour
+	{
+		/**
+		 * Constructor for environment's agent behaviour class.
+		 *
+		 * @param a the agent to which behaviour is being applied.
+		 * @param period the tick period in ms
+		 */
+		public UpdateDisplayDataBridge(Agent a, long period)
+		{
+			super(a, period);
+		}
+
+		/**
+		 * This method is invoked periodically with the period defined in the constructor.
+		 */
+		@Override
+		public void onTick()
+		{
+			//sends data to SmartPodDisplay
+			DisplayDataBridge.sendUpdateMessage(podList, stationList, junctionList);
+		}
+	}
 	
 	/**
 	 * Method used for getting the Node's position.
@@ -181,32 +213,5 @@ public class EnvironmentAgent extends SPAgent
 		}
 		//return null result if the Node with specified name wasn't found.
 		return null;
-	}
-
-	/**
-	 * Behaviour class for EnvironmentAgent. It extends CyclicBehaviour.
-	 */
-	public class EnvironmentAgentBehaviour extends CyclicBehaviour
-	{
-		/**
-		 * Constructor for environment's agent behaviour class.
-		 *
-		 * @param a the agent to which behaviour is being applied.
-		 */
-		public EnvironmentAgentBehaviour(Agent a)
-		{
-			super(a);
-		}
-
-		/**
-		 * Method that performs actions in EnvironmentAgentBehaviour class.
-		 * It gets called each time Jade platform has spare resources.
-		 */
-		@Override
-		public void action()
-		{
-			//sends data to SmartPodDisplay
-			DisplayDataBridge.sendUpdateMessage(podList, stationList, junctionList);
-		}
 	}
 }

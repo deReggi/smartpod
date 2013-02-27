@@ -197,7 +197,7 @@ public class RoadAgent extends SPAgent
 			ArrayList<ACLMessage> attachMessages = communicator.checkPodAttachMessages();
 			for (ACLMessage msg : attachMessages)
 			{
-				System.out.println("com-road : "+msg.getContent());
+//				System.out.println("com-road : "+msg.getContent());
 				registeredPods.add(msg.getSender().getLocalName());
 				communicator.informRoadData(msg);
 			}
@@ -206,7 +206,7 @@ public class RoadAgent extends SPAgent
 			ArrayList<ACLMessage> detachMessages = communicator.checkPodDetachMessages();
 			for (ACLMessage msg : detachMessages)
 			{
-				System.out.println("com-road : "+msg.getContent());
+//				System.out.println("com-road : "+msg.getContent());
 				registeredPods.remove(msg.getSender().getLocalName());
 			}
 			
@@ -214,7 +214,7 @@ public class RoadAgent extends SPAgent
 			ArrayList<ACLMessage> messages = communicator.checkMessageBox(null);
 			for (ACLMessage msg : messages)
 			{
-				System.out.println("com-road : "+msg.getContent());
+//				System.out.println("com-road : "+msg.getContent());
 			}
 			
 			// inform weight change
