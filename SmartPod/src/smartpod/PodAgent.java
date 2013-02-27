@@ -85,7 +85,6 @@ public class PodAgent extends SPAgent
 	 */
 	public void setFinalDestination(Vector2D destination)
 	{
-		arrived = false;
 		this.finalDestination = destination;
 		throw new UnsupportedOperationException("Ni še narejeno, je treba dodat nastavljanje currentDestination in finalDestinationNodeName!!!");
 	}
@@ -109,7 +108,6 @@ public class PodAgent extends SPAgent
 	 */
 	public void setFinalDestinationNodeName(String name)
 	{
-		arrived = false;
 		this.finalDestinationNodeName = name;
 		throw new UnsupportedOperationException("Ni še narejeno, je treba dodat nastavljanje currentDestination in finalDestinationNodeName!!!");
 	}
@@ -314,6 +312,7 @@ public class PodAgent extends SPAgent
 				currentTime = getCurrentTime();
 				
 				onTheRoad = true;
+				arrived = false;
 			}
 			
 			// check other messages
