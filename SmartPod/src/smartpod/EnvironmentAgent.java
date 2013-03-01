@@ -2,7 +2,6 @@ package smartpod;
 
 import com.janezfeldin.Math.Vector2D;
 import jade.core.Agent;
-import jade.core.behaviours.CyclicBehaviour;
 import jade.core.behaviours.TickerBehaviour;
 import jade.wrapper.AgentController;
 import java.io.File;
@@ -105,7 +104,8 @@ public class EnvironmentAgent extends SPAgent
 				temp = (Element) tempList.item(i);
 				String tempStart = temp.getElementsByTagName("start").item(0).getTextContent();
 				String tempEnd = temp.getElementsByTagName("end").item(0).getTextContent();
-				RoadAgent tempAgent = new RoadAgent(tempStart, tempEnd, getNodesPosition(tempStart), getNodesPosition(tempEnd), roadBelongingType);
+				double tempWeight = Double.parseDouble(temp.getElementsByTagName("weight").item(0).getTextContent());
+				RoadAgent tempAgent = new RoadAgent(tempStart, tempEnd, getNodesPosition(tempStart), getNodesPosition(tempEnd), roadBelongingType,tempWeight);
 				((AgentController) getContainerController().acceptNewAgent(temp.getElementsByTagName("name").item(0).getTextContent(), tempAgent)).start();
 				tempAgent.weightUpdateDelegate = pathFndingAgent.getAID();
 				roadList.add(tempAgent);
@@ -138,13 +138,16 @@ public class EnvironmentAgent extends SPAgent
 			pathFndingAgent.loadMap(nodeList,roadList);
 			
 			// testing moving of pod agents
-			for (int i = 0; i < 5; i++)
-			{
-				PassengerGroupAgent testAgent1 = new PassengerGroupAgent("Postaja1", "Postaja2", 5000+i*1000);
-				((AgentController) getContainerController().acceptNewAgent("Janez"+i, testAgent1)).start();
-				PassengerGroupAgent testAgent2 = new PassengerGroupAgent("Postaja2", "Postaja1", 11000+i*1000);
-				((AgentController) getContainerController().acceptNewAgent("Andreas"+i, testAgent2)).start();
-			}
+//			PassengerGroupAgent testAgent1 = new PassengerGroupAgent("Postaja3", "Postaja4", 5000);
+//			((AgentController) getContainerController().acceptNewAgent("Janez", testAgent1)).start();
+				
+//			for (int i = 0; i < 5; i++)
+//			{
+//				PassengerGroupAgent testAgent1 = new PassengerGroupAgent("Postaja3", "Postaja4", 5000+i*1000);
+//				((AgentController) getContainerController().acceptNewAgent("Janez"+i, testAgent1)).start();
+//				PassengerGroupAgent testAgent2 = new PassengerGroupAgent("Postaja4", "Postaja3", 11000+i*1000);
+//				((AgentController) getContainerController().acceptNewAgent("Andreas"+i, testAgent2)).start();
+//			}
 		}
 		catch (Exception ex)
 		{
@@ -156,7 +159,7 @@ public class EnvironmentAgent extends SPAgent
 		DisplayDataBridge.sendInitialMessage(mapWidth,mapHeight,podList, stationList, junctionList, roadList);
 
 		// add ticker behaviour for updating SmartPodDisplay on 1ms
-		addBehaviour(new EnvironmentAgent.UpdateDisplayDataBridge(this,1));
+		addBehaviour(new EnvironmentAgent.UpdateDisplayDataBridge(this,50));
 	}
 
 	/**

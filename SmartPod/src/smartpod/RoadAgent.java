@@ -35,13 +35,15 @@ public class RoadAgent extends SPAgent
 	 * @param endPosition Vector2D of the end location
 	 * @param roadBelongingType String containing two possible values: inbound/outgoing. inbound - the road belongs to the node at the end; outgoing - road belongs to the node at the start.
 	 */
-	public RoadAgent(String startNode, String endNode, Vector2D startPosition, Vector2D endPosition, String roadBelongingType)
+	public RoadAgent(String startNode, String endNode, Vector2D startPosition, Vector2D endPosition, String roadBelongingType, double weight)
 	{
 		this.startNode = startNode;
 		this.endNode = endNode;
 		this.startPosition = startPosition;
 		this.endPosition = endPosition;
 		this.roadBelongingType = roadBelongingType;
+		this.weight = weight;
+//		System.out.println("RoadAgent("+startNode+", "+endNode+", "+startPosition+", "+endPosition+", "+roadBelongingType+", "+weight+")");
 	}
 	
 	/**

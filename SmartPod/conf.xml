@@ -1,21 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Conf>
 	<Environment>
-		<width>500</width>
-		<height>500</height>
+		<width>600</width>
+		<height>600</height>
 		<roadBelongingType>inbound</roadBelongingType><!--(inbound ali outgoing) inbound - cesta pripada vozlišču v katerega se izteka; outgoing - cesta pripada vozlišču iz katerega izhaja-->
 	</Environment>
 	<Nodes>
 		<Stations>
 			<Station>
 				<name>Postaja1</name>
-				<position>(100,200)</position>
+				<position>(100,100)</position>
 				<podCapacity>3</podCapacity>
 				<peopleCapacity>100</peopleCapacity>
 			</Station>
 			<Station>
 				<name>Postaja2</name>
-				<position>(300,200)</position>
+				<position>(500,100)</position>
+				<podCapacity>3</podCapacity>
+				<peopleCapacity>100</peopleCapacity>
+			</Station>
+			<Station>
+				<name>Postaja3</name>
+				<position>(200,300)</position>
+				<podCapacity>3</podCapacity>
+				<peopleCapacity>100</peopleCapacity>
+			</Station>
+			<Station>
+				<name>Postaja4</name>
+				<position>(400,300)</position>
+				<podCapacity>3</podCapacity>
+				<peopleCapacity>100</peopleCapacity>
+			</Station>
+			<Station>
+				<name>Postaja5</name>
+				<position>(100,500)</position>
+				<podCapacity>3</podCapacity>
+				<peopleCapacity>100</peopleCapacity>
+			</Station>
+			<Station>
+				<name>Postaja6</name>
+				<position>(500,500)</position>
 				<podCapacity>3</podCapacity>
 				<peopleCapacity>100</peopleCapacity>
 			</Station>
@@ -23,11 +47,19 @@
 		<Junctions>
 			<Junction>
 				<name>Križišče1</name>
-				<position>(200,100)</position>
+				<position>(300,100)</position>
 			</Junction>
 			<Junction>
 				<name>Križišče2</name>
-				<position>(200,300)</position>
+				<position>(300,200)</position>
+			</Junction>
+			<Junction>
+				<name>Križišče3</name>
+				<position>(500,300)</position>
+			</Junction>
+			<Junction>
+				<name>Križišče4</name>
+				<position>(300,400)</position>
 			</Junction>
 		</Junctions>
 	</Nodes>
@@ -36,25 +68,173 @@
 			<name>Pot1</name>
 			<start>Postaja1</start>
 			<end>Križišče1</end>
+			<weight>5</weight>
 		</Road>
 		<Road>
 			<name>Pot2</name>
 			<start>Križišče1</start>
-			<end>Postaja2</end>
+			<end>Postaja1</end>
+			<weight>5</weight>
 		</Road>
 		<Road>
 			<name>Pot3</name>
-			<start>Postaja2</start>
-			<end>Križišče2</end>
+			<start>Križišče1</start>
+			<end>Postaja2</end>
+			<weight>4</weight>
 		</Road>
 		<Road>
 			<name>Pot4</name>
-			<start>Križišče2</start>
+			<start>Postaja2</start>
+			<end>Križišče1</end>
+			<weight>4</weight>
+		</Road>
+		<Road>
+			<name>Pot5</name>
+			<start>Postaja1</start>
+			<end>Postaja5</end>
+			<weight>1</weight>
+		</Road>
+		<Road>
+			<name>Pot6</name>
+			<start>Postaja5</start>
 			<end>Postaja1</end>
+			<weight>1</weight>
+		</Road>
+		<Road>
+			<name>Pot7</name>
+			<start>Križišče1</start>
+			<end>Križišče2</end>
+			<weight>3</weight>
+		</Road>
+		<Road>
+			<name>Pot8</name>
+			<start>Križišče2</start>
+			<end>Križišče1</end>
+			<weight>3</weight>
+		</Road>
+		<Road>
+			<name>Pot9</name>
+			<start>Postaja2</start>
+			<end>Križišče3</end>
+			<weight>5</weight>
+		</Road>
+		<Road>
+			<name>Pot10</name>
+			<start>Križišče3</start>
+			<end>Postaja2</end>
+			<weight>5</weight>
+		</Road>
+		<Road>
+			<name>Pot11</name>
+			<start>Križišče2</start>
+			<end>Postaja3</end>
+			<weight>2</weight>
+		</Road>
+		<Road>
+			<name>Pot12</name>
+			<start>Postaja3</start>
+			<end>Križišče2</end>
+			<weight>2</weight>
+		</Road>
+		<Road>
+			<name>Pot13</name>
+			<start>Križišče2</start>
+			<end>Postaja4</end>
+			<weight>2</weight>
+		</Road>
+		<Road>
+			<name>Pot14</name>
+			<start>Postaja4</start>
+			<end>Križišče2</end>
+			<weight>2</weight>
+		</Road>
+		<Road>
+			<name>Pot15</name>
+			<start>Postaja4</start>
+			<end>Križišče3</end>
+			<weight>4</weight>
+		</Road>
+		<Road>
+			<name>Pot16</name>
+			<start>Križišče3</start>
+			<end>Postaja4</end>
+			<weight>4</weight>
+		</Road>
+		<Road>
+			<name>Pot17</name>
+			<start>Postaja3</start>
+			<end>Križišče4</end>
+			<weight>2</weight>
+		</Road>
+		<Road>
+			<name>Pot18</name>
+			<start>Križišče4</start>
+			<end>Postaja3</end>
+			<weight>2</weight>
+		</Road>
+		<Road>
+			<name>Pot19</name>
+			<start>Postaja4</start>
+			<end>Križišče4</end>
+			<weight>2</weight>
+		</Road>
+		<Road>
+			<name>Pot20</name>
+			<start>Križišče4</start>
+			<end>Postaja4</end>
+			<weight>2</weight>
+		</Road>
+		<Road>
+			<name>Pot21</name>
+			<start>Križišče3</start>
+			<end>Postaja6</end>
+			<weight>4</weight>
+		</Road>
+		<Road>
+			<name>Pot22</name>
+			<start>Postaja6</start>
+			<end>Križišče3</end>
+			<weight>4</weight>
+		</Road>
+		<Road>
+			<name>Pot23</name>
+			<start>Križišče4</start>
+			<end>Postaja5</end>
+			<weight>4</weight>
+		</Road>
+		<Road>
+			<name>Pot24</name>
+			<start>Postaja5</start>
+			<end>Križišče4</end>
+			<weight>4</weight>
+		</Road>
+		<Road>
+			<name>Pot25</name>
+			<start>Križišče4</start>
+			<end>Postaja6</end>
+			<weight>3</weight>
+		</Road>
+		<Road>
+			<name>Pot26</name>
+			<start>Postaja6</start>
+			<end>Križišče4</end>
+			<weight>3</weight>
+		</Road>
+		<Road>
+			<name>Pot27</name>
+			<start>Postaja5</start>
+			<end>Postaja6</end>
+			<weight>5</weight>
+		</Road>
+		<Road>
+			<name>Pot28</name>
+			<start>Postaja6</start>
+			<end>Postaja5</end>
+			<weight>5</weight>
 		</Road>
 	</Roads>
 	<Pods>
-		<startPosition>Postaja1</startPosition>
+		<startPosition>Postaja3</startPosition>
 		<numPods>5</numPods>
 		<capacity>1,2,3</capacity><!--Vzame številke po vrsti za vsak pod posebaj. Če število številk ni enako številu podov je zadnja številka za vse nadalnje pode.-->
 	</Pods>
