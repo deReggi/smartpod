@@ -126,18 +126,7 @@ public class PathFindingAgent extends SPAgent
 				else
 				{
 					// check to see if this path to that square is better, using G cost as the measure.
-					double childG = currentNode.G + child.C;
-					double otherChildG = 0.0;
-					ArrayList<PFNode> otherChildren = childNodeMap.get(child.parentNode);
-					for (PFNode otherChild : otherChildren)
-					{
-						if (otherChild.nodeAID.equals(child.nodeAID))
-						{
-							otherChildG = otherChild.G + otherChild.C;
-							break;
-						}
-					}
-					if (childG < otherChildG)
+					if (currentNode.G  + child.C < child.G)
 					{
 						ArrayList<PFNode> nodes = endNodeNameToNodeMap.get(child.nodeAID);
 						for (PFNode node : nodes)

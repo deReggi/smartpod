@@ -18,11 +18,12 @@ public class PFNode
 	public PFNode parentNode	= null;
 	public AID roadAID			= null;
 	public AID nodeAID			= null;
-	public double D = 0.0; // the road distance. G = D + W
-	public double C = 0.0; // the movement cost to move from the parent node. 
-	public double G = 0.0; // acumulated cost
+	public double D = 0.0; // the road distance. C = D + W
+	public double C = 0.0; // the movement cost to move from the parent node.
+	public double P = 0.0; // the movement cost to the parent node
+	public double G = 0.0; // G = P + C
 	public double H = 0.0; // the estimated movement cost to move to the end node.
-	public double F = 0.0; // F = G + C + H
+	public double F = 0.0; // F = G + H
 	
 	public boolean opened = false;
 	public boolean closed = false;
@@ -44,6 +45,7 @@ public class PFNode
 		this.roadAID = road.getAID();
 		this.D = road.startPosition.dist(road.endPosition)*distanceWeight;
 		this.C = D + road.weight;
+		this.G = P + C;
 		this.position = road.endPosition;
 	}
 	
@@ -54,21 +56,23 @@ public class PFNode
 
 	public void setRoadWeight(double weight)
 	{
-		this.G = D + weight;
-		this.F = G + C + H;
+		this.C = D + weight;
+		this.G = P + C;
+		this.F = G + H;
 	}
 	
 	public void setFinalPosition(Vector2D finalPosition)
 	{
 		this.H = finalPosition.dist(position)*heuristicWeight + 1;
-		this.F = G + C + H;
+		this.F = G + H;
 	}
 	
 	public void setParentNode(PFNode parentNode)
 	{
 		this.parentNode = parentNode;
-		this.G = (parentNode != null ? parentNode.G + parentNode.C : 0.0);
-		this.F = G + C + H;
+		this.P = (parentNode != null ? parentNode.G + parentNode.C : 0.0);
+		this.G = P + C;
+		this.F = G + H;
 	}
 	
 	@Override
