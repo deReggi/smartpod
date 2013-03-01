@@ -21,6 +21,7 @@ public class RoadAgent extends SPAgent
 	public ArrayList<AID> registeredPods = new ArrayList<AID>();
 	public AID		weightUpdateDelegate;
 	public double	weight		= 0.0;
+	public double	totalWeight	= 0.0;
 	public AID	startNode	= null;
 	public AID	endNode		= null;
 	public Vector2D	startPosition;
@@ -156,11 +157,11 @@ public class RoadAgent extends SPAgent
 	 */
 	public boolean recalculateWeight()
 	{
-		double oldWeight = weight;
-		weight = 0.5*registeredPods.size();
-		return (oldWeight != weight);
+		double oldWeight = totalWeight;
+		totalWeight = weight + registeredPods.size();
+		return (oldWeight != totalWeight);
 	}
-
+	
 	/**
 	 * This method gets called when agent is started.
 	 * It adds the desired behaviour to the agent.

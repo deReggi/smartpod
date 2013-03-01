@@ -89,27 +89,31 @@ public class PathFindingAgent extends SPAgent
 //				System.out.println("  |"+child);
 //			}
 //		}
-		/*
-		// find path
-		String finalNodeName = "Postaja6";
-		String sourceNodeName = "Postaja5";
-		
-		PFNode currentNode = endNodeNameToNodeMap.get(sourceNodeName).get(0);
-		close(currentNode);
-		
-		while (!(currentNode.nodeAID).equals(finalNodeName))
-		{
-			System.out.println("currentNode : "+currentNode);
+//
+//		// find path
+//		AID finalNodeAID	= new AID("Postaja2", false);
+//		AID sourceNodeAID	= new AID("Postaja1", false);
+//
+//		AID roadAID = findNextOptimalRoad(sourceNodeAID, finalNodeAID);
+//
+//		System.err.println("WAHOO :: " + roadAID);
 
+		//</editor-fold>
+	}
+
+	private AID findNextOptimalRoad(AID sourceNodeAID, AID finalNodeAID)
+	{
+		PFNode currentNode = endNodeNameToNodeMap.get(sourceNodeAID).get(0);
+		close(currentNode);
+
+		while (!(currentNode.nodeAID).equals(finalNodeAID))
+		{
 			ArrayList<PFNode> children = childNodeMap.get(currentNode);
 
 			for (PFNode child : children)
 			{
-				System.out.println("C :  |"+child);
-				
 				if (child.closed)
 				{
-					System.out.println("     | closed");
 					// ignore
 				}
 				else if (!child.opened)
@@ -117,13 +121,10 @@ public class PathFindingAgent extends SPAgent
 					// open child with parent
 					open(child, currentNode);
 					// set the final position for F calculation
-					child.setFinalPosition(nodePositionMap.get(finalNodeName));
-					
-					System.out.println("     | will open F="+child.F);
+					child.setFinalPosition(nodePositionMap.get(finalNodeAID));
 				}
 				else
 				{
-					System.out.println("     | opened");
 					// check to see if this path to that square is better, using G cost as the measure.
 					double childG = currentNode.G + child.C;
 					double otherChildG = 0.0;
@@ -153,27 +154,24 @@ public class PathFindingAgent extends SPAgent
 			close(currentNode);
 		}
 
+		// loopback
 		while (currentNode.parentNode.parentNode != null)
 		{
-			System.err.println(currentNode.roadAID);
 			currentNode = currentNode.parentNode;
 		}
-		String roadAID = currentNode.roadAID;
-
-		System.err.println("WAHOO :: "+roadAID);
 
 		// cleanup
 		cleanup();
-		*/
-		//</editor-fold>
+
+		return currentNode.roadAID;
 	}
 
 	private void open(PFNode child, PFNode parent)
 	{
 //		System.out.println("Open "+child.nodeAID);
-		
+
 		openNodes.add(child);
-		
+
 		ArrayList<PFNode> nodes = endNodeNameToNodeMap.get(child.nodeAID);
 		for (PFNode node : nodes)
 		{
@@ -260,12 +258,9 @@ public class PathFindingAgent extends SPAgent
 			ArrayList<ACLMessage> weightMessages = communicator.checkRoadWeightUpdates();
 			for (ACLMessage msg : weightMessages)
 			{
-//				System.out.println("com-env : "+msg.getContent());
-
 				// update node road weight
 				double weight = Double.parseDouble(msg.getUserDefinedParameter("weight"));
-				AID roadAID = msg.getSender();
-				PFNode node = roadNameToNodeMap.get(roadAID);
+				PFNode node = roadNameToNodeMap.get(msg.getSender());
 				if (node != null)
 				{
 					node.setRoadWeight(weight);
@@ -273,77 +268,16 @@ public class PathFindingAgent extends SPAgent
 			}
 
 			// check path finding request messages
-			ArrayList<ACLMessage> pathFindingMessages = communicator.checkPathFindingRequests();
-			for (ACLMessage msg : pathFindingMessages)
+			ACLMessage pathFindingRequest = communicator.checkPathFindingRequests();
+			if (pathFindingRequest != null)
 			{
-//				System.out.println("com-env : "+msg.getContent());
-
 				// find path
-				AID finalNodeAID = new AID(msg.getUserDefinedParameter("destination"),false);
-				AID sourceNodeAID = msg.getSender();
-				
-				PFNode currentNode = endNodeNameToNodeMap.get(sourceNodeAID).get(0);
-				close(currentNode);
-				
-				while (!(currentNode.nodeAID).equals(finalNodeAID))
-				{
-					ArrayList<PFNode> children = childNodeMap.get(currentNode);
-					
-					for (PFNode child : children)
-					{
-						if (child.closed)
-						{
-							// ignore
-						}
-						else if (!child.opened)
-						{
-							// open child with parent
-							open(child, currentNode);
-							// set the final position for F calculation
-							child.setFinalPosition(nodePositionMap.get(finalNodeAID));
-						}
-						else
-						{
-							// check to see if this path to that square is better, using G cost as the measure.
-							double childG = currentNode.G + child.C;
-							double otherChildG = 0.0;
-							ArrayList<PFNode> otherChildren = childNodeMap.get(child.parentNode);
-							for (PFNode otherChild : otherChildren)
-							{
-								if (otherChild.nodeAID.equals(child.nodeAID))
-								{
-									otherChildG = otherChild.G + otherChild.C;
-									break;
-								}
-							}
-							if (childG < otherChildG)
-							{
-								ArrayList<PFNode> nodes = endNodeNameToNodeMap.get(child.nodeAID);
-								for (PFNode node : nodes)
-								{
-									node.setParentNode(currentNode);
-								}
-							}
-						}
-					}
-					
-					int index = findLowestCost();
+				AID finalNodeAID = new AID(pathFindingRequest.getUserDefinedParameter("destination"), false);
+				AID sourceNodeAID = pathFindingRequest.getSender();
 
-					currentNode = openNodes.get(index);
-					close(currentNode);
-				}
-				
-				// loopback
-				while (currentNode.parentNode.parentNode != null)
-				{
-					currentNode = currentNode.parentNode;
-				}
-				AID roadAID = currentNode.roadAID;
+				AID roadAID = findNextOptimalRoad(sourceNodeAID, finalNodeAID);
 
-				communicator.informPathFindingResult(msg, roadAID);
-
-				// cleanup
-				cleanup();
+				communicator.informPathFindingResult(pathFindingRequest, roadAID);
 			}
 		}
 	}

@@ -58,7 +58,7 @@ public class RoadCommunicator extends Communicator
 		msg.setOntology(ONTOLOGY_ROAD_WEIGHT_UPDATE);
 		msg.setContent("my weight is");
 		msg.addReceiver(((RoadAgent)agent).weightUpdateDelegate);
-		msg.addUserDefinedParameter("weight", String.valueOf(((RoadAgent)agent).weight));
+		msg.addUserDefinedParameter("weight", String.valueOf(((RoadAgent)agent).totalWeight));
 		agent.send(msg);
 	}
 	

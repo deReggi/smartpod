@@ -44,9 +44,9 @@ public class PathFindingCommunicator extends Communicator
 	 * Checks for received path finding requests.
 	 * @return ArrayList of received path finding ACLMessages.
 	 */
-	public ArrayList<ACLMessage> checkPathFindingRequests()
+	public ACLMessage checkPathFindingRequests()
 	{
-		return checkMessageBox(pathFindRequestTemplate);
+		return agent.receive(pathFindRequestTemplate);
 	}
 	
 	/**
