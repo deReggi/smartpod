@@ -69,22 +69,46 @@ public class PathFindingAgent extends SPAgent
 				children.add(child);
 			}
 		}
-		
+		//<editor-fold defaultstate="collapsed" desc="debug">
+//		for (PFNode parent : allNodes)
+//		{
+//			System.out.println("P : "+parent);
+//			ArrayList<PFNode> children = childNodeMap.get(parent);
+//			for (PFNode child : children)
+//			{
+//				System.out.println("C :  |"+child);
+//			}
+//		}
+//		for (PFNode parent : allNodes)
+//		{
+//			System.out.println("endName : "+parent.nodeName);
+//			ArrayList<PFNode> children = endNodeNameToNodeMap.get(parent.nodeName);
+//			for (PFNode child : children)
+//			{
+//				System.out.println("  |"+child);
+//			}
+//		}
+		/*
 		// find path
 		String finalNodeName = "Postaja6";
 		String sourceNodeName = "Postaja5";
 		
 		PFNode currentNode = endNodeNameToNodeMap.get(sourceNodeName).get(0);
 		close(currentNode);
-
+		
 		while (!(currentNode.nodeName).equals(finalNodeName))
 		{
+			System.out.println("currentNode : "+currentNode);
+
 			ArrayList<PFNode> children = childNodeMap.get(currentNode);
 
 			for (PFNode child : children)
 			{
+				System.out.println("C :  |"+child);
+				
 				if (child.closed)
 				{
+					System.out.println("     | closed");
 					// ignore
 				}
 				else if (!child.opened)
@@ -93,9 +117,12 @@ public class PathFindingAgent extends SPAgent
 					open(child, currentNode);
 					// set the final position for F calculation
 					child.setFinalPosition(nodePositionMap.get(finalNodeName));
+					
+					System.out.println("     | will open F="+child.F);
 				}
 				else
 				{
+					System.out.println("     | opened");
 					// check to see if this path to that square is better, using G cost as the measure.
 					double childG = currentNode.G + child.C;
 					double otherChildG = 0.0;
@@ -125,7 +152,7 @@ public class PathFindingAgent extends SPAgent
 			close(currentNode);
 		}
 
-		while (currentNode.parentNode != null)
+		while (currentNode.parentNode.parentNode != null)
 		{
 			System.err.println(currentNode.roadName);
 			currentNode = currentNode.parentNode;
@@ -136,16 +163,20 @@ public class PathFindingAgent extends SPAgent
 
 		// cleanup
 		cleanup();
+		*/
+		//</editor-fold>
 	}
 
 	private void open(PFNode child, PFNode parent)
 	{
 //		System.out.println("Open "+child.nodeName);
+		
+		openNodes.add(child);
+		
 		ArrayList<PFNode> nodes = endNodeNameToNodeMap.get(child.nodeName);
 		for (PFNode node : nodes)
 		{
 			node.opened = true;
-			openNodes.add(node);
 			node.setParentNode(parent);
 		}
 	}
@@ -302,7 +333,7 @@ public class PathFindingAgent extends SPAgent
 				}
 				
 				// loopback
-				while (currentNode.parentNode != null)
+				while (currentNode.parentNode.parentNode != null)
 				{
 					System.out.println(currentNode.nodeName);
 					currentNode = currentNode.parentNode;
@@ -313,27 +344,6 @@ public class PathFindingAgent extends SPAgent
 
 				// cleanup
 				cleanup();
-
-//				String node = msg.getSender().getLocalName();
-//				String road = "Pot1";
-//				
-//				if (node.equals("Postaja3"))
-//				{
-//					road = "Pot12";
-//				}
-//				else if (node.equals("Postaja4"))
-//				{
-//					road = "Pot19";
-//				}
-//				else if (node.equals("Križišče2"))
-//				{
-//					road = "Pot13";
-//				}
-//				else if (node.equals("Križišče4"))
-//				{
-//					road = "Pot18";
-//				}
-//				communicator.informPathFindingResult(msg, road);
 			}
 		}
 	}

@@ -69,4 +69,10 @@ public class PFNode
 		this.G = (parentNode != null ? parentNode.G + parentNode.C : 0.0);
 		this.F = G + C + H;
 	}
+	
+	@Override
+	public String toString()
+	{
+		return "===="+roadName+"===>"+nodeName;//+" parentNode : "+parentNode;
+	}
 }
