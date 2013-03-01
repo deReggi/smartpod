@@ -138,24 +138,12 @@ public class EnvironmentAgent extends SPAgent
 			pathFndingAgent.loadMap(nodeList,roadList);
 			
 			// testing moving of pod agents
-			PassengerGroupAgent testAgent1 = new PassengerGroupAgent("Postaja3", "Postaja1", 5000);
-			((AgentController) getContainerController().acceptNewAgent("Janez1", testAgent1)).start();
-			PassengerGroupAgent testAgent2 = new PassengerGroupAgent("Postaja3", "Postaja2", 6000);
-			((AgentController) getContainerController().acceptNewAgent("Janez2", testAgent2)).start();
-			PassengerGroupAgent testAgent3 = new PassengerGroupAgent("Postaja3", "Postaja4", 7000);
-			((AgentController) getContainerController().acceptNewAgent("Janez3", testAgent3)).start();
-			PassengerGroupAgent testAgent4 = new PassengerGroupAgent("Postaja3", "Postaja5", 8000);
-			((AgentController) getContainerController().acceptNewAgent("Janez4", testAgent4)).start();
-			PassengerGroupAgent testAgent5 = new PassengerGroupAgent("Postaja3", "Postaja6", 9000);
-			((AgentController) getContainerController().acceptNewAgent("Janez5", testAgent5)).start();
 				
-//			for (int i = 0; i < 5; i++)
-//			{
-//				PassengerGroupAgent testAgent1 = new PassengerGroupAgent("Postaja3", "Postaja4", 5000+i*1000);
-//				((AgentController) getContainerController().acceptNewAgent("Janez"+i, testAgent1)).start();
-//				PassengerGroupAgent testAgent2 = new PassengerGroupAgent("Postaja4", "Postaja3", 11000+i*1000);
-//				((AgentController) getContainerController().acceptNewAgent("Andreas"+i, testAgent2)).start();
-//			}
+			for (int i = 0; i < 20; i++)
+			{
+				PassengerGroupAgent testAgent1 = new PassengerGroupAgent("Garaža1", "Postaja"+(i%6+1), 5000+i*1000);
+				((AgentController) getContainerController().acceptNewAgent("Janez"+i, testAgent1)).start();
+			}
 		}
 		catch (Exception ex)
 		{

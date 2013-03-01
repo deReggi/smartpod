@@ -53,7 +53,7 @@ public class RoadCommunicator extends Communicator
 	 */
 	public void informRoadWeight()
 	{
-		System.out.println("RoadCommunicator - informRoadWeight()");
+		System.out.println(agent.getLocalName()+"\t :: informRoadWeight()");
 		ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
 		msg.setOntology(ONTOLOGY_ROAD_WEIGHT_UPDATE);
 		msg.setContent("my weight is");
@@ -67,7 +67,7 @@ public class RoadCommunicator extends Communicator
 	 */
 	public void informRoadData(ACLMessage requestMessage)
 	{
-		System.out.println("RoadCommunicator - informRoadData()");
+		System.out.println(agent.getLocalName()+"\t :: informRoadData()");
 		ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
 		msg.setOntology(ONTOLOGY_POD_ROAD_ATTACH);
 		msg.setContent("my road data");

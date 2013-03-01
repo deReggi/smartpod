@@ -8,6 +8,12 @@
 	<Nodes>
 		<Stations>
 			<Station>
+				<name>Garaža1</name>
+				<position>(550,300)</position>
+				<podCapacity>40</podCapacity>
+				<peopleCapacity>0</peopleCapacity>
+			</Station>
+			<Station>
 				<name>Postaja1</name>
 				<position>(100,100)</position>
 				<podCapacity>10</podCapacity>
@@ -65,177 +71,189 @@
 	</Nodes>
 	<Roads>
 		<Road>
-			<name>Pot1</name>
+			<name>Cesta1</name>
 			<start>Postaja1</start>
 			<end>Križišče1</end>
 			<weight>5</weight>
 		</Road>
 		<Road>
-			<name>Pot2</name>
+			<name>Cesta2</name>
 			<start>Križišče1</start>
 			<end>Postaja1</end>
 			<weight>5</weight>
 		</Road>
 		<Road>
-			<name>Pot3</name>
+			<name>Cesta3</name>
 			<start>Križišče1</start>
 			<end>Postaja2</end>
 			<weight>4</weight>
 		</Road>
 		<Road>
-			<name>Pot4</name>
+			<name>Cesta4</name>
 			<start>Postaja2</start>
 			<end>Križišče1</end>
 			<weight>4</weight>
 		</Road>
 		<Road>
-			<name>Pot5</name>
+			<name>Cesta5</name>
 			<start>Postaja1</start>
 			<end>Postaja5</end>
 			<weight>1</weight>
 		</Road>
 		<Road>
-			<name>Pot6</name>
+			<name>Cesta6</name>
 			<start>Postaja5</start>
 			<end>Postaja1</end>
 			<weight>1</weight>
 		</Road>
 		<Road>
-			<name>Pot7</name>
+			<name>Cesta7</name>
 			<start>Križišče1</start>
 			<end>Križišče2</end>
 			<weight>3</weight>
 		</Road>
 		<Road>
-			<name>Pot8</name>
+			<name>Cesta8</name>
 			<start>Križišče2</start>
 			<end>Križišče1</end>
 			<weight>3</weight>
 		</Road>
 		<Road>
-			<name>Pot9</name>
+			<name>Cesta9</name>
 			<start>Postaja2</start>
 			<end>Križišče3</end>
 			<weight>5</weight>
 		</Road>
 		<Road>
-			<name>Pot10</name>
+			<name>Cesta10</name>
 			<start>Križišče3</start>
 			<end>Postaja2</end>
 			<weight>5</weight>
 		</Road>
 		<Road>
-			<name>Pot11</name>
+			<name>Cesta11</name>
 			<start>Križišče2</start>
 			<end>Postaja3</end>
 			<weight>2</weight>
 		</Road>
 		<Road>
-			<name>Pot12</name>
+			<name>Cesta12</name>
 			<start>Postaja3</start>
 			<end>Križišče2</end>
 			<weight>2</weight>
 		</Road>
 		<Road>
-			<name>Pot13</name>
+			<name>Cesta13</name>
 			<start>Križišče2</start>
 			<end>Postaja4</end>
 			<weight>2</weight>
 		</Road>
 		<Road>
-			<name>Pot14</name>
+			<name>Cesta14</name>
 			<start>Postaja4</start>
 			<end>Križišče2</end>
 			<weight>2</weight>
 		</Road>
 		<Road>
-			<name>Pot15</name>
+			<name>Cesta15</name>
 			<start>Postaja4</start>
 			<end>Križišče3</end>
 			<weight>4</weight>
 		</Road>
 		<Road>
-			<name>Pot16</name>
+			<name>Cesta16</name>
 			<start>Križišče3</start>
 			<end>Postaja4</end>
 			<weight>4</weight>
 		</Road>
 		<Road>
-			<name>Pot17</name>
+			<name>Cesta17</name>
 			<start>Postaja3</start>
 			<end>Križišče4</end>
 			<weight>2</weight>
 		</Road>
 		<Road>
-			<name>Pot18</name>
+			<name>Cesta18</name>
 			<start>Križišče4</start>
 			<end>Postaja3</end>
 			<weight>2</weight>
 		</Road>
 		<Road>
-			<name>Pot19</name>
+			<name>Cesta19</name>
 			<start>Postaja4</start>
 			<end>Križišče4</end>
 			<weight>2</weight>
 		</Road>
 		<Road>
-			<name>Pot20</name>
+			<name>Cesta20</name>
 			<start>Križišče4</start>
 			<end>Postaja4</end>
 			<weight>2</weight>
 		</Road>
 		<Road>
-			<name>Pot21</name>
+			<name>Cesta21</name>
 			<start>Križišče3</start>
 			<end>Postaja6</end>
 			<weight>4</weight>
 		</Road>
 		<Road>
-			<name>Pot22</name>
+			<name>Cesta22</name>
 			<start>Postaja6</start>
 			<end>Križišče3</end>
 			<weight>4</weight>
 		</Road>
 		<Road>
-			<name>Pot23</name>
+			<name>Cesta23</name>
 			<start>Križišče4</start>
 			<end>Postaja5</end>
 			<weight>4</weight>
 		</Road>
 		<Road>
-			<name>Pot24</name>
+			<name>Cesta24</name>
 			<start>Postaja5</start>
 			<end>Križišče4</end>
 			<weight>4</weight>
 		</Road>
 		<Road>
-			<name>Pot25</name>
+			<name>Cesta25</name>
 			<start>Križišče4</start>
 			<end>Postaja6</end>
 			<weight>3</weight>
 		</Road>
 		<Road>
-			<name>Pot26</name>
+			<name>Cesta26</name>
 			<start>Postaja6</start>
 			<end>Križišče4</end>
 			<weight>3</weight>
 		</Road>
 		<Road>
-			<name>Pot27</name>
+			<name>Cesta27</name>
 			<start>Postaja5</start>
 			<end>Postaja6</end>
 			<weight>5</weight>
 		</Road>
 		<Road>
-			<name>Pot28</name>
+			<name>Cesta28</name>
 			<start>Postaja6</start>
 			<end>Postaja5</end>
+			<weight>5</weight>
+		</Road>
+		<Road>
+			<name>Cesta29</name>
+			<start>Garaža1</start>
+			<end>Križišče3</end>
+			<weight>1</weight>
+		</Road>
+		<Road>
+			<name>Cesta30</name>
+			<start>Križišče3</start>
+			<end>Garaža1</end>
 			<weight>5</weight>
 		</Road>
 	</Roads>
 	<Pods>
-		<startPosition>Postaja3</startPosition>
-		<numPods>5</numPods>
+		<startPosition>Garaža1</startPosition>
+		<numPods>40</numPods>
 		<capacity>1,2,3</capacity><!--Vzame številke po vrsti za vsak pod posebaj. Če število številk ni enako številu podov je zadnja številka za vse nadalnje pode.-->
 	</Pods>
 </Conf>

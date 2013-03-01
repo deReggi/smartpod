@@ -145,29 +145,33 @@ public class StationNodeAgent extends NodeAgent
 			}
 			
 			// check arrival message box
-			ArrayList<ACLMessage> arrivalMessages = communicator.checkPodArrivalRequestMessages();
-			for (ACLMessage msg : arrivalMessages)
+			ACLMessage arrivalMessage = communicator.receiveMessage(communicator.podArrivalTemplate);
+			if (arrivalMessage != null)
+//			ArrayList<ACLMessage> arrivalMessages = communicator.checkPodArrivalRequestMessages();
+//			for (ACLMessage arrivalMessage : arrivalMessages)
 			{
-//				System.out.println("com-node : "+msg.getContent());
+//				System.out.println("com-node : "+arrivalMessage.getContent());
 				
-				String podName = msg.getSender().getLocalName();
+				String podName = arrivalMessage.getSender().getLocalName();
 
 				if (!registeredPods.contains(podName))
 				{
 					registeredPods.add(podName);
 
-					String destination = msg.getUserDefinedParameter("destination");
+					String destination = arrivalMessage.getUserDefinedParameter("destination");
 
-					communicator.confirmPodToNodeArrival(msg);
+					communicator.confirmPodToNodeArrival(arrivalMessage);
 
 					// check whether final destination has been reached
 					if (destination.equals(getLocalName()))
 					{
 						// the pod has reached the final destination
-						System.out.println("=======\nSUCCESS :: "+podName+" has reached destination!\n=======");
+						System.out.println("=======\nSUCCESS :: "+podName+" has reached destination "+getLocalName()+"\n=======");
 					}
 					else
 					{
+						departingPods.add(podName);
+						registeredPods.remove(podName);
 						communicator.requestPathFinding(podName, destination);
 					}
 				}

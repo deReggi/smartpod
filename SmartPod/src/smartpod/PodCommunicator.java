@@ -66,7 +66,7 @@ public class PodCommunicator extends Communicator
 	 */
 	public void acceptPodToRoadDeparture(ACLMessage requestMessage)
 	{
-		System.out.println("PodCommunicator - acceptPodToRoadDeparture()");
+		System.out.println(agent.getLocalName()+"\t :: acceptPodToRoadDeparture()");
 		ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
 		msg.setOntology(ONTOLOGY_POD_NODE_DEPARTURE);
 		msg.setContent("accept proposal");
@@ -80,7 +80,7 @@ public class PodCommunicator extends Communicator
 	 */
 	public void informPodToRoadTransfer(String roadName)
 	{
-		System.out.println("PodCommunicator - informPodToRoadTransfer("+roadName+")");
+		System.out.println(agent.getLocalName()+"\t :: informPodToRoadTransfer("+roadName+")");
 		ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
 		msg.setOntology(ONTOLOGY_POD_ROAD_ATTACH);
 		msg.setContent("pod attached");
@@ -94,7 +94,7 @@ public class PodCommunicator extends Communicator
 	 */
 	public void informPodToNodeTransfer(String roadName)
 	{
-		System.out.println("PodCommunicator - informPodToNodeTransfer("+roadName+")");
+		System.out.println(agent.getLocalName()+"\t :: informPodToNodeTransfer("+roadName+")");
 		ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
 		msg.setOntology(ONTOLOGY_POD_ROAD_DETACH);
 		msg.setContent("pod detached");
@@ -108,10 +108,13 @@ public class PodCommunicator extends Communicator
 	 */
 	public void requestPodToNodeArrival(String nodeName)
 	{
-		System.out.println("PodCommunicator - requestPodToNodeArrival("+nodeName+")");
+		System.out.println(agent.getLocalName()+"\t :: requestPodToNodeArrival("+nodeName+")");
 		ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
 		msg.setOntology(ONTOLOGY_POD_NODE_ARRIVAL);
 		msg.setContent("pod to node transfer request");
+		
+		System.err.println(agent.getLocalName()+";"+nodeName+";"+agent.getAgentByName(nodeName)+";"+agent.getAgentByName(nodeName).getName());
+		
 		msg.addReceiver(agent.getAgentByName(nodeName).getName());
 		msg.addUserDefinedParameter("destination", ((PodAgent)agent).getFinalDestinationNodeName());
 		agent.send(msg);

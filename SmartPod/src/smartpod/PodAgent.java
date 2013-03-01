@@ -243,7 +243,7 @@ public class PodAgent extends SPAgent
 			if (!arrived)
 			{
 				// @todo neka funkcija hitrosti
-				double v = 0.001;
+				double v = 0.1;
 
 				// the time needed for the whole journey with the given speed v
 				double journeyTime = currentRoadLength/v;
@@ -256,7 +256,7 @@ public class PodAgent extends SPAgent
 				// the time percentage of the journey
 				double elapsedPercentage = elapsedTime/journeyTime;
 				
-//				System.out.println(getAID().getLocalName()+" position = "+position.stringRepresentation()+" elapsedTime = "+elapsedTime+"\telapsedPercentage = "+elapsedPercentage);
+//				System.out.println(getAID().getLocalName()+" elapsedTime = "+elapsedTime+"\telapsedPercentage = "+elapsedPercentage);
 				
 				// the travel vector representing the previously traveled distance
 				Vector2D travelVector = (new Vector2D(position)).sub(currentSource);
@@ -268,7 +268,7 @@ public class PodAgent extends SPAgent
 				double distancePercentage = travleDistance/currentRoadLength;
 				
 				// new percentage as the sum of previous and new
-				double positionPercentage = distancePercentage + elapsedPercentage*currentRoadLength;
+				double positionPercentage = distancePercentage + elapsedPercentage;
 				
 //				System.out.println("\tpercentage: "+positionPercentage);
 				
