@@ -182,9 +182,9 @@ public class DisplayDataBridge
 		}
 		catch (IOException ex)
 		{
-			System.out.println("Error while sending message.\nError code:\n"+ex.toString());
+			System.err.println("Error while sending message.\nError code:\n"+ex.toString());
 		}
-		System.out.println("Initial msg sent.");
+//		System.out.println("Initial msg sent.");
 	}
 
 	public static void sendUpdateMessage(ArrayList<PodAgent> podList,ArrayList<StationNodeAgent> stationList,ArrayList<JunctionNodeAgent> junctionList)
@@ -270,7 +270,7 @@ public class DisplayDataBridge
 		}
 		catch (IOException ex)
 		{
-			System.out.println("Error while sending message.\nError code:\n"+ex.toString());
+			System.err.println("Error while sending message.\nError code:\n"+ex.toString());
 		}
 //		System.out.println("Update msg sent.");
 	}

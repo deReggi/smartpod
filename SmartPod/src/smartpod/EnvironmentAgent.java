@@ -1,6 +1,7 @@
 package smartpod;
 
 import com.janezfeldin.Math.Vector2D;
+import jade.core.AID;
 import jade.core.Agent;
 import jade.core.behaviours.TickerBehaviour;
 import jade.wrapper.AgentController;
@@ -93,7 +94,7 @@ public class EnvironmentAgent extends SPAgent
 				Vector2D tVec = new Vector2D(temp.getElementsByTagName("position").item(0).getTextContent());				
 				StationNodeAgent tempAgent = new StationNodeAgent(tVec, Integer.parseInt(temp.getElementsByTagName("podCapacity").item(0).getTextContent()), Integer.parseInt(temp.getElementsByTagName("peopleCapacity").item(0).getTextContent()));
 				((AgentController) getContainerController().acceptNewAgent(temp.getElementsByTagName("name").item(0).getTextContent(), tempAgent)).start();
-                tempAgent.pathFindingAgent = pathFndingAgent.getAID();
+				tempAgent.pathFindingAgent = pathFndingAgent.getAID();
 				stationList.add(tempAgent);
 			}
 
@@ -138,16 +139,18 @@ public class EnvironmentAgent extends SPAgent
 			pathFndingAgent.loadMap(nodeList,roadList);
 			
 			// testing moving of pod agents
-				
-			for (int i = 0; i < 20; i++)
+			
+			AID garageAID = new AID("Garaža1",false);
+			for (int i = 0; i < 30; i++)
 			{
-				PassengerGroupAgent testAgent1 = new PassengerGroupAgent("Garaža1", "Postaja"+(i%6+1), 5000+i*1000);
+				AID destinationAID = new AID("Postaja"+(i%6+1),false);
+				PassengerGroupAgent testAgent1 = new PassengerGroupAgent(garageAID, destinationAID, 5000+i*1000);
 				((AgentController) getContainerController().acceptNewAgent("Janez"+i, testAgent1)).start();
 			}
 		}
 		catch (Exception ex)
 		{
-			System.out.println(ex.toString());
+			System.err.println(ex.toString());
 		}
 
 		

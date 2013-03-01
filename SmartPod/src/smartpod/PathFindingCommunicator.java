@@ -1,5 +1,6 @@
 package smartpod;
 
+import jade.core.AID;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import java.util.ArrayList;
@@ -51,17 +52,17 @@ public class PathFindingCommunicator extends Communicator
 	/**
 	 * Sends the INFORM response of path finding result.
 	 * @param requestMessage the request message.
-	 * @param roadToTake the next road name.
+	 * @param roadToTake the next road agent id.
 	 */
-	public void informPathFindingResult(ACLMessage requestMessage, String roadToTake)
+	public void informPathFindingResult(ACLMessage requestMessage, AID roadToTake)
 	{
-		System.out.println(agent.getLocalName()+"\t :: informPathFindingResult("+roadToTake+")");
+		System.out.println(agent.getLocalName()+"\t :: informPathFindingResult("+roadToTake.getLocalName()+")");
 		ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
 		msg.setOntology(ONTOLOGY_PATH_FINDING);
 		msg.setContent("optimal path found");
 		msg.addReceiver(requestMessage.getSender());
 		msg.addUserDefinedParameter("pod", requestMessage.getUserDefinedParameter("pod"));
-		msg.addUserDefinedParameter("road_to_take", roadToTake);
+		msg.addUserDefinedParameter("road_to_take", roadToTake.getLocalName());
 		msg.addUserDefinedParameter("destination", requestMessage.getUserDefinedParameter("destination"));
 		agent.send(msg);
 	}

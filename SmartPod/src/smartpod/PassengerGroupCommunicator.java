@@ -1,5 +1,6 @@
 package smartpod;
 
+import jade.core.AID;
 import jade.lang.acl.ACLMessage;
 
 /**
@@ -12,7 +13,8 @@ public class PassengerGroupCommunicator extends Communicator
 	/**
 	 * PassengerGroupCommunicator constructor.
 	 * 
-	 * @param passangerGroup the parent agent.
+	 * @param passangerGroup
+	 *		The parent agent.
 	 */
 	public PassengerGroupCommunicator(PassengerGroupAgent passangerGroup)
 	{
@@ -22,17 +24,19 @@ public class PassengerGroupCommunicator extends Communicator
 	/**
 	 * Sends the REQUEST message for transport.
 	 * 
-	 * @param originName The name of the origin station.
-	 * @param destinationName the name of the destination station.
+	 * @param originAID
+	 *		The origin station agent id.
+	 * @param destinationAID
+	 *		The destination station agent id.
 	 */
-	public void requestTransport(String originName, String destinationName)
+	public void requestTransport(AID originAID, AID destinationAID)
 	{
-		System.out.println(agent.getLocalName()+"\t :: requestTransport("+originName+","+destinationName+")");
+		System.out.println(agent.getLocalName()+"\t :: requestTransport("+originAID.getLocalName()+","+destinationAID.getLocalName()+")");
 		ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
 		msg.setOntology(ONTOLOGY_PASSENGER_TRANSPORT);
 		msg.setContent("transport request");
-		msg.addReceiver(agent.getAgentByName(originName).getName());
-		msg.addUserDefinedParameter("destination", destinationName);
+		msg.addReceiver(originAID);
+		msg.addUserDefinedParameter("destination", destinationAID.getLocalName());
 		agent.send(msg);
 	}
 }

@@ -72,7 +72,7 @@ public class RoadCommunicator extends Communicator
 		msg.setOntology(ONTOLOGY_POD_ROAD_ATTACH);
 		msg.setContent("my road data");
 		msg.addReceiver(requestMessage.getSender());
-		msg.addUserDefinedParameter("end_node", ((RoadAgent)agent).endNode);
+		msg.addUserDefinedParameter("end_node", ((RoadAgent)agent).endNode.getLocalName());
 		msg.addUserDefinedParameter("start_position", ((RoadAgent)agent).startPosition.stringRepresentation());
 		msg.addUserDefinedParameter("end_position", ((RoadAgent)agent).endPosition.stringRepresentation());
 		agent.send(msg);

@@ -1,6 +1,7 @@
 package smartpod;
 
 import com.janezfeldin.Math.Vector2D;
+import jade.core.AID;
 import jade.core.Agent;
 import jade.core.behaviours.CyclicBehaviour;
 import jade.lang.acl.ACLMessage;
@@ -141,7 +142,7 @@ public class StationNodeAgent extends NodeAgent
 			{
 //				System.out.println("com-node : "+msg.getContent());
 				
-				departingPods.remove(msg.getSender().getLocalName());
+				departingPods.remove(msg.getSender());
 			}
 			
 			// check arrival message box
@@ -152,32 +153,32 @@ public class StationNodeAgent extends NodeAgent
 			{
 //				System.out.println("com-node : "+arrivalMessage.getContent());
 				
-				String podName = arrivalMessage.getSender().getLocalName();
+				AID podAID = arrivalMessage.getSender();
 
-				if (!registeredPods.contains(podName))
+				if (!registeredPods.contains(podAID))
 				{
-					registeredPods.add(podName);
+					registeredPods.add(podAID);
 
-					String destination = arrivalMessage.getUserDefinedParameter("destination");
+					AID destinationAID = new AID(arrivalMessage.getUserDefinedParameter("destination"),false);
 
 					communicator.confirmPodToNodeArrival(arrivalMessage);
 
 					// check whether final destination has been reached
-					if (destination.equals(getLocalName()))
+					if (destinationAID.equals(getAID()))
 					{
 						// the pod has reached the final destination
-						System.out.println("=======\nSUCCESS :: "+podName+" has reached destination "+getLocalName()+"\n=======");
+						System.out.println("=======\nSUCCESS :: "+podAID.getLocalName()+" has reached destination "+getLocalName()+"\n=======");
 					}
 					else
 					{
-						departingPods.add(podName);
-						registeredPods.remove(podName);
-						communicator.requestPathFinding(podName, destination);
+						departingPods.add(podAID);
+						registeredPods.remove(podAID);
+						communicator.requestPathFinding(podAID, destinationAID);
 					}
 				}
 				else
 				{
-					System.out.println("com-node : pod already registered");
+					System.err.println("com-node : pod already registered");
 				}
 			}
 			
@@ -185,14 +186,14 @@ public class StationNodeAgent extends NodeAgent
 			ACLMessage transportRequest = communicator.receiveMessage(communicator.transportRequestTemplate);
 			if (transportRequest != null)
 			{
-				String podName = registeredPods.get(0);
+				AID podAID = registeredPods.get(0);
 				
-				departingPods.add(podName);
-				registeredPods.remove(podName);
+				departingPods.add(podAID);
+				registeredPods.remove(podAID);
 				
-				String destination = transportRequest.getUserDefinedParameter("destination");
+				AID destinationAID = new AID(transportRequest.getUserDefinedParameter("destination"),false);
 				
-				communicator.requestPathFinding(podName, destination);
+				communicator.requestPathFinding(podAID, destinationAID);
 			}
 			
 			// check path finding result message box
@@ -201,10 +202,10 @@ public class StationNodeAgent extends NodeAgent
 			{
 //				System.out.println("com-node : "+msg.getContent());
 				
-				String podName = msg.getUserDefinedParameter("pod");
-				String roadName = msg.getUserDefinedParameter("road_to_take");
-				String destination = msg.getUserDefinedParameter("destination");
-				communicator.requestPodToRoadDeparture(podName, roadName, destination);
+				AID podAID = new AID(msg.getUserDefinedParameter("pod"),false);
+				AID roadAID = new AID(msg.getUserDefinedParameter("road_to_take"),false);
+				AID destinationAID = new AID(msg.getUserDefinedParameter("destination"),false);
+				communicator.requestPodToRoadDeparture(podAID, roadAID, destinationAID);
 			}
         }
     }

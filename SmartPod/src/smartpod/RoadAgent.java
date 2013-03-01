@@ -18,11 +18,11 @@ public class RoadAgent extends SPAgent
 	private RoadCommunicator communicator = new RoadCommunicator(this);
 	
 	//variable declarations for road's properties
-	public ArrayList<String> registeredPods = new ArrayList<String>();
+	public ArrayList<AID> registeredPods = new ArrayList<AID>();
 	public AID		weightUpdateDelegate;
 	public double	weight		= 0.0;
-	public String	startNode	= "";
-	public String	endNode		= "";
+	public AID	startNode	= null;
+	public AID	endNode		= null;
 	public Vector2D	startPosition;
 	public Vector2D	endPosition;
 	public String	roadBelongingType = "";//(inbound ali outgoing) inbound - the road belongs to the node at the end; outgoing - road belongs to the node at the start
@@ -37,8 +37,8 @@ public class RoadAgent extends SPAgent
 	 */
 	public RoadAgent(String startNode, String endNode, Vector2D startPosition, Vector2D endPosition, String roadBelongingType, double weight)
 	{
-		this.startNode = startNode;
-		this.endNode = endNode;
+		this.startNode = new AID(startNode,false);
+		this.endNode = new AID(endNode,false);
 		this.startPosition = startPosition;
 		this.endPosition = endPosition;
 		this.roadBelongingType = roadBelongingType;
@@ -52,7 +52,7 @@ public class RoadAgent extends SPAgent
 	 */
 	public String getStartNode()
 	{
-		return startNode;
+		return startNode.getLocalName();
 	}
 
 	/**
@@ -61,7 +61,7 @@ public class RoadAgent extends SPAgent
 	 */
 	public String getEndNode()
 	{
-		return endNode;
+		return endNode.getLocalName();
 	}
 
 	/**
@@ -86,7 +86,7 @@ public class RoadAgent extends SPAgent
 	 * Method that returns the node's name to which the road belongs.
 	 * @return String that contains the name of the node to which the road belongs.
 	 */
-	public String getParentNode()
+	public AID getParentNode()
 	{
 		if (roadBelongingType.equals("inbound"))
 		{
@@ -105,7 +105,7 @@ public class RoadAgent extends SPAgent
 	 */
 	public void setStartNode(String startNode)
 	{
-		this.startNode = startNode;
+		this.startNode = new AID(startNode,false);
 		throw new UnsupportedOperationException("Še ne dela, poišči lokacijo od vozlišča z imaneom" + startNode);
 	}
 
@@ -115,7 +115,7 @@ public class RoadAgent extends SPAgent
 	 */
 	public void setEndNode(String endNode)
 	{
-		this.endNode = endNode;
+		this.endNode = new AID(endNode,false);
 		throw new UnsupportedOperationException("Še ne dela, poišči lokacijo od vozlišča z imaneom" + endNode);
 	}
 
@@ -200,7 +200,7 @@ public class RoadAgent extends SPAgent
 			for (ACLMessage msg : attachMessages)
 			{
 //				System.out.println("com-road : "+msg.getContent());
-				registeredPods.add(msg.getSender().getLocalName());
+				registeredPods.add(msg.getSender());
 				communicator.informRoadData(msg);
 			}
 			
@@ -209,14 +209,7 @@ public class RoadAgent extends SPAgent
 			for (ACLMessage msg : detachMessages)
 			{
 //				System.out.println("com-road : "+msg.getContent());
-				registeredPods.remove(msg.getSender().getLocalName());
-			}
-			
-			// check remaining messages
-			ArrayList<ACLMessage> messages = communicator.checkMessageBox(null);
-			for (ACLMessage msg : messages)
-			{
-//				System.out.println("com-road : "+msg.getContent());
+				registeredPods.remove(msg.getSender());
 			}
 			
 			// inform weight change

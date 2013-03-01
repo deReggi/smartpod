@@ -1,6 +1,7 @@
 package smartpod;
 
 import com.janezfeldin.Math.Vector2D;
+import jade.core.AID;
 
 /**
  * The path finding node wrapper class.
@@ -15,8 +16,8 @@ public class PFNode
 	private Vector2D position = null;
 	
 	public PFNode parentNode	= null;
-	public String roadName		= null;
-	public String nodeName		= null;
+	public AID roadAID			= null;
+	public AID nodeAID			= null;
 	public double D = 0.0; // the road distance. G = D + W
 	public double C = 0.0; // the movement cost to move from the parent node. 
 	public double G = 0.0; // acumulated cost
@@ -26,11 +27,11 @@ public class PFNode
 	public boolean opened = false;
 	public boolean closed = false;
 	
-//	public PFNode(PFNode parentNode, String nodeName, String roadName, double weight, Vector2D startPosition, Vector2D endPosition, Vector2D finalPosition)
+//	public PFNode(PFNode parentNode, String nodeAID, String roadAID, double weight, Vector2D startPosition, Vector2D endPosition, Vector2D finalPosition)
 //	{
 //		this.parentNode = parentNode;
-//		this.nodeName = nodeName;
-//		this.roadName = roadName;
+//		this.nodeAID = nodeAID;
+//		this.roadAID = roadAID;
 //		this.D = startPosition.dist(endPosition)*distanceWeight;
 //		this.H = finalPosition.dist(endPosition)*heuristicWeight + 1;
 //		this.C = D + weight;
@@ -39,16 +40,16 @@ public class PFNode
 	
 	public PFNode(RoadAgent road)
 	{
-		this.nodeName = road.endNode;
-		this.roadName = road.getLocalName();
+		this.nodeAID = road.endNode;
+		this.roadAID = road.getAID();
 		this.D = road.startPosition.dist(road.endPosition)*distanceWeight;
 		this.C = D + road.weight;
 		this.position = road.endPosition;
 	}
 	
-	public PFNode(String nodeName)
+	public PFNode(AID nodeAID)
 	{
-		this.nodeName = nodeName;
+		this.nodeAID = nodeAID;
 	}
 
 	public void setRoadWeight(double weight)
@@ -73,6 +74,6 @@ public class PFNode
 	@Override
 	public String toString()
 	{
-		return "===="+roadName+"===>"+nodeName;//+" parentNode : "+parentNode;
+		return "===="+roadAID.getLocalName()+"===>"+nodeAID.getLocalName();//+" parentNode : "+parentNode;
 	}
 }

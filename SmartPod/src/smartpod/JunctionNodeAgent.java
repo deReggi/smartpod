@@ -1,6 +1,7 @@
 package smartpod;
 
 import com.janezfeldin.Math.Vector2D;
+import jade.core.AID;
 import jade.core.Agent;
 import jade.core.behaviours.CyclicBehaviour;
 import jade.lang.acl.ACLMessage;
@@ -63,7 +64,7 @@ public class JunctionNodeAgent extends NodeAgent
 			{
 //				System.out.println("com-node : "+msg.getContent());
 				
-				departingPods.remove(msg.getSender().getLocalName());
+				departingPods.remove(msg.getSender());
 			}
 			
 			// check arrival message box
@@ -72,20 +73,20 @@ public class JunctionNodeAgent extends NodeAgent
 			{
 //				System.out.println("com-node : "+msg.getContent());
 				
-				String podName = msg.getSender().getLocalName();
+				AID podAID = msg.getSender();
 
-				if (!registeredPods.contains(podName))
+				if (!registeredPods.contains(podAID))
 				{
-					registeredPods.add(podName);
+					registeredPods.add(podAID);
 
-					String destination = msg.getUserDefinedParameter("destination");
+					AID destinationAID = new AID(msg.getUserDefinedParameter("destination"),false);
 
 					communicator.confirmPodToNodeArrival(msg);
-					communicator.requestPathFinding(podName, destination);
+					communicator.requestPathFinding(podAID, destinationAID);
 				}
 				else
 				{
-					System.out.println("com-node : pod already registered");
+					System.err.println("com-node : pod already registered");
 				}
 			}
 			
@@ -95,14 +96,14 @@ public class JunctionNodeAgent extends NodeAgent
 			{
 //				System.out.println("com-node : "+msg.getContent());
 				
-				String podName = msg.getUserDefinedParameter("pod");
+				AID podAID = new AID(msg.getUserDefinedParameter("pod"),false);
 				
-				departingPods.add(podName);
-				registeredPods.remove(podName);
+				departingPods.add(podAID);
+				registeredPods.remove(podAID);
 				
-				String roadName = msg.getUserDefinedParameter("road_to_take");
-				String destination = msg.getUserDefinedParameter("destination");
-				communicator.requestPodToRoadDeparture(podName, roadName, destination);
+				AID roadAID = new AID(msg.getUserDefinedParameter("road_to_take"),false);
+				AID destinationAID = new AID(msg.getUserDefinedParameter("destination"),false);
+				communicator.requestPodToRoadDeparture(podAID, roadAID, destinationAID);
 			}
         }
     } 

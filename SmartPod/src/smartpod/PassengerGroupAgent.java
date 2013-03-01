@@ -1,5 +1,6 @@
 package smartpod;
 
+import jade.core.AID;
 import jade.core.Agent;
 import jade.core.behaviours.WakerBehaviour;
 
@@ -18,8 +19,8 @@ public class PassengerGroupAgent extends SPAgent
 	private PassengerGroupCommunicator communicator = new PassengerGroupCommunicator(this);
 	
 	//variable declaration for all the agent's properties
-	private String	originName		= null;
-	private String	destinationName	= null;
+	private AID		originAID		= null;
+	private AID		destinationAID	= null;
 	private long	timeout			= 0;
 	
 	/***************************************************************************
@@ -31,22 +32,25 @@ public class PassengerGroupAgent extends SPAgent
 	 */
     public PassengerGroupAgent()
     {
-		this.originName = "Postaja1";
-		this.destinationName = "Postaja2";
+		this.originAID = new AID("Postaja1",false);
+		this.destinationAID = new AID("Postaja2",false);
 		this.timeout = 5000;
     }
 	
 	/**
 	 * Constructor for passenger group agent.
 	 * 
-	 * @param originName The name of the origin station.
-	 * @param destinationName The name of destination station.
-	 * @param timeout The timeout when the transfer is requested.
+	 * @param originAID
+	 *		The origin station agent id.
+	 * @param destinationAID
+	 *		The destination station agent id.
+	 * @param timeout
+	 *		The timeout when the transfer is requested.
 	 */
-    public PassengerGroupAgent(String originName, String destinationName, long timeout)
+    public PassengerGroupAgent(AID originAID, AID destinationAID, long timeout)
     {
-		this.originName = originName;
-		this.destinationName = destinationName;
+		this.originAID = originAID;
+		this.destinationAID = destinationAID;
 		this.timeout = timeout;
     }
 	
@@ -91,7 +95,7 @@ public class PassengerGroupAgent extends SPAgent
         @Override
         public void onWake()
         {
-			communicator.requestTransport(originName, destinationName);
+			communicator.requestTransport(originAID, destinationAID);
         }
     }
 }

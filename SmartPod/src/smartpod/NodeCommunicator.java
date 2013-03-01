@@ -1,5 +1,6 @@
 package smartpod;
 
+import jade.core.AID;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import java.util.ArrayList;
@@ -36,7 +37,9 @@ public class NodeCommunicator extends Communicator
 	
 	/**
 	 * NodeCommunicator constructor.
-	 * @param node the parent agent.
+	 * 
+	 * @param node
+	 *		The parent agent.
 	 */
 	public NodeCommunicator(NodeAgent node)
 	{
@@ -45,7 +48,9 @@ public class NodeCommunicator extends Communicator
 	
 	/**
 	 * Checks for received pod departure messages.
-	 * @return ArrayList of received pod departure ACLMessages.
+	 * 
+	 * @return
+	 *		ArrayList of received pod departure ACLMessages.
 	 */
 	public ArrayList<ACLMessage> checkPodDepartureMessages()
 	{
@@ -54,7 +59,9 @@ public class NodeCommunicator extends Communicator
 	
 	/**
 	 * Checks for received pod arrival messages.
-	 * @return ArrayList of received pod arrival ACLMessages.
+	 * 
+	 * @return
+	 *		ArrayList of received pod arrival ACLMessages.
 	 */
 	public ArrayList<ACLMessage> checkPodArrivalRequestMessages()
 	{
@@ -63,7 +70,9 @@ public class NodeCommunicator extends Communicator
 	
 	/**
 	 * Checks for received path finding result messages.
-	 * @return ArrayList of received path finding result ACLMessages.
+	 * 
+	 * @return 
+	 *		ArrayList of received path finding result ACLMessages.
 	 */
 	public ArrayList<ACLMessage> checkPathFindingResultMessages()
 	{
@@ -73,24 +82,28 @@ public class NodeCommunicator extends Communicator
 	/**
 	 * Sends REQUEST message for the pod departure to the road.
 	 * 
-	 * @param podName	the pod involved in the transfer
-	 * @param roadName	the road the pod should transfer to
-	 * @param destination the final destination
+	 * @param podAID
+	 *		The pod involved in the transfer.
+	 * @param roadAID
+	 *		The road the pod should transfer to.
+	 * @param destinationAID
+	 *		The final destination.
 	 */
-	public void requestPodToRoadDeparture(String podName, String roadName, String destination)
+	public void requestPodToRoadDeparture(AID podAID, AID roadAID, AID destinationAID)
 	{
-		System.out.println(agent.getLocalName()+"\t :: requestPodToRoadDeparture("+podName+","+roadName+","+destination+")");
+		System.out.println(agent.getLocalName()+"\t :: requestPodToRoadDeparture("+podAID.getLocalName()+","+roadAID.getLocalName()+","+destinationAID.getLocalName()+")");
 		ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
 		msg.setOntology(ONTOLOGY_POD_NODE_DEPARTURE);
 		msg.setContent("pod to road transfer request");
-		msg.addReceiver(agent.getAgentByName(podName).getName());
-		msg.addUserDefinedParameter("road", roadName);
-		msg.addUserDefinedParameter("destination", destination);
+		msg.addReceiver(podAID);
+		msg.addUserDefinedParameter("road", roadAID.getLocalName());
+		msg.addUserDefinedParameter("destination", destinationAID.getLocalName());
 		agent.send(msg);
 	}
 	
 	/**
 	 * Sends the CONFIRM message for accepting pod arrival to node request.
+	 * 
 	 * @param requestMessage
 	 */
 	public void confirmPodToNodeArrival(ACLMessage requestMessage)
@@ -105,18 +118,21 @@ public class NodeCommunicator extends Communicator
 	
 	/**
 	 * Sends the REQUEST message to the path finding agent.
-	 * @param podName the traveling pod.
-	 * @param destinationNodeName the name of the destination node.
+	 * 
+	 * @param podAID
+	 *		The traveling pod agent id.
+	 * @param destinationAID
+	 *		The destination node agent id.
 	 */
-	public void requestPathFinding(String podName, String destinationNodeName)
+	public void requestPathFinding(AID podAID, AID destinationAID)
 	{
-		System.out.println(agent.getLocalName()+"\t :: requestPathFinding("+podName+","+destinationNodeName+")");
+		System.out.println(agent.getLocalName()+"\t :: requestPathFinding("+podAID.getLocalName()+","+destinationAID.getLocalName()+")");
 		ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
 		msg.setOntology(ONTOLOGY_PATH_FINDING);
 		msg.setContent("path finding request");
 		msg.addReceiver(((NodeAgent)agent).pathFindingAgent);
-		msg.addUserDefinedParameter("pod", podName);
-		msg.addUserDefinedParameter("destination", destinationNodeName);
+		msg.addUserDefinedParameter("pod", podAID.getLocalName());
+		msg.addUserDefinedParameter("destination", destinationAID.getLocalName());
 		agent.send(msg);
 	}
 }

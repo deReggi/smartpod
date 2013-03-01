@@ -1,6 +1,7 @@
 package smartpod;
 
 import com.janezfeldin.Math.Vector2D;
+import jade.core.AID;
 import jade.core.Agent;
 import jade.core.behaviours.CyclicBehaviour;
 import jade.lang.acl.ACLMessage;
@@ -20,9 +21,9 @@ public class PathFindingAgent extends SPAgent
 
 	private PathFindingCommunicator communicator = new PathFindingCommunicator(this);
 	// maps
-	private Map<String, Vector2D> nodePositionMap = new HashMap<String, Vector2D>();
-	private Map<String, PFNode> roadNameToNodeMap = new HashMap<String, PFNode>();
-	private Map<String, ArrayList<PFNode>> endNodeNameToNodeMap = new HashMap<String, ArrayList<PFNode>>();
+	private Map<AID, Vector2D> nodePositionMap = new HashMap<AID, Vector2D>();
+	private Map<AID, PFNode> roadNameToNodeMap = new HashMap<AID, PFNode>();
+	private Map<AID, ArrayList<PFNode>> endNodeNameToNodeMap = new HashMap<AID, ArrayList<PFNode>>();
 	private Map<PFNode, ArrayList<PFNode>> childNodeMap = new HashMap<PFNode, ArrayList<PFNode>>();
 	private List<PFNode> allNodes = new ArrayList<PFNode>();
 	private List<PFNode> openNodes = new ArrayList<PFNode>();
@@ -38,16 +39,16 @@ public class PathFindingAgent extends SPAgent
 	{
 		for (NodeAgent node : nodeList)
 		{
-			String nodeName = node.getLocalName();
-			nodePositionMap.put(nodeName, node.getPosition());
-//			nodeNameToNodeMap.put(nodeName,node);
+			AID nodeAID = node.getAID();
+			nodePositionMap.put(nodeAID, node.getPosition());
+//			nodeNameToNodeMap.put(nodeAID,node);
 		}
 		for (RoadAgent road : roadList)
 		{
 			PFNode node = new PFNode(road);
 			allNodes.add(node);
 
-			roadNameToNodeMap.put(road.getLocalName(), node);
+			roadNameToNodeMap.put(road.getAID(), node);
 
 			ArrayList<PFNode> parents = endNodeNameToNodeMap.get(road.endNode);
 			if (parents == null)
@@ -61,7 +62,7 @@ public class PathFindingAgent extends SPAgent
 		}
 		for (RoadAgent road : roadList)
 		{
-			PFNode child = roadNameToNodeMap.get(road.getLocalName());
+			PFNode child = roadNameToNodeMap.get(road.getAID());
 			ArrayList<PFNode> parents = endNodeNameToNodeMap.get(road.startNode);
 			for (PFNode parent : parents)
 			{
@@ -81,8 +82,8 @@ public class PathFindingAgent extends SPAgent
 //		}
 //		for (PFNode parent : allNodes)
 //		{
-//			System.out.println("endName : "+parent.nodeName);
-//			ArrayList<PFNode> children = endNodeNameToNodeMap.get(parent.nodeName);
+//			System.out.println("endName : "+parent.nodeAID);
+//			ArrayList<PFNode> children = endNodeNameToNodeMap.get(parent.nodeAID);
 //			for (PFNode child : children)
 //			{
 //				System.out.println("  |"+child);
@@ -96,7 +97,7 @@ public class PathFindingAgent extends SPAgent
 		PFNode currentNode = endNodeNameToNodeMap.get(sourceNodeName).get(0);
 		close(currentNode);
 		
-		while (!(currentNode.nodeName).equals(finalNodeName))
+		while (!(currentNode.nodeAID).equals(finalNodeName))
 		{
 			System.out.println("currentNode : "+currentNode);
 
@@ -129,7 +130,7 @@ public class PathFindingAgent extends SPAgent
 					ArrayList<PFNode> otherChildren = childNodeMap.get(child.parentNode);
 					for (PFNode otherChild : otherChildren)
 					{
-						if (otherChild.nodeName.equals(child.nodeName))
+						if (otherChild.nodeAID.equals(child.nodeAID))
 						{
 							otherChildG = otherChild.G + otherChild.C;
 							break;
@@ -137,7 +138,7 @@ public class PathFindingAgent extends SPAgent
 					}
 					if (childG < otherChildG)
 					{
-						ArrayList<PFNode> nodes = endNodeNameToNodeMap.get(child.nodeName);
+						ArrayList<PFNode> nodes = endNodeNameToNodeMap.get(child.nodeAID);
 						for (PFNode node : nodes)
 						{
 							node.setParentNode(currentNode);
@@ -154,12 +155,12 @@ public class PathFindingAgent extends SPAgent
 
 		while (currentNode.parentNode.parentNode != null)
 		{
-			System.err.println(currentNode.roadName);
+			System.err.println(currentNode.roadAID);
 			currentNode = currentNode.parentNode;
 		}
-		String roadName = currentNode.roadName;
+		String roadAID = currentNode.roadAID;
 
-		System.err.println("WAHOO :: "+roadName);
+		System.err.println("WAHOO :: "+roadAID);
 
 		// cleanup
 		cleanup();
@@ -169,11 +170,11 @@ public class PathFindingAgent extends SPAgent
 
 	private void open(PFNode child, PFNode parent)
 	{
-//		System.out.println("Open "+child.nodeName);
+//		System.out.println("Open "+child.nodeAID);
 		
 		openNodes.add(child);
 		
-		ArrayList<PFNode> nodes = endNodeNameToNodeMap.get(child.nodeName);
+		ArrayList<PFNode> nodes = endNodeNameToNodeMap.get(child.nodeAID);
 		for (PFNode node : nodes)
 		{
 			node.opened = true;
@@ -183,8 +184,8 @@ public class PathFindingAgent extends SPAgent
 
 	private void close(PFNode child)
 	{
-//		System.out.println("Close "+child.nodeName);
-		ArrayList<PFNode> nodes = endNodeNameToNodeMap.get(child.nodeName);
+//		System.out.println("Close "+child.nodeAID);
+		ArrayList<PFNode> nodes = endNodeNameToNodeMap.get(child.nodeAID);
 		for (PFNode node : nodes)
 		{
 			node.closed = true;
@@ -263,8 +264,8 @@ public class PathFindingAgent extends SPAgent
 
 				// update node road weight
 				double weight = Double.parseDouble(msg.getUserDefinedParameter("weight"));
-				String roadName = msg.getSender().getLocalName();
-				PFNode node = roadNameToNodeMap.get(roadName);
+				AID roadAID = msg.getSender();
+				PFNode node = roadNameToNodeMap.get(roadAID);
 				if (node != null)
 				{
 					node.setRoadWeight(weight);
@@ -278,13 +279,13 @@ public class PathFindingAgent extends SPAgent
 //				System.out.println("com-env : "+msg.getContent());
 
 				// find path
-				String finalNodeName = msg.getUserDefinedParameter("destination");
-				String sourceNodeName = msg.getSender().getLocalName();
+				AID finalNodeAID = new AID(msg.getUserDefinedParameter("destination"),false);
+				AID sourceNodeAID = msg.getSender();
 				
-				PFNode currentNode = endNodeNameToNodeMap.get(sourceNodeName).get(0);
+				PFNode currentNode = endNodeNameToNodeMap.get(sourceNodeAID).get(0);
 				close(currentNode);
 				
-				while (!(currentNode.nodeName).equals(finalNodeName))
+				while (!(currentNode.nodeAID).equals(finalNodeAID))
 				{
 					ArrayList<PFNode> children = childNodeMap.get(currentNode);
 					
@@ -299,7 +300,7 @@ public class PathFindingAgent extends SPAgent
 							// open child with parent
 							open(child, currentNode);
 							// set the final position for F calculation
-							child.setFinalPosition(nodePositionMap.get(finalNodeName));
+							child.setFinalPosition(nodePositionMap.get(finalNodeAID));
 						}
 						else
 						{
@@ -309,7 +310,7 @@ public class PathFindingAgent extends SPAgent
 							ArrayList<PFNode> otherChildren = childNodeMap.get(child.parentNode);
 							for (PFNode otherChild : otherChildren)
 							{
-								if (otherChild.nodeName.equals(child.nodeName))
+								if (otherChild.nodeAID.equals(child.nodeAID))
 								{
 									otherChildG = otherChild.G + otherChild.C;
 									break;
@@ -317,7 +318,7 @@ public class PathFindingAgent extends SPAgent
 							}
 							if (childG < otherChildG)
 							{
-								ArrayList<PFNode> nodes = endNodeNameToNodeMap.get(child.nodeName);
+								ArrayList<PFNode> nodes = endNodeNameToNodeMap.get(child.nodeAID);
 								for (PFNode node : nodes)
 								{
 									node.setParentNode(currentNode);
@@ -335,12 +336,11 @@ public class PathFindingAgent extends SPAgent
 				// loopback
 				while (currentNode.parentNode.parentNode != null)
 				{
-					System.out.println(currentNode.nodeName);
 					currentNode = currentNode.parentNode;
 				}
-				String roadName = currentNode.roadName;
+				AID roadAID = currentNode.roadAID;
 
-				communicator.informPathFindingResult(msg, roadName);
+				communicator.informPathFindingResult(msg, roadAID);
 
 				// cleanup
 				cleanup();

@@ -1,6 +1,7 @@
 package smartpod;
 
 import com.janezfeldin.Math.Vector2D;
+import jade.core.AID;
 import jade.core.Agent;
 import jade.core.behaviours.CyclicBehaviour;
 import jade.core.behaviours.TickerBehaviour;
@@ -24,20 +25,20 @@ public class PodAgent extends SPAgent
 	//variable declaration for agents properties
 	private Vector2D position;
 	private Vector2D currentDestination;
-	private String currentDestinationNodeName;
+	private AID currentDestinationNode;
 	private Vector2D finalDestination;
-	private String finalDestinationNodeName;
+	private AID finalDestinationNode;
 	private int peopleCapacity;
 	private int peopleOnBoard;
 	private double priority;
 	
-	private String currentNode;
+	private AID currentNode;
 	private boolean onTheRoad = false;
 	private double currentRoadLength = 0.0;
 	private Vector2D currentSource;
 	private long currentTime = 0;
 	private double traveledPercentage = 0.0;
-	private String currentRoadName = null;
+	private AID currentRoad = null;
 	
 	/***************************************************************************
 	 * Constructors
@@ -58,12 +59,12 @@ public class PodAgent extends SPAgent
 	public PodAgent(String currentNode, Vector2D position, int peopleCapacity, int peopleOnBoard)
 	{
 		super();
-		this.currentNode = currentNode;
+		this.currentNode = new AID(currentNode,false);
 		this.position = position;
 		this.peopleCapacity = peopleCapacity;
 		this.peopleOnBoard = peopleOnBoard;
-		this.currentDestinationNodeName = currentNode;
-		this.finalDestinationNodeName = currentNode;
+		this.currentDestinationNode = this.currentNode;
+		this.finalDestinationNode = this.currentNode;
 		this.currentDestination = position;
 		this.finalDestination = position;
 	}
@@ -166,12 +167,11 @@ public class PodAgent extends SPAgent
 			for (ACLMessage msg : departureMessages)
 			{
 //				System.out.println("com-pod : "+msg.getContent());
-				finalDestinationNodeName = msg.getUserDefinedParameter("destination");
-
+				finalDestinationNode = new AID(msg.getUserDefinedParameter("destination"),false);
 				communicator.acceptPodToRoadDeparture(msg);
 				
-				currentRoadName = msg.getUserDefinedParameter("road");
-				communicator.informPodToRoadTransfer(currentRoadName);
+				currentRoad = new AID(msg.getUserDefinedParameter("road"),false);
+				communicator.informPodToRoadTransfer(currentRoad);
 			}
 			
 			// check arrival message box
@@ -180,13 +180,13 @@ public class PodAgent extends SPAgent
 			{
 //				System.out.println("com-pod : "+msg.getContent());
 				
-				if (currentRoadName != null)
+				if (currentRoad != null)
 				{
-					communicator.informPodToNodeTransfer(currentRoadName);
-					currentRoadName = null;
+					communicator.informPodToNodeTransfer(currentRoad);
+					currentRoad = null;
 				}
 				
-				currentNode = currentDestinationNodeName;
+				currentNode = currentDestinationNode;
 								
 				onTheRoad = false;
 			}
@@ -199,11 +199,11 @@ public class PodAgent extends SPAgent
 				if (onTheRoad)
 				{
 					// this should never happen!
-					System.out.println("com-pod : ERROR: already on the road!");
+					System.err.println("com-pod : ERROR: already on the road!");
 					break;
 				}
 				
-				currentDestinationNodeName = msg.getUserDefinedParameter("end_node");
+				currentDestinationNode = new AID(msg.getUserDefinedParameter("end_node"),false);
 				
 				// calculate road length
 				currentSource		= new Vector2D(msg.getUserDefinedParameter("start_position"));
@@ -287,7 +287,7 @@ public class PodAgent extends SPAgent
 			else
 			{
 				this.myAgent.removeBehaviour(this);
-				communicator.requestPodToNodeArrival(currentDestinationNodeName);
+				communicator.requestPodToNodeArrival(currentDestinationNode);
 			}
 		}
 		
@@ -341,7 +341,7 @@ public class PodAgent extends SPAgent
 	 */
 	public String getCurrentDestinationNodeName()
 	{
-		return currentDestinationNodeName;
+		return currentDestinationNode.getLocalName();
 	}
 
 	/**
@@ -378,7 +378,7 @@ public class PodAgent extends SPAgent
 	 */
 	public void setFinalDestinationNodeName(String name)
 	{
-		this.finalDestinationNodeName = name;
+		this.finalDestinationNode = new AID(name,false);
 		throw new UnsupportedOperationException("Ni še narejeno, je treba dodat nastavljanje currentDestination in finalDestinationNodeName!!!");
 	}
 
@@ -391,7 +391,7 @@ public class PodAgent extends SPAgent
 	 */
 	public String getFinalDestinationNodeName()
 	{
-		return finalDestinationNodeName;
+		return finalDestinationNode.getLocalName();
 	}
 
 	/**
