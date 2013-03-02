@@ -42,9 +42,7 @@ public class StationNodeAgent extends NodeAgent
 	 */
     public StationNodeAgent(Vector2D position, int podsCapacity, int peopleCapacity)
     {
-        super(position);
-        this.podsCapacity = podsCapacity;
-        this.peopleCapacity = peopleCapacity;
+        super(position,podsCapacity);
     }
 	
 	/***************************************************************************
@@ -215,30 +213,6 @@ public class StationNodeAgent extends NodeAgent
 	 **************************************************************************/
 	//<editor-fold defaultstate="collapsed" desc="Getters & setters">
 	
-	/**
-	 * Method that returns the integer value representing the maximum number 
-	 * of pods, that can be on this station at a given moment.
-	 * 
-	 * @return
-	 *		Integer value representing stations pod capacity
-	 */
-    public int getPodsCapacity()
-    {
-        return podsCapacity;
-    }
-
-	/**
-	 * Method used to set the maximum number of pods, that can be on this 
-	 * station at a given moment.
-	 * 
-	 * @param podsCapacity
-	 *		Integer value representing the maximum number of pods.
-	 */
-    public void setPodsCapacity(int podsCapacity)
-    {
-        this.podsCapacity = podsCapacity;
-    }
-
 	/**
 	 * Method that returns the maximum number of people, that can be on this 
 	 * station at a given moment.

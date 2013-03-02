@@ -109,7 +109,7 @@ public class DisplayDataBridge
 			JSONObject tempObject = new JSONObject();
 			tempObject.put("name", junctionList.get(i).getLocalName());
 			tempObject.put("position", junctionList.get(i).getPosition().stringRepresentation());
-//			tempObject.put("podCapacity", junctionList.get(i).getPodsCapacity());
+			tempObject.put("podCapacity", junctionList.get(i).getPodsCapacity());
 			
 			tempArray.put(tempObject);
 		}
@@ -127,55 +127,6 @@ public class DisplayDataBridge
 		}
 		message.put("Roads", tempArray);
 		
-		/*String message = "(initial)";
-		//map settings
-		message += mapWidth+","+mapHeight+";";
-		
-		//sending pods
-		message += "pods:";
-		for(int i=0;i<podList.size();i++)
-		{
-			message += podList.get(i).getLocalName()+","+podList.get(i).getPosition().x+","+podList.get(i).getPosition().y;
-			if ( i < podList.size()-1)
-			{
-				message+=",";
-			}
-		}
-		message += ";";
-		
-		//sending stations
-		message += "stations:";
-		for(int i=0;i<stationList.size();i++)
-		{
-			message += stationList.get(i).getLocalName()+","+stationList.get(i).getPosition().x+","+stationList.get(i).getPosition().y+","+stationList.get(i).getPodsCapacity()+","+stationList.get(i).getPeopleCapacity();
-			if ( i < stationList.size()-1)
-			{
-				message+=",";
-			}
-		}
-		message += ";";
-//		sending roads
-		message += "roads:";
-		for(int i=0;i<roadList.size();i++)
-		{
-			message += roadList.get(i).getLocalName()+","+roadList.get(i).getStartPosition().x+","+roadList.get(i).getStartPosition().y+","+roadList.get(i).getEndPosition().x+","+roadList.get(i).getEndPosition().y;
-			if ( i < roadList.size()-1)
-			{
-				message+=",";
-			}
-		}
-		message += ";";
-//		sending junctions
-		message += "junctions:";
-		for(int i=0;i<junctionList.size();i++)
-		{
-			message += junctionList.get(i).getLocalName()+","+junctionList.get(i).getPosition().x+","+junctionList.get(i).getPosition().y;
-			if ( i < junctionList.size()-1)
-			{
-				message+=",";
-			}
-		}
-		message += ";";*/
 		try
 		{
 			DisplayDataBridge.sendMessage(message.toString());
@@ -184,7 +135,6 @@ public class DisplayDataBridge
 		{
 			System.err.println("Error while sending message.\nError code:\n"+ex.toString());
 		}
-//		System.out.println("Initial msg sent.");
 	}
 
 	public static void sendUpdateMessage(ArrayList<PodAgent> podList,ArrayList<StationNodeAgent> stationList,ArrayList<JunctionNodeAgent> junctionList)
@@ -228,42 +178,6 @@ public class DisplayDataBridge
 		}
 		message.put("Junctions", tempArray);
 		
-		/*String message = "(update)";
-		
-		//sending pods
-		message += "pods:";
-		for(int i=0;i<podList.size();i++)
-		{
-			message += podList.get(i).getLocalName()+","+podList.get(i).getPosition().x+","+podList.get(i).getPosition().y;
-			if ( i < podList.size()-1)
-			{
-				message+=",";
-			}
-		}
-		message += ";";
-		
-		//sending stations
-		message += "stations:";
-		for(int i=0;i<stationList.size();i++)
-		{
-			message += stationList.get(i).getLocalName()+","+stationList.get(i).getPeopleOnStation();
-			if ( i < stationList.size()-1)
-			{
-				message+=",";
-			}
-		}
-		message += ";";
-//		sending junctions
-		*//*message += "junctions:";
-		for(int i=0;i<junctionsList.size();i++)
-		{
-			message += junctionsList.get(i).getLocalName()+","+junctionsList.get(i).get;
-			if ( i < junctionList.size()-1)
-			{
-				message+=",";
-			}
-		}
-		message += ";";*/
 		try
 		{
 			DisplayDataBridge.sendMessage(message.toString());

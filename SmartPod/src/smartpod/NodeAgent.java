@@ -20,6 +20,9 @@ public class NodeAgent extends SPAgent
 	protected AID pathFindingAgent;
     protected Vector2D position;
     
+	//variable declaration for all the agent's properties
+    private int podsCapacity;
+	
 	/**
 	 * This method returns the position of this node.
 	 * @return Vector2D that represents the position of the node location.
@@ -42,9 +45,34 @@ public class NodeAgent extends SPAgent
 	 * Constructor for node agent.
 	 * @param position Vector2D that contains the desired position.
 	 */
-    public NodeAgent(Vector2D position)
+    public NodeAgent(Vector2D position,int podsCapacity)
     {
         this.position = position;
+		this.podsCapacity = podsCapacity;
+    }
+	
+	/**
+	 * Method that returns the integer value representing the maximum number 
+	 * of pods, that can be on this station at a given moment.
+	 * 
+	 * @return
+	 *		Integer value representing stations pod capacity
+	 */
+    public int getPodsCapacity()
+    {
+        return podsCapacity;
+    }
+
+	/**
+	 * Method used to set the maximum number of pods, that can be on this 
+	 * station at a given moment.
+	 * 
+	 * @param podsCapacity
+	 *		Integer value representing the maximum number of pods.
+	 */
+    public void setPodsCapacity(int podsCapacity)
+    {
+        this.podsCapacity = podsCapacity;
     }
     
 	/**

@@ -20,9 +20,9 @@ public class JunctionNodeAgent extends NodeAgent
 	 * Constructor for junction agent.
 	 * @param position Vector2D that contains the desired position.
 	 */
-    public JunctionNodeAgent(Vector2D position)
+    public JunctionNodeAgent(Vector2D position, int podsCapacity)
     {
-		super(position);
+		super(position,podsCapacity);
     }
     
 	/**

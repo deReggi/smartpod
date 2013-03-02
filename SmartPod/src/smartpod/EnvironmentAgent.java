@@ -80,7 +80,7 @@ public class EnvironmentAgent extends SPAgent
 			{
 				temp = (Element) tempList.item(i);
 				Vector2D tVec = new Vector2D(temp.getElementsByTagName("position").item(0).getTextContent());				
-				JunctionNodeAgent tempAgent = new JunctionNodeAgent(tVec);
+				JunctionNodeAgent tempAgent = new JunctionNodeAgent(tVec,Integer.parseInt(temp.getElementsByTagName("podCapacity").item(0).getTextContent()));
 				((AgentController) getContainerController().acceptNewAgent(temp.getElementsByTagName("name").item(0).getTextContent(), tempAgent)).start();
                 tempAgent.pathFindingAgent = pathFndingAgent.getAID();
 				junctionList.add(tempAgent);
