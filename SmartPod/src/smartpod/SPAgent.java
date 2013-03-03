@@ -1,6 +1,7 @@
 package smartpod;
 
 import jade.core.Agent;
+import java.util.Date;
 
 /**
  * Class for creating SPAgent. It extends jade.core.Agent class.
@@ -19,7 +20,20 @@ public class SPAgent extends Agent
 	public long getCurrentTime()
 	{
 		long time = System.currentTimeMillis();
+		//gets current date object
+		Date temp = new Date(time*1000);
+		
 		// for simulation milliseconds represent seconds.
-		return time%86400;
+		return temp.getTime();
+//		return time%86400;
+	}
+	
+	public Date getCurrentDate()
+	{
+		long time = System.currentTimeMillis();
+		//gets current date object
+		Date temp = new Date(time*1000);
+		
+		return temp;
 	}
 }

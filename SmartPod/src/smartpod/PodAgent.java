@@ -243,7 +243,7 @@ public class PodAgent extends SPAgent
 			if (!arrived)
 			{
 				// @todo neka funkcija hitrosti
-				double v = 0.1;
+				double v = 0.0001;
 
 				// the time needed for the whole journey with the given speed v
 				double journeyTime = currentRoadLength/v;

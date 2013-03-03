@@ -148,6 +148,14 @@ public class EnvironmentAgent extends SPAgent
 				PassengerGroupAgent testAgent1 = new PassengerGroupAgent(garageAID, destinationAID, 3000+i*500);
 				((AgentController) getContainerController().acceptNewAgent("Janez"+i, testAgent1)).start();
 			}
+			
+			PassengerGroupAgent testAgent1 = new PassengerGroupAgent(garageAID, destinationAID, 100000);
+			((AgentController) getContainerController().acceptNewAgent("Janez1234", testAgent1)).start();
+			
+			PassengerGroupAgent testAgent2 = new PassengerGroupAgent(garageAID, destinationAID, 200000);
+			((AgentController) getContainerController().acceptNewAgent("Janez12345", testAgent2)).start();
+			
+			
 		}
 		catch (Exception ex)
 		{
