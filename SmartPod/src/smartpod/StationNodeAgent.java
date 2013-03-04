@@ -166,7 +166,7 @@ public class StationNodeAgent extends NodeAgent
 					if (destinationAID.equals(getAID()))
 					{
 						// the pod has reached the final destination
-						System.out.println("=======\nSUCCESS :: "+podAID.getLocalName()+" has reached destination "+getLocalName()+"\n=======");
+						System.out.println("\u001b[32mSUCCESS    :: "+podAID.getLocalName()+" has reached destination "+getLocalName()+"\u001b[0m");
 					}
 					else
 					{

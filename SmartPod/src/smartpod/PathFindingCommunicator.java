@@ -56,7 +56,7 @@ public class PathFindingCommunicator extends Communicator
 	 */
 	public void informPathFindingResult(ACLMessage requestMessage, AID roadToTake)
 	{
-		System.out.println(agent.getLocalName()+"\t :: informPathFindingResult("+roadToTake.getLocalName()+")");
+		System.out.printf("%-10s :: informPathFindingResult(%s)\n",agent.getLocalName(),roadToTake.getLocalName());
 		ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
 		msg.setOntology(ONTOLOGY_PATH_FINDING);
 		msg.setContent("optimal path found");

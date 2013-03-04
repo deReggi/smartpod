@@ -67,7 +67,7 @@ public class PodCommunicator extends Communicator
 	 */
 	public void acceptPodToRoadDeparture(ACLMessage requestMessage)
 	{
-		System.out.println(agent.getLocalName()+"\t :: acceptPodToRoadDeparture()");
+		System.out.printf("%-10s :: acceptPodToRoadDeparture()\n",agent.getLocalName());
 		ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
 		msg.setOntology(ONTOLOGY_POD_NODE_DEPARTURE);
 		msg.setContent("accept proposal");
@@ -81,7 +81,7 @@ public class PodCommunicator extends Communicator
 	 */
 	public void informPodToRoadTransfer(AID road)
 	{
-		System.out.println(agent.getLocalName()+"\t :: informPodToRoadTransfer("+road.getLocalName()+")");
+		System.out.printf("%-10s :: informPodToRoadTransfer(%s)\n",agent.getLocalName(),road.getLocalName());
 		ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
 		msg.setOntology(ONTOLOGY_POD_ROAD_ATTACH);
 		msg.setContent("pod attached");
@@ -95,7 +95,7 @@ public class PodCommunicator extends Communicator
 	 */
 	public void informPodToNodeTransfer(AID road)
 	{
-		System.out.println(agent.getLocalName()+"\t :: informPodToNodeTransfer("+road.getLocalName()+")");
+		System.out.printf("%-10s :: informPodToNodeTransfer(%s)\n",agent.getLocalName(),road.getLocalName());
 		ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
 		msg.setOntology(ONTOLOGY_POD_ROAD_DETACH);
 		msg.setContent("pod detached");
@@ -109,7 +109,7 @@ public class PodCommunicator extends Communicator
 	 */
 	public void requestPodToNodeArrival(AID node)
 	{
-		System.out.println(agent.getLocalName()+"\t :: requestPodToNodeArrival("+node.getLocalName()+")");
+		System.out.printf("%-10s :: requestTransport(%s)\n",agent.getLocalName(),node.getLocalName());
 		ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
 		msg.setOntology(ONTOLOGY_POD_NODE_ARRIVAL);
 		msg.setContent("pod to node transfer request");		

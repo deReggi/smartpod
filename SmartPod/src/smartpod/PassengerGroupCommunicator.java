@@ -31,7 +31,7 @@ public class PassengerGroupCommunicator extends Communicator
 	 */
 	public void requestTransport(AID originAID, AID destinationAID)
 	{
-		System.out.println(agent.getLocalName()+"\t :: requestTransport("+originAID.getLocalName()+","+destinationAID.getLocalName()+")");
+		System.out.printf("%-10s :: requestTransport(%s,%s)\n",agent.getLocalName(),originAID.getLocalName(),destinationAID.getLocalName());
 		ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
 		msg.setOntology(ONTOLOGY_PASSENGER_TRANSPORT);
 		msg.setContent("transport request");

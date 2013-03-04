@@ -111,7 +111,7 @@ public class NodeCommunicator extends Communicator
 	 */
 	public void requestPodToRoadDeparture(AID podAID, AID roadAID, AID destinationAID)
 	{
-		System.out.println(agent.getLocalName()+"\t :: requestPodToRoadDeparture("+podAID.getLocalName()+","+roadAID.getLocalName()+","+destinationAID.getLocalName()+")");
+		System.out.printf("%-10s :: requestPodToRoadDeparture(%s,%s,%s)\n",agent.getLocalName(),podAID.getLocalName(),roadAID.getLocalName(),destinationAID.getLocalName());
 		ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
 		msg.setOntology(ONTOLOGY_POD_NODE_DEPARTURE);
 		msg.setContent("pod to road transfer request");
@@ -128,7 +128,7 @@ public class NodeCommunicator extends Communicator
 	 */
 	public void confirmPodToNodeArrival(ACLMessage requestMessage)
 	{
-		System.out.println(agent.getLocalName()+"\t :: confirmPodToNodeArrival()");
+		System.out.printf("%-10s :: confirmPodToNodeArrival()\n",agent.getLocalName());
 		ACLMessage msg = new ACLMessage(ACLMessage.CONFIRM);
 		msg.setOntology(ONTOLOGY_POD_NODE_ARRIVAL);
 		msg.setContent("pod to node transfer confirm");
@@ -146,7 +146,7 @@ public class NodeCommunicator extends Communicator
 	 */
 	public void requestPathFinding(AID podAID, AID destinationAID)
 	{
-		System.out.println(agent.getLocalName()+"\t :: requestPathFinding("+podAID.getLocalName()+","+destinationAID.getLocalName()+")");
+		System.out.printf("%-10s :: requestPathFinding(%s,%s)\n",agent.getLocalName(),podAID.getLocalName(),destinationAID.getLocalName());
 		ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
 		msg.setOntology(ONTOLOGY_PATH_FINDING);
 		msg.setContent("path finding request");

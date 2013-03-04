@@ -49,7 +49,7 @@ public class PassengerGroupAgent extends SPAgent
 	 */
     public PassengerGroupAgent()
     {
-		System.out.println("INFO  :: PassengerGroupAgent created with JADE GUI");
+		System.out.println("\u001b[34mINFO  :: PassengerGroupAgent created with JADE GUI");
 		createdByJADE = true;
     }
 	

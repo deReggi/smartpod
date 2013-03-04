@@ -55,7 +55,7 @@ public class EnvironmentAgent extends SPAgent
 //			Thread.sleep(3000);
 		
 			// path finding agent
-			((AgentController) getContainerController().acceptNewAgent("mainPathFindingAgent", pathFndingAgent)).start();
+			((AgentController) getContainerController().acceptNewAgent("PathFinder", pathFndingAgent)).start();
 
 			
 			File xmlFile = new File("conf.xml");
