@@ -14,13 +14,13 @@ public class Communicator
 	/**
 	 * The message ontology.
 	 */
-	public final String ONTOLOGY_POD_NODE_ARRIVAL	= "pod_node_arrival";
-	public final String ONTOLOGY_POD_NODE_DEPARTURE	= "pod_node_departure";
-	public final String ONTOLOGY_POD_ROAD_ATTACH	= "pod_road_attach";
-	public final String ONTOLOGY_POD_ROAD_DETACH	= "pod_road_detach";
-	public final String ONTOLOGY_ROAD_WEIGHT_UPDATE	= "road_weight_update";
-	public final String ONTOLOGY_PATH_FINDING		= "path_finding";
-	public final String ONTOLOGY_PASSENGER_TRANSPORT= "passenger_transport";
+	protected final String ONTOLOGY_POD_NODE_ARRIVAL	= "pod_node_arrival";
+	protected final String ONTOLOGY_POD_NODE_DEPARTURE	= "pod_node_departure";
+	protected final String ONTOLOGY_POD_ROAD_ATTACH		= "pod_road_attach";
+	protected final String ONTOLOGY_POD_ROAD_DETACH		= "pod_road_detach";
+	protected final String ONTOLOGY_ROAD_WEIGHT_UPDATE	= "road_weight_update";
+	protected final String ONTOLOGY_PATH_FINDING		= "path_finding";
+	protected final String ONTOLOGY_PASSENGER_TRANSPORT	= "passenger_transport";
 		
 	/**
 	 * The parent agent.

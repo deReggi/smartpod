@@ -140,19 +140,19 @@ public class EnvironmentAgent extends SPAgent
 			// testing moving of pod agents
 			
 			AID garageAID = new AID("Garaža1",false);
-			AID destinationAID = new AID("Postaja5",false);
+//			AID destinationAID = new AID("Postaja5",false);
 			for (int i = 0; i < 30; i++)
 			{
-//				AID destinationAID = new AID("Postaja"+(i%6+1),false);
-				PassengerGroupAgent testAgent1 = new PassengerGroupAgent(garageAID, destinationAID, 3000+i*500);
+				AID destinationAID = new AID("Postaja"+(i%6+1),false);
+				PassengerGroupAgent testAgent1 = new PassengerGroupAgent(garageAID, destinationAID, 3000+i*1000);
 				((AgentController) getContainerController().acceptNewAgent("Janez"+i, testAgent1)).start();
 			}
 			
-			PassengerGroupAgent testAgent1 = new PassengerGroupAgent(garageAID, destinationAID, 100000);
-			((AgentController) getContainerController().acceptNewAgent("Janez1234", testAgent1)).start();
-			
-			PassengerGroupAgent testAgent2 = new PassengerGroupAgent(garageAID, destinationAID, 200000);
-			((AgentController) getContainerController().acceptNewAgent("Janez12345", testAgent2)).start();
+//			PassengerGroupAgent testAgent1 = new PassengerGroupAgent(garageAID, destinationAID, 100000);
+//			((AgentController) getContainerController().acceptNewAgent("Janez1234", testAgent1)).start();
+//			
+//			PassengerGroupAgent testAgent2 = new PassengerGroupAgent(garageAID, destinationAID, 200000);
+//			((AgentController) getContainerController().acceptNewAgent("Janez12345", testAgent2)).start();
 			
 			
 		}
