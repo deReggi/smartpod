@@ -24,7 +24,6 @@ public class StationNodeAgent extends NodeAgent
 	private NodeCommunicator communicator = new NodeCommunicator(this);
 	
 	//variable declaration for all the agent's properties
-    private int podsCapacity;
     private int peopleCapacity;
     private int peopleOnStation;
 	
@@ -119,7 +118,7 @@ public class StationNodeAgent extends NodeAgent
     public class StationAgentBehaviour extends CyclicBehaviour
     {
 		/**
-		 * Constructor for Station's agent behaviour class.
+		 * Constructor for station agent behaviour class.
 		 * 
 		 * @param a 
 		 *		the agent to which behaviour is being applied.
@@ -146,7 +145,7 @@ public class StationNodeAgent extends NodeAgent
 			}
 			
 			// check arrival message box
-			ACLMessage arrivalMessage = communicator.receiveMessage(communicator.podArrivalTemplate);
+			ACLMessage arrivalMessage = communicator.checkPodArrivalRequests();
 			if (arrivalMessage != null)
 //			ArrayList<ACLMessage> arrivalMessages = communicator.checkPodArrivalRequestMessages();
 //			for (ACLMessage arrivalMessage : arrivalMessages)
@@ -183,7 +182,7 @@ public class StationNodeAgent extends NodeAgent
 			}
 			
 			// check transport request message
-			ACLMessage transportRequest = communicator.receiveMessage(communicator.transportRequestTemplate);
+			ACLMessage transportRequest = communicator.checkPassengerTransportRequests();
 			if (transportRequest != null)
 			{
 				AID podAID = registeredPods.get(0);

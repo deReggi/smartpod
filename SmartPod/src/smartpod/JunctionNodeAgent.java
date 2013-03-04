@@ -18,7 +18,11 @@ public class JunctionNodeAgent extends NodeAgent
 	
 	/**
 	 * Constructor for junction agent.
-	 * @param position Vector2D that contains the desired position.
+	 * 
+	 * @param position
+	 *		Vector2D that contains the desired position.
+	 * @param podsCapacity
+	 *		Maximum allowed pods on the station at a given moment.
 	 */
     public JunctionNodeAgent(Vector2D position, int podsCapacity)
     {

@@ -5,7 +5,6 @@
 package smartpod;
 
 import com.janezfeldin.Math.Vector2D;
-import com.sun.corba.se.impl.copyobject.JavaStreamObjectCopierImpl;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -120,8 +119,8 @@ public class DisplayDataBridge
 		{
 			JSONObject tempObject = new JSONObject();
 			tempObject.put("name", roadList.get(i).getLocalName());
-			tempObject.put("startPosition", roadList.get(i).startPosition.stringRepresentation());
-			tempObject.put("endPosition", roadList.get(i).endPosition.stringRepresentation());
+			tempObject.put("startPosition", roadList.get(i).getStartPosition().stringRepresentation());
+			tempObject.put("endPosition", roadList.get(i).getEndPosition().stringRepresentation());
 			
 			tempArray.put(tempObject);
 		}

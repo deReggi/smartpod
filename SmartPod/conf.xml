@@ -3,7 +3,6 @@
 	<Environment>
 		<width>600</width>
 		<height>600</height>
-		<roadBelongingType>inbound</roadBelongingType><!--(inbound ali outgoing) inbound - cesta pripada vozlišču v katerega se izteka; outgoing - cesta pripada vozlišču iz katerega izhaja-->
 	</Environment>
 	<Nodes>
 		<Stations>

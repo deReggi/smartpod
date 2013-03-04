@@ -72,7 +72,6 @@ public class EnvironmentAgent extends SPAgent
 			temp = (Element) doc.getElementsByTagName("Environment").item(0);
 			mapWidth = Integer.parseInt(temp.getElementsByTagName("width").item(0).getTextContent());
 			mapHeight = Integer.parseInt(temp.getElementsByTagName("height").item(0).getTextContent());
-			roadBelongingType = temp.getElementsByTagName("roadBelongingType").item(0).getTextContent();
 
 			//settings for junctions
 			tempList = doc.getElementsByTagName("Junction");
@@ -106,7 +105,7 @@ public class EnvironmentAgent extends SPAgent
 				String tempStart = temp.getElementsByTagName("start").item(0).getTextContent();
 				String tempEnd = temp.getElementsByTagName("end").item(0).getTextContent();
 				double tempWeight = Double.parseDouble(temp.getElementsByTagName("weight").item(0).getTextContent());
-				RoadAgent tempAgent = new RoadAgent(tempStart, tempEnd, getNodesPosition(tempStart), getNodesPosition(tempEnd), roadBelongingType,tempWeight);
+				RoadAgent tempAgent = new RoadAgent(tempStart, tempEnd, getNodesPosition(tempStart), getNodesPosition(tempEnd),tempWeight);
 				((AgentController) getContainerController().acceptNewAgent(temp.getElementsByTagName("name").item(0).getTextContent(), tempAgent)).start();
 				tempAgent.weightUpdateDelegate = pathFndingAgent.getAID();
 				roadList.add(tempAgent);

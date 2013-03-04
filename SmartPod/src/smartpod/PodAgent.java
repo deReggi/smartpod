@@ -237,6 +237,10 @@ public class PodAgent extends SPAgent
 			super(a, period);
 		}
 		
+		/**
+		 * This method is invoked periodically with the period defined in the 
+		 * constructor.
+		 */
 		@Override
 		protected void onTick()
 		{

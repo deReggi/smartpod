@@ -13,37 +13,42 @@ import java.util.ArrayList;
  */
 public class NodeAgent extends SPAgent
 {
-	//declaration of variables
+	/***************************************************************************
+	 * Variables
+	 **************************************************************************/
+
+	/**
+	 * The currently registered pods at the node.
+	 */
 	public ArrayList<AID> registeredPods = new ArrayList<AID>();
+	/**
+	 * The currently registered pods in the process of departing the node.
+	 */
 	public ArrayList<AID> departingPods = new ArrayList<AID>();
-	
+	/**
+	 * The AID of the path finding agent.
+	 */
 	protected AID pathFindingAgent;
+	/**
+	 * The position of the node.
+	 */
     protected Vector2D position;
-    
-	//variable declaration for all the agent's properties
-    private int podsCapacity;
-	
 	/**
-	 * This method returns the position of this node.
-	 * @return Vector2D that represents the position of the node location.
+	 * Maximum allowed pods on the station at a given moment.
 	 */
-    public Vector2D getPosition()
-    {
-        return position;
-    }
+    protected int podsCapacity;
 	
-	/**
-	 * Method used for setting the node's position.
-	 * @param position Vector2D that contains the desired position.
-	 */
-    public void setPosition(Vector2D position)
-    {
-        this.position = position;
-    }
+	/***************************************************************************
+	 * Constructors
+	 **************************************************************************/
     
 	/**
 	 * Constructor for node agent.
-	 * @param position Vector2D that contains the desired position.
+	 * 
+	 * @param position 
+	 *		Vector2D that contains the desired position.
+	 * @param podsCapacity
+	 *		Maximum allowed pods on the station at a given moment.
 	 */
     public NodeAgent(Vector2D position,int podsCapacity)
     {
@@ -51,30 +56,10 @@ public class NodeAgent extends SPAgent
 		this.podsCapacity = podsCapacity;
     }
 	
-	/**
-	 * Method that returns the integer value representing the maximum number 
-	 * of pods, that can be on this station at a given moment.
-	 * 
-	 * @return
-	 *		Integer value representing stations pod capacity
-	 */
-    public int getPodsCapacity()
-    {
-        return podsCapacity;
-    }
+	/***************************************************************************
+	 * JADE setup and behaviors
+	 **************************************************************************/
 
-	/**
-	 * Method used to set the maximum number of pods, that can be on this 
-	 * station at a given moment.
-	 * 
-	 * @param podsCapacity
-	 *		Integer value representing the maximum number of pods.
-	 */
-    public void setPodsCapacity(int podsCapacity)
-    {
-        this.podsCapacity = podsCapacity;
-    }
-    
 	/**
 	 * This method gets called when agent is started.
 	 * It adds the desired behaviour to the agent.
@@ -85,7 +70,6 @@ public class NodeAgent extends SPAgent
         //adds the behviour to the agent
         addBehaviour(new NodeAgentBehaviour(this));
     }
-    
     
     /**
 	 * Behaviour class for NodeAgent.
@@ -112,4 +96,53 @@ public class NodeAgent extends SPAgent
         }
     }
     
+	/***************************************************************************
+	 * Getters & setters
+	 **************************************************************************/
+	
+	/**
+	 * This method returns the position of this node.
+	 * 
+	 * @return
+	 *		Vector2D that represents the position of the node location.
+	 */
+    public Vector2D getPosition()
+    {
+        return position;
+    }
+	
+	/**
+	 * Method used for setting the node's position.
+	 * 
+	 * @param position 
+	 *		Vector2D that contains the desired position.
+	 */
+    public void setPosition(Vector2D position)
+    {
+        this.position = position;
+    }
+	
+	/**
+	 * Method that returns the integer value representing the maximum number 
+	 * of pods, that can be on this station at a given moment.
+	 * 
+	 * @return
+	 *		Integer value representing stations pod capacity
+	 */
+    public int getPodsCapacity()
+    {
+        return podsCapacity;
+    }
+
+	/**
+	 * Method used to set the maximum number of pods, that can be on this 
+	 * station at a given moment.
+	 * 
+	 * @param podsCapacity
+	 *		Integer value representing the maximum number of pods.
+	 */
+    public void setPodsCapacity(int podsCapacity)
+    {
+        this.podsCapacity = podsCapacity;
+    }
 }

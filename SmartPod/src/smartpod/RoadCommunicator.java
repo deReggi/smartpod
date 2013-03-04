@@ -14,10 +14,10 @@ public class RoadCommunicator extends Communicator
 	/**
 	 * The message templates for receiving messages.
 	 */
-	public MessageTemplate podAttachedTemplate	= MessageTemplate.and(
+	private MessageTemplate podAttachedTemplate	= MessageTemplate.and(
 													MessageTemplate.MatchPerformative(ACLMessage.INFORM),
 													MessageTemplate.MatchOntology(ONTOLOGY_POD_ROAD_ATTACH));
-	public MessageTemplate podDetachedTemplate	= MessageTemplate.and(
+	private MessageTemplate podDetachedTemplate	= MessageTemplate.and(
 													MessageTemplate.MatchPerformative(ACLMessage.INFORM),
 													MessageTemplate.MatchOntology(ONTOLOGY_POD_ROAD_DETACH));
 		
@@ -58,12 +58,15 @@ public class RoadCommunicator extends Communicator
 		msg.setOntology(ONTOLOGY_ROAD_WEIGHT_UPDATE);
 		msg.setContent("my weight is");
 		msg.addReceiver(((RoadAgent)agent).weightUpdateDelegate);
-		msg.addUserDefinedParameter("weight", String.valueOf(((RoadAgent)agent).totalWeight));
+		msg.addUserDefinedParameter("weight", ((RoadAgent)agent).getWeightAsString());
 		agent.send(msg);
 	}
 	
 	/**
 	 * Sends the INFORM response message containing the road data.
+	 * 
+	 * @param requestMessage
+	 *		The message that initiated the request.
 	 */
 	public void informRoadData(ACLMessage requestMessage)
 	{
@@ -72,9 +75,9 @@ public class RoadCommunicator extends Communicator
 		msg.setOntology(ONTOLOGY_POD_ROAD_ATTACH);
 		msg.setContent("my road data");
 		msg.addReceiver(requestMessage.getSender());
-		msg.addUserDefinedParameter("end_node", ((RoadAgent)agent).endNode.getLocalName());
-		msg.addUserDefinedParameter("start_position", ((RoadAgent)agent).startPosition.stringRepresentation());
-		msg.addUserDefinedParameter("end_position", ((RoadAgent)agent).endPosition.stringRepresentation());
+		msg.addUserDefinedParameter("end_node", ((RoadAgent)agent).getEndNode().getLocalName());
+		msg.addUserDefinedParameter("start_position", ((RoadAgent)agent).getStartPosition().stringRepresentation());
+		msg.addUserDefinedParameter("end_position", ((RoadAgent)agent).getEndPosition().stringRepresentation());
 		agent.send(msg);
 	}
 	

@@ -14,143 +14,64 @@ import java.util.ArrayList;
  */
 public class RoadAgent extends SPAgent
 {
+	/***************************************************************************
+	 * Variables
+	 **************************************************************************/
+
 	// agent communicator
 	private RoadCommunicator communicator = new RoadCommunicator(this);
 	
-	//variable declarations for road's properties
-	public ArrayList<AID> registeredPods = new ArrayList<AID>();
+	// registered pod list
+	private ArrayList<AID> registeredPods = new ArrayList<AID>();
+	
+	// start and end node AIDs and positions
+	private AID			startNode;
+	private AID			endNode;
+	private Vector2D	startPosition;
+	private Vector2D	endPosition;
+	
+	// road weights
+	private double	weight		= 0.0;
+	private double	totalWeight	= 0.0;
+	
+	/**
+	 * The AID of the weight update delegate (path finding algorithm)
+	 */
 	public AID		weightUpdateDelegate;
-	public double	weight		= 0.0;
-	public double	totalWeight	= 0.0;
-	public AID	startNode	= null;
-	public AID	endNode		= null;
-	public Vector2D	startPosition;
-	public Vector2D	endPosition;
-	public String	roadBelongingType = "";//(inbound ali outgoing) inbound - the road belongs to the node at the end; outgoing - road belongs to the node at the start
+
+	/***************************************************************************
+	 * Constructors
+	 **************************************************************************/
 
 	/**
 	 * Constructor for road agent.
-	 * @param startNode String containing the name of the starting node
-	 * @param endNode String containing the name of the ending node
-	 * @param startPosition Vector2D of the starting position
-	 * @param endPosition Vector2D of the end location
-	 * @param roadBelongingType String containing two possible values: inbound/outgoing. inbound - the road belongs to the node at the end; outgoing - road belongs to the node at the start.
+	 * 
+	 * @param startNode
+	 *		String containing the name of the starting node
+	 * @param endNode
+	 *		String containing the name of the ending node
+	 * @param startPosition
+	 *		Vector2D of the starting position
+	 * @param endPosition
+	 *		Vector2D of the end location
+	 * @param weight
+	 *		The initial road weight (speed constant).
 	 */
-	public RoadAgent(String startNode, String endNode, Vector2D startPosition, Vector2D endPosition, String roadBelongingType, double weight)
+	public RoadAgent(String startNode, String endNode, Vector2D startPosition, Vector2D endPosition, double weight)
 	{
 		this.startNode = new AID(startNode,false);
 		this.endNode = new AID(endNode,false);
 		this.startPosition = startPosition;
 		this.endPosition = endPosition;
-		this.roadBelongingType = roadBelongingType;
 		this.weight = weight;
-//		System.out.println("RoadAgent("+startNode+", "+endNode+", "+startPosition+", "+endPosition+", "+roadBelongingType+", "+weight+")");
+		this.totalWeight = weight;
+//		System.out.println("RoadAgent("+startNode+", "+endNode+", "+startPosition+", "+endPosition+", "+weight+")");
 	}
 	
-	/**
-	 * Method that returns the name of the node at the beginning of the road.
-	 * @return String containing the name of the node at the beginning.
-	 */
-	public String getStartNode()
-	{
-		return startNode.getLocalName();
-	}
+	/***************************************************************************
+	 * Public methods
+	 **************************************************************************/
 
-	/**
-	 * Method that returns the name of the node at the end of the road.
-	 * @return String containing the name of the node at the end.
-	 */
-	public String getEndNode()
-	{
-		return endNode.getLocalName();
-	}
-
-	/**
-	 * Method that returns the start position of the road.
-	 * @return Vector2D containing the position of the beginning of the road.
-	 */
-	public Vector2D getStartPosition()
-	{
-		return startPosition;
-	}
-
-	/**
-	 * Method that returns the end position of the road.
-	 * @return Vector2D containing the position of the road's end.
-	 */
-	public Vector2D getEndPosition()
-	{
-		return endPosition;
-	}
-
-	/**
-	 * Method that returns the node's name to which the road belongs.
-	 * @return String that contains the name of the node to which the road belongs.
-	 */
-	public AID getParentNode()
-	{
-		if (roadBelongingType.equals("inbound"))
-		{
-			return endNode;
-		}
-		else
-		{
-			return startNode;
-		}
-	}
-
-	/**
-	 * This method sets the name of the road's starting node.
-	 *
-	 * @param startNode String representing the name of node at the beginning of the road.
-	 */
-	public void setStartNode(String startNode)
-	{
-		this.startNode = new AID(startNode,false);
-		throw new UnsupportedOperationException("Še ne dela, poišči lokacijo od vozlišča z imaneom" + startNode);
-	}
-
-	/**
-	 * This method sets the name of the road's ending node.
-	 * @param endNode String representing the name of node at the end of the road.
-	 */
-	public void setEndNode(String endNode)
-	{
-		this.endNode = new AID(endNode,false);
-		throw new UnsupportedOperationException("Še ne dela, poišči lokacijo od vozlišča z imaneom" + endNode);
-	}
-
-	/**
-	 * This method is used to set the starting position of the road.
-	 * @param startPosition Vector2D containing the desired starting position.
-	 */
-	public void setStartPosition(Vector2D startPosition)
-	{
-		this.startPosition = startPosition;
-		throw new UnsupportedOperationException("Še ne dela, poišči še ime vozlišča na lokaciji" + startPosition);
-	}
-	
-	/**
-	 * This method is used to set the ending position of the road.
-	 * 
-	 * @param endPosition Vector2D containing the desired ending position.
-	 */
-	public void setEndPosition(Vector2D endPosition)
-	{
-		this.endPosition = endPosition;
-		throw new UnsupportedOperationException("Še ne dela, poišči še ime vozlišča na lokaciji" + endPosition);
-	}
-	
-	/**
-	 * This method is used to set the method that is used to determine to which node the road belongs.
-	 * 
-	 * @param roadBelongingType String containing either "inbound" or "outgoing". inbound - the road belongs to the node at the end; outgoing - road belongs to the node at the start
-	 */
-	public void setRoadBelongingType(String roadBelongingType)
-	{
-		this.roadBelongingType = roadBelongingType;
-	}
-	
 	/**
 	 * This method recalculates road weight.
 	 * @return returns true if weight has been changed. 
@@ -162,6 +83,10 @@ public class RoadAgent extends SPAgent
 		return (oldWeight != totalWeight);
 	}
 	
+	/***************************************************************************
+	 * JADE setup and behaviors
+	 **************************************************************************/
+
 	/**
 	 * This method gets called when agent is started.
 	 * It adds the desired behaviour to the agent.
@@ -200,7 +125,6 @@ public class RoadAgent extends SPAgent
 			ArrayList<ACLMessage> attachMessages = communicator.checkPodAttachMessages();
 			for (ACLMessage msg : attachMessages)
 			{
-//				System.out.println("com-road : "+msg.getContent());
 				registeredPods.add(msg.getSender());
 				communicator.informRoadData(msg);
 			}
@@ -209,7 +133,6 @@ public class RoadAgent extends SPAgent
 			ArrayList<ACLMessage> detachMessages = communicator.checkPodDetachMessages();
 			for (ACLMessage msg : detachMessages)
 			{
-//				System.out.println("com-road : "+msg.getContent());
 				registeredPods.remove(msg.getSender());
 			}
 			
@@ -220,5 +143,76 @@ public class RoadAgent extends SPAgent
 				communicator.informRoadWeight();
 			}
 		}
+	}
+	
+	/***************************************************************************
+	 * Getters & setters
+	 **************************************************************************/
+
+	/**
+	 * Method that returns the AID of the node agent at the beginning of the road.
+	 * 
+	 * @return
+	 *		AID of the node agent at the beginning.
+	 */
+	public AID getStartNode()
+	{
+		return startNode;
+	}
+
+	/**
+	 * Method that returns the AID of the node agent at the end of the road.
+	 * 
+	 * @return
+	 *		AID of the node agent at the end.
+	 */
+	public AID getEndNode()
+	{
+		return endNode;
+	}
+
+	/**
+	 * Method that returns the start position of the road.
+	 * 
+	 * @return
+	 *		Vector2D containing the position of the beginning of the road.
+	 */
+	public Vector2D getStartPosition()
+	{
+		return startPosition;
+	}
+
+	/**
+	 * Method that returns the end position of the road.
+	 * 
+	 * @return 
+	 *		Vector2D containing the position of the road's end.
+	 */
+	public Vector2D getEndPosition()
+	{
+		return endPosition;
+	}
+	
+	/**
+	 * Method that returns the weight of the road.
+	 * It is calculated with the constant road weight (speed limit),
+	 * current pod capacity and later some other stuff.
+	 * 
+	 * @return
+	 *		The calculated weight.
+	 */
+	public double getWeight()
+	{
+		return totalWeight;
+	}
+	
+	/**
+	 * Method that returns the weight of the road as a string representation.
+	 * @return
+	 *		The string representation of the calculated weight.
+	 */
+	public String getWeightAsString()
+	{
+		return String.valueOf(totalWeight);
 	}
 }

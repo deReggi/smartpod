@@ -28,6 +28,12 @@ public class SPAgent extends Agent
 //		return time%86400;
 	}
 	
+	/**
+	 * Creates and returns current simulation date.
+	 * 
+	 * @return
+	 *		Date object containing simulation date.
+	 */
 	public Date getCurrentDate()
 	{
 		long time = System.currentTimeMillis();

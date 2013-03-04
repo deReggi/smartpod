@@ -13,11 +13,11 @@ public class EnvironmentCommunicator extends Communicator
 	/**
 	 * The message templates for receiving messages.
 	 */
-	public MessageTemplate roadWeightUpdateTemplate	= 
+	private MessageTemplate roadWeightUpdateTemplate	= 
 			MessageTemplate.and(
 				MessageTemplate.MatchPerformative(ACLMessage.INFORM),
 				MessageTemplate.MatchOntology(ONTOLOGY_ROAD_WEIGHT_UPDATE));
-	public MessageTemplate pathFindRequestTemplate =
+	private MessageTemplate pathFindRequestTemplate =
 			MessageTemplate.and(
 				MessageTemplate.MatchPerformative(ACLMessage.REQUEST),
 				MessageTemplate.MatchOntology(ONTOLOGY_PATH_FINDING));

@@ -50,11 +50,11 @@ public class PathFindingAgent extends SPAgent
 
 			roadNameToNodeMap.put(road.getAID(), node);
 
-			ArrayList<PFNode> parents = endNodeNameToNodeMap.get(road.endNode);
+			ArrayList<PFNode> parents = endNodeNameToNodeMap.get(road.getEndNode());
 			if (parents == null)
 			{
 				parents = new ArrayList<PFNode>();
-				endNodeNameToNodeMap.put(road.endNode, parents);
+				endNodeNameToNodeMap.put(road.getEndNode(), parents);
 			}
 			parents.add(node);
 
@@ -63,7 +63,7 @@ public class PathFindingAgent extends SPAgent
 		for (RoadAgent road : roadList)
 		{
 			PFNode child = roadNameToNodeMap.get(road.getAID());
-			ArrayList<PFNode> parents = endNodeNameToNodeMap.get(road.startNode);
+			ArrayList<PFNode> parents = endNodeNameToNodeMap.get(road.getStartNode());
 			for (PFNode parent : parents)
 			{
 				ArrayList<PFNode> children = childNodeMap.get(parent);

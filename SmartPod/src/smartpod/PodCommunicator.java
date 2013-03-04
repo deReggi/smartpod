@@ -15,13 +15,13 @@ public class PodCommunicator extends Communicator
 	/**
 	 * The message templates for receiving messages.
 	 */
-	public MessageTemplate podArrivalTemplate	= MessageTemplate.and(
+	private MessageTemplate podArrivalTemplate	= MessageTemplate.and(
 													MessageTemplate.MatchPerformative(ACLMessage.CONFIRM),
 													MessageTemplate.MatchOntology(ONTOLOGY_POD_NODE_ARRIVAL));
-	public MessageTemplate podDepartureTemplate = MessageTemplate.and(
+	private MessageTemplate podDepartureTemplate = MessageTemplate.and(
 													MessageTemplate.MatchPerformative(ACLMessage.REQUEST),
 													MessageTemplate.MatchOntology(ONTOLOGY_POD_NODE_DEPARTURE));
-	public MessageTemplate podRoadAttachTemplate = MessageTemplate.and(
+	private MessageTemplate podRoadAttachTemplate = MessageTemplate.and(
 													MessageTemplate.MatchPerformative(ACLMessage.INFORM),
 													MessageTemplate.MatchOntology(ONTOLOGY_POD_ROAD_ATTACH));
 	

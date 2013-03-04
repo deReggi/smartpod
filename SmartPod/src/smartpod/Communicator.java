@@ -29,8 +29,12 @@ public class Communicator
 	
 	/**
 	 * Checks for received messages with given template.
-	 * @param messageTemplate the MessageTemplate to use. If null all messages will be supplied.
-	 * @return ArrayList of received ACLMessages.
+	 * 
+	 * @param messageTemplate
+	 *		The MessageTemplate to use. If null all messages will be supplied.
+	 * 
+	 * @return 
+	 *		ArrayList of received ACLMessages.
 	 */
 	public ArrayList<ACLMessage> checkMessageBox(MessageTemplate messageTemplate)
 	{
@@ -46,8 +50,12 @@ public class Communicator
 	
 	/**
 	 * Receives an ACL message from the agent message queue.
-	 * @param template the MessageTemplate to use.
-	 * @return A new ACL message, or null if no message is present.
+	 * 
+	 * @param messageTemplate
+	 *		The MessageTemplate to use.
+	 * 
+	 * @return
+	 *		A new ACL message, or null if no message is present.
 	 */
 	public ACLMessage receiveMessage(MessageTemplate messageTemplate)
 	{

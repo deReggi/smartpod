@@ -15,24 +15,22 @@ public class NodeCommunicator extends Communicator
 	/**
 	 * The message templates for receiving messages.
 	 */
-	public MessageTemplate podArrivalTemplate =
+	private MessageTemplate podArrivalTemplate =
 			MessageTemplate.and(
 				MessageTemplate.MatchPerformative(ACLMessage.REQUEST),
 				MessageTemplate.MatchOntology(ONTOLOGY_POD_NODE_ARRIVAL));
-	public MessageTemplate podDepartureTemplate = 
+	private MessageTemplate podDepartureTemplate = 
 			MessageTemplate.and(
 				MessageTemplate.MatchPerformative(ACLMessage.INFORM),
 				MessageTemplate.MatchOntology(ONTOLOGY_POD_NODE_DEPARTURE));
-	public MessageTemplate pathFindResultTemplate = 
+	private MessageTemplate pathFindResultTemplate = 
 			MessageTemplate.and(
 				MessageTemplate.MatchPerformative(ACLMessage.INFORM),
 				MessageTemplate.MatchOntology(ONTOLOGY_PATH_FINDING));
-	public MessageTemplate transportRequestTemplate = 
+	private MessageTemplate transportRequestTemplate = 
 			MessageTemplate.and(
 				MessageTemplate.MatchPerformative(ACLMessage.REQUEST),
 				MessageTemplate.MatchOntology(ONTOLOGY_PASSENGER_TRANSPORT));
-	
-	
 	
 	
 	/**
@@ -77,6 +75,28 @@ public class NodeCommunicator extends Communicator
 	public ArrayList<ACLMessage> checkPathFindingResultMessages()
 	{
 		return checkMessageBox(pathFindResultTemplate);
+	}
+	
+	/**
+	 * Receives the pod arrival request message.
+	 * 
+	 * @return
+	 *		The arrived ACLMessage or null.
+	 */
+	public ACLMessage checkPodArrivalRequests()
+	{
+		return agent.receive(podArrivalTemplate);
+	}
+	
+	/**
+	 * Receives the passenger transport request message.
+	 * 
+	 * @return
+	 *		The arrived ACLMessage or null.
+	 */
+	public ACLMessage checkPassengerTransportRequests()
+	{
+		return agent.receive(transportRequestTemplate);
 	}
 	
 	/**
