@@ -83,7 +83,7 @@ public class JunctionNodeAgent extends NodeAgent
 					myAgent.addBehaviour(new ParhFindingRequest(myAgent, destinationAID, podAID)
 					{
 						@Override
-						public void handle(AID roadAID, double cost, AID podAID, AID destinationAID)
+						public void handleResult(AID roadAID, double cost, AID podAID, AID destinationAID)
 						{
 							departingPods.add(podAID);
 							registeredPods.remove(podAID);

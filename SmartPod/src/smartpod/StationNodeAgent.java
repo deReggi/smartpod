@@ -117,7 +117,7 @@ public class StationNodeAgent extends NodeAgent
 		addBehaviour(new ParhFindingRequest(this, destinationAID, podAID)
 		{
 			@Override
-			public void handle(AID roadAID, double cost, AID podAID, AID destinationAID)
+			public void handleResult(AID roadAID, double cost, AID podAID, AID destinationAID)
 			{
 				communicator.requestPodToRoadDeparture(podAID, roadAID, destinationAID);
 			}
@@ -204,7 +204,7 @@ public class StationNodeAgent extends NodeAgent
 						myAgent.addBehaviour(new ParhFindingRequest(myAgent, destinationAID, podAID)
 						{
 							@Override
-							public void handle(AID roadAID, double cost, AID podAID, AID destinationAID)
+							public void handleResult(AID roadAID, double cost, AID podAID, AID destinationAID)
 							{
 								communicator.requestPodToRoadDeparture(podAID, roadAID, destinationAID);
 							}
@@ -349,7 +349,7 @@ public class StationNodeAgent extends NodeAgent
 			addSubBehaviour(new ParhFindingRequest(myAgent, msg.getSender(), null)
 			{
 				@Override
-				public void handle(AID roadAID, double cost, AID podAID, AID destinationAID)
+				public void handleResult(AID roadAID, double cost, AID podAID, AID destinationAID)
 				{
 					firstRoadAID = roadAID;
 					price = cost + (registeredPods.size() > 0 ? neededPods / registeredPods.size() : 100);

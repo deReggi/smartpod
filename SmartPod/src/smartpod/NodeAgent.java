@@ -70,7 +70,7 @@ public class NodeAgent extends SPAgent
 	/**
 	 * Path finding request behaviour.
 	 * It consists of request behaviour and response behaviour.
-	 * The result can be gathered by overriding the handle(...) method.
+	 * The result can be gathered by overriding the handleResult(...) method.
 	 */
 	public class ParhFindingRequest extends SequentialBehaviour
 	{
@@ -106,12 +106,12 @@ public class NodeAgent extends SPAgent
 					AID roadAID = new AID(response.getUserDefinedParameter("road_to_take"), false);
 					double pathCost = Double.parseDouble(response.getUserDefinedParameter("path_cost"));
 
-					handle(roadAID, pathCost, podAID, destinationAID);
+					handleResult(roadAID, pathCost, podAID, destinationAID);
 				}
 			});
 		}
 
-		public void handle(AID roadAID, double cost, AID podAID, AID destinationAID)
+		public void handleResult(AID roadAID, double cost, AID podAID, AID destinationAID)
 		{
 			/* should override */
 		}
