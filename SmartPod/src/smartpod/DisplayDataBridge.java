@@ -12,6 +12,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Date;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -73,11 +74,12 @@ public class DisplayDataBridge
 		return msg;
 	}
 	
-	public static void sendInitialMessage(int mapWidth,int mapHeight,ArrayList<PodAgent> podList,ArrayList<StationNodeAgent> stationList,ArrayList<JunctionNodeAgent> junctionList,ArrayList<RoadAgent> roadList)
+	public static void sendInitialMessage(int mapWidth,int mapHeight,ArrayList<PodAgent> podList,ArrayList<StationNodeAgent> stationList,ArrayList<JunctionNodeAgent> junctionList,ArrayList<RoadAgent> roadList, Date time)
 	{
 		JSONObject message = new JSONObject();
 		message.put("Type", "InitialMessage");
 		message.put("EnvironmentSize", new Vector2D(mapWidth,mapHeight).stringRepresentation());
+		message.put("EnvironmentTime", time);
 		
 		JSONArray tempArray = new JSONArray();
 		for(int i=0;i<podList.size();i++)
@@ -136,10 +138,11 @@ public class DisplayDataBridge
 		}
 	}
 
-	public static void sendUpdateMessage(ArrayList<PodAgent> podList,ArrayList<StationNodeAgent> stationList,ArrayList<JunctionNodeAgent> junctionList)
+	public static void sendUpdateMessage(ArrayList<PodAgent> podList,ArrayList<StationNodeAgent> stationList,ArrayList<JunctionNodeAgent> junctionList,Date time)
 	{
 		JSONObject message = new JSONObject();
 		message.put("Type", "UpdateMessage");
+		message.put("EnvironmentTime", time);
 		
 		JSONArray tempArray = new JSONArray();
 		//pods
@@ -160,6 +163,7 @@ public class DisplayDataBridge
 			tempObject.put("name",stationList.get(i).getLocalName());
 			tempObject.put("podsOnStation", stationList.get(i).registeredPods.size());
 			tempObject.put("peopleOnStation", stationList.get(i).getPeopleOnStation());
+			tempObject.put("podRequests", stationList.get(i).pendingRequests.size());
 			
 			tempArray.put(tempObject);
 		}

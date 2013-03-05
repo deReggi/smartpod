@@ -352,7 +352,7 @@ public class StationNodeAgent extends NodeAgent
 				public void handleResult(AID roadAID, double cost, AID podAID, AID destinationAID)
 				{
 					firstRoadAID = roadAID;
-					price = cost + (registeredPods.size() > 0 ? neededPods / registeredPods.size() : 100);
+					price = cost + (registeredPods.size() > 0 ? predictNumRequestsForTimeFrame(getCurrentDate(), new Date(getCurrentTime()+3*3600)) / registeredPods.size() : 100);
 				}
 			});
 
