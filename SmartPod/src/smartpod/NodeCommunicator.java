@@ -139,19 +139,18 @@ public class NodeCommunicator extends Communicator
 	/**
 	 * Sends the REQUEST message to the path finding agent.
 	 * 
-	 * @param podAID
-	 *		The traveling pod agent id.
+	 * @param conversationId
+	 *		The conversation id.
 	 * @param destinationAID
 	 *		The destination node agent id.
 	 */
-	public void requestPathFinding(AID podAID, AID destinationAID)
+	public void requestPathFinding(String conversationId, AID destinationAID)
 	{
-		System.out.printf("%-10s :: requestPathFinding(%s,%s)\n",agent.getLocalName(),podAID.getLocalName(),destinationAID.getLocalName());
+		System.out.printf("%-10s :: requestPathFinding(\"%s\",%s)\n",agent.getLocalName(),conversationId,destinationAID.getLocalName());
 		ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
+		msg.setConversationId(conversationId);
 		msg.setOntology(ONTOLOGY_PATH_FINDING);
-		msg.setContent("path finding request");
 		msg.addReceiver(((NodeAgent)agent).pathFindingAgent);
-		msg.addUserDefinedParameter("pod", podAID.getLocalName());
 		msg.addUserDefinedParameter("destination", destinationAID.getLocalName());
 		agent.send(msg);
 	}

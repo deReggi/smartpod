@@ -17,9 +17,24 @@ import java.util.Map;
  */
 public class PathFindingAgent extends SPAgent
 {
+	private class PFResult
+	{
+		public AID roadAID = null;
+		public double totalCost = 0.0;
+		public PFResult(AID roadAID, double totalCost)
+		{
+			this.roadAID = roadAID;
+			this.totalCost = totalCost;
+		}
+	}
+	
+	/***************************************************************************
+	 * Variables
+	 **************************************************************************/
+	
 	// agent communicator
-
 	private PathFindingCommunicator communicator = new PathFindingCommunicator(this);
+	
 	// maps
 	private Map<AID, Vector2D> nodePositionMap = new HashMap<AID, Vector2D>();
 	private Map<AID, PFNode> roadNameToNodeMap = new HashMap<AID, PFNode>();
@@ -29,6 +44,10 @@ public class PathFindingAgent extends SPAgent
 	private List<PFNode> openNodes = new ArrayList<PFNode>();
 	private List<PFNode> closedNodes = new ArrayList<PFNode>();
 
+	/***************************************************************************
+	 * Public methods
+	 **************************************************************************/
+	
 	/**
 	 * Loads maps for path finding agent.
 	 *
@@ -100,8 +119,14 @@ public class PathFindingAgent extends SPAgent
 
 		//</editor-fold>
 	}
-
-	private AID findNextOptimalRoad(AID sourceNodeAID, AID finalNodeAID)
+	
+	/***************************************************************************
+	 * Private methods
+	 **************************************************************************/
+	
+	//<editor-fold defaultstate="collapsed" desc="Private path finding methods">
+	
+	private PFResult findNextOptimalRoad(AID sourceNodeAID, AID finalNodeAID)
 	{
 		PFNode currentNode = endNodeNameToNodeMap.get(sourceNodeAID).get(0);
 		close(currentNode);
@@ -142,17 +167,19 @@ public class PathFindingAgent extends SPAgent
 			currentNode = openNodes.get(index);
 			close(currentNode);
 		}
-
+		
+		double cost = currentNode.C;
 		// loopback
 		while (currentNode.parentNode.parentNode != null)
 		{
 			currentNode = currentNode.parentNode;
+			cost += currentNode.C;
 		}
-
+		
 		// cleanup
 		cleanup();
 
-		return currentNode.roadAID;
+		return new PFResult(currentNode.roadAID, cost);
 	}
 
 	private void open(PFNode child, PFNode parent)
@@ -208,6 +235,11 @@ public class PathFindingAgent extends SPAgent
 		openNodes.clear();
 		closedNodes.clear();
 	}
+	//</editor-fold>
+	
+	/***************************************************************************
+	 * JADE setup and behaviors
+	 **************************************************************************/
 
 	/**
 	 * This method gets called when agent is started. It adds the desired
@@ -216,58 +248,94 @@ public class PathFindingAgent extends SPAgent
 	@Override
 	protected void setup()
 	{
-		//adds the behviour to the agent
-		addBehaviour(new PathFindingAgent.PathFindingAgentBehaviour(this));
+		//adds the behviours to the agent
+		addBehaviour(new PathFindingAgent.RoadUpdateBehaviour(this));
+		addBehaviour(new PathFindingAgent.PathFindingBehaviour(this));
 	}
 
 	/**
 	 * Behaviour class for PathFindingAgent. It extends CyclicBehaviour.
 	 */
-	public class PathFindingAgentBehaviour extends CyclicBehaviour
+	public class RoadUpdateBehaviour extends CyclicBehaviour
 	{
-
 		/**
-		 * Constructor for PathDindingAgent's behaviour class.
+		 * Constructor for PathFindingAgent's behaviour class.
 		 *
-		 * @param a the agent to which behaviour is being applied.
+		 * @param a
+		 *		The agent which behaviour is being applied to.
 		 */
-		public PathFindingAgentBehaviour(Agent a)
+		public RoadUpdateBehaviour(Agent a)
 		{
 			super(a);
 		}
 
 		/**
-		 * Method that performs actions in PathFindingAgentBehaviour class. It
+		 * Method that performs actions in RoadUpdateBehaviour class. It
 		 * gets called each time Jade platform has spare resources.
 		 */
 		@Override
 		public void action()
 		{
 			// check road weight update messages
-			ArrayList<ACLMessage> weightMessages = communicator.checkRoadWeightUpdates();
-			for (ACLMessage msg : weightMessages)
+			ACLMessage weightMessages = communicator.checkRoadWeightUpdates();
+			while (weightMessages != null)
 			{
 				// update node road weight
-				double weight = Double.parseDouble(msg.getUserDefinedParameter("weight"));
-				PFNode node = roadNameToNodeMap.get(msg.getSender());
+				double weight = Double.parseDouble(weightMessages.getUserDefinedParameter("weight"));
+				PFNode node = roadNameToNodeMap.get(weightMessages.getSender());
 				if (node != null)
 				{
 					node.setRoadWeight(weight);
 				}
+				// check if new messages have arrived during the proces
+				weightMessages = communicator.checkRoadWeightUpdates();
 			}
+			// block the cycle until new messages arrive
+			block();
+		}
+	}
+	
+	/**
+	 * Behaviour class for PathFindingAgent. It extends CyclicBehaviour.
+	 */
+	public class PathFindingBehaviour extends CyclicBehaviour
+	{
 
+		/**
+		 * Constructor for PathDindingAgent's behaviour class.
+		 *
+		 * @param a
+		 *		The agent which behaviour is being applied to.
+		 */
+		public PathFindingBehaviour(Agent a)
+		{
+			super(a);
+		}
+
+		/**
+		 * Method that performs actions in RoadUpdateBehaviour class. It
+		 * gets called each time Jade platform has spare resources.
+		 */
+		@Override
+		public void action()
+		{
 			// check path finding request messages
 			ACLMessage pathFindingRequest = communicator.checkPathFindingRequests();
-			if (pathFindingRequest != null)
+			while (pathFindingRequest != null)
 			{
 				// find path
 				AID finalNodeAID = new AID(pathFindingRequest.getUserDefinedParameter("destination"), false);
 				AID sourceNodeAID = pathFindingRequest.getSender();
+				
+				PFResult result = findNextOptimalRoad(sourceNodeAID, finalNodeAID);
 
-				AID roadAID = findNextOptimalRoad(sourceNodeAID, finalNodeAID);
-
-				communicator.informPathFindingResult(pathFindingRequest, roadAID);
+				communicator.informPathFindingResult(pathFindingRequest, result.roadAID, result.totalCost);
+				
+				// check if new messages have arrived during the proces
+				pathFindingRequest = communicator.checkPathFindingRequests();
 			}
+			// block the cycle until new messages arrive
+			block();
 		}
 	}
 }

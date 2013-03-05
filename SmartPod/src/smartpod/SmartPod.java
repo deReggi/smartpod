@@ -9,13 +9,12 @@ package smartpod;
  */
 public class SmartPod
 {
-
 	/**
 	 * main method for SmartPod project
 	 * @param args the command line arguments
 	 */
 	public static void main(String[] args)
 	{
-            jade.Boot.main(args);
+		jade.Boot.main(args);
 	}
 }

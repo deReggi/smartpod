@@ -251,7 +251,7 @@
 			<name>Cesta30</name>
 			<start>Križišče3</start>
 			<end>Garaža1</end>
-			<weight>5</weight>
+			<weight>1</weight>
 		</Road>
 	</Roads>
 	<Pods>

@@ -3,7 +3,6 @@ package smartpod;
 import jade.core.AID;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
-import java.util.ArrayList;
 
 /**
  *
@@ -14,7 +13,7 @@ public class PathFindingCommunicator extends Communicator
 	/**
 	 * The message templates for receiving messages.
 	 */
-	private MessageTemplate roadWeightUpdateTemplate	= 
+	private MessageTemplate roadWeightUpdateTemplate = 
 			MessageTemplate.and(
 				MessageTemplate.MatchPerformative(ACLMessage.INFORM),
 				MessageTemplate.MatchOntology(ONTOLOGY_ROAD_WEIGHT_UPDATE));
@@ -24,7 +23,9 @@ public class PathFindingCommunicator extends Communicator
 				MessageTemplate.MatchOntology(ONTOLOGY_PATH_FINDING));
 	/**
 	 * PathFindingCommunicator constructor.
-	 * @param pathFindingAgent the parent agent
+	 * 
+	 * @param
+	 *		pathFindingAgent the parent agent
 	 */
 	public PathFindingCommunicator(PathFindingAgent pathFindingAgent)
 	{
@@ -33,16 +34,20 @@ public class PathFindingCommunicator extends Communicator
 	
 	/**
 	 * Checks for road weight update messages.
-	 * @return ArrayList of received weight update ACLMessages.
+	 * 
+	 * @return
+	 *		The ACLMessage received.
 	 */
-	public ArrayList<ACLMessage> checkRoadWeightUpdates()
+	public ACLMessage checkRoadWeightUpdates()
 	{
-		return checkMessageBox(roadWeightUpdateTemplate);
+		return agent.receive(roadWeightUpdateTemplate);
 	}
 	
 	/**
 	 * Checks for received path finding requests.
-	 * @return ArrayList of received path finding ACLMessages.
+	 * 
+	 * @return
+	 *		The ACLMessage received.
 	 */
 	public ACLMessage checkPathFindingRequests()
 	{
@@ -51,19 +56,21 @@ public class PathFindingCommunicator extends Communicator
 	
 	/**
 	 * Sends the INFORM response of path finding result.
-	 * @param requestMessage the request message.
-	 * @param roadToTake the next road agent id.
+	 * 
+	 * @param requestMessage
+	 *		The request message.
+	 * @param roadToTake
+	 *		The next road agent id.
+	 * @param pathCost
+	 *		The total cost of the path.
 	 */
-	public void informPathFindingResult(ACLMessage requestMessage, AID roadToTake)
+	public void informPathFindingResult(ACLMessage requestMessage, AID roadToTake, double pathCost)
 	{
 		System.out.printf("%-10s :: informPathFindingResult(%s)\n",agent.getLocalName(),roadToTake.getLocalName());
-		ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
-		msg.setOntology(ONTOLOGY_PATH_FINDING);
-		msg.setContent("optimal path found");
-		msg.addReceiver(requestMessage.getSender());
-		msg.addUserDefinedParameter("pod", requestMessage.getUserDefinedParameter("pod"));
+		ACLMessage msg = requestMessage.createReply();
+		msg.setPerformative(ACLMessage.INFORM);
 		msg.addUserDefinedParameter("road_to_take", roadToTake.getLocalName());
-		msg.addUserDefinedParameter("destination", requestMessage.getUserDefinedParameter("destination"));
+		msg.addUserDefinedParameter("path_cost", String.valueOf(pathCost));
 		agent.send(msg);
 	}
 }

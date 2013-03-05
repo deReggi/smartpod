@@ -1,9 +1,12 @@
 package smartpod;
 
 import com.janezfeldin.Math.Vector2D;
+import de.reggi.jade.MessageHelper;
+import de.reggi.jade.MyReceiver;
 import jade.core.AID;
 import jade.core.Agent;
-import jade.core.behaviours.CyclicBehaviour;
+import jade.core.behaviours.*;
+import jade.lang.acl.*;
 import java.util.ArrayList;
 
 /**
@@ -16,7 +19,11 @@ public class NodeAgent extends SPAgent
 	/***************************************************************************
 	 * Variables
 	 **************************************************************************/
-
+	/**
+	 * Agent communicator.
+	 */
+	protected NodeCommunicator communicator = new NodeCommunicator(this);
+	
 	/**
 	 * The currently registered pods at the node.
 	 */
@@ -59,42 +66,56 @@ public class NodeAgent extends SPAgent
 	/***************************************************************************
 	 * JADE setup and behaviors
 	 **************************************************************************/
-
+	
 	/**
-	 * This method gets called when agent is started.
-	 * It adds the desired behaviour to the agent.
+	 * Path finding request behaviour.
+	 * It consists of request behaviour and response behaviour.
+	 * The result can be gathered by overriding the handle(...) method.
 	 */
-    @Override
-    protected void setup()
-    {
-        //adds the behviour to the agent
-        addBehaviour(new NodeAgentBehaviour(this));
-    }
-    
-    /**
-	 * Behaviour class for NodeAgent.
-	 * It extends CyclicBehaviour.
-	 */
-    public class NodeAgentBehaviour extends CyclicBehaviour
-    {
-		/**
-		 * Constructor for Node's agent behaviour class.
-		 * @param a the agent to which behaviour is being applied.
-		 */
-        public NodeAgentBehaviour(Agent a)
-        {
-            super(a);
-        }
+	public class ParhFindingRequest extends SequentialBehaviour
+	{
 
-		/**
-		 * Method that performs actions in NodeAgentBehaviour class.
-		 * It gets called each time Jade platform has spare resources.
-		 */
-        @Override
-        public void action()
-        {
-        }
-    }
+		private String convID;
+		private AID destinationAID = null;
+		private AID podAID = null;
+
+		public ParhFindingRequest(Agent a, AID destinationAID, AID podAID)
+		{
+			super(a);
+			this.destinationAID = destinationAID;
+			this.podAID = podAID;
+		}
+
+		@Override
+		public void onStart()
+		{
+			convID = MessageHelper.genCID();
+			addSubBehaviour(new OneShotBehaviour(myAgent)
+			{
+				@Override
+				public void action()
+				{
+					communicator.requestPathFinding(convID, destinationAID);
+				}
+			});
+			addSubBehaviour(new MyReceiver(myAgent, -1, MessageTemplate.MatchConversationId(convID))
+			{
+				@Override
+				public void handle(ACLMessage response)
+				{
+					AID roadAID = new AID(response.getUserDefinedParameter("road_to_take"), false);
+					double pathCost = Double.parseDouble(response.getUserDefinedParameter("path_cost"));
+
+					handle(roadAID, pathCost, podAID, destinationAID);
+				}
+			});
+		}
+
+		public void handle(AID roadAID, double cost, AID podAID, AID destinationAID)
+		{
+			/* should override */
+		}
+	}
     
 	/***************************************************************************
 	 * Getters & setters

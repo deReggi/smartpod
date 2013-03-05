@@ -13,9 +13,6 @@ import java.util.ArrayList;
  */
 public class JunctionNodeAgent extends NodeAgent
 {
-	// agent communicator
-	private NodeCommunicator communicator = new NodeCommunicator(this);
-	
 	/**
 	 * Constructor for junction agent.
 	 * 
@@ -65,18 +62,14 @@ public class JunctionNodeAgent extends NodeAgent
 			// check departure message box
 			ArrayList<ACLMessage> departureMessages = communicator.checkPodDepartureMessages();
 			for (ACLMessage msg : departureMessages)
-			{
-//				System.out.println("com-node : "+msg.getContent());
-				
+			{				
 				departingPods.remove(msg.getSender());
 			}
 			
 			// check arrival message box
 			ArrayList<ACLMessage> arrivalMessages = communicator.checkPodArrivalRequestMessages();
 			for (ACLMessage msg : arrivalMessages)
-			{
-//				System.out.println("com-node : "+msg.getContent());
-				
+			{				
 				AID podAID = msg.getSender();
 
 				if (!registeredPods.contains(podAID))
@@ -86,28 +79,22 @@ public class JunctionNodeAgent extends NodeAgent
 					AID destinationAID = new AID(msg.getUserDefinedParameter("destination"),false);
 
 					communicator.confirmPodToNodeArrival(msg);
-					communicator.requestPathFinding(podAID, destinationAID);
+					
+					myAgent.addBehaviour(new ParhFindingRequest(myAgent, destinationAID, podAID)
+					{
+						@Override
+						public void handle(AID roadAID, double cost, AID podAID, AID destinationAID)
+						{
+							departingPods.add(podAID);
+							registeredPods.remove(podAID);
+							communicator.requestPodToRoadDeparture(podAID, roadAID, destinationAID);
+						}
+					});
 				}
 				else
 				{
 					System.err.println("com-node : pod already registered");
 				}
-			}
-			
-			// check path finding result message box
-			ArrayList<ACLMessage> pathFinding = communicator.checkPathFindingResultMessages();
-			for (ACLMessage msg : pathFinding)
-			{
-//				System.out.println("com-node : "+msg.getContent());
-				
-				AID podAID = new AID(msg.getUserDefinedParameter("pod"),false);
-				
-				departingPods.add(podAID);
-				registeredPods.remove(podAID);
-				
-				AID roadAID = new AID(msg.getUserDefinedParameter("road_to_take"),false);
-				AID destinationAID = new AID(msg.getUserDefinedParameter("destination"),false);
-				communicator.requestPodToRoadDeparture(podAID, roadAID, destinationAID);
 			}
         }
     } 

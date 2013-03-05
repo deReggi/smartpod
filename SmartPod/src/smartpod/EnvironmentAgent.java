@@ -7,6 +7,7 @@ import jade.core.behaviours.TickerBehaviour;
 import jade.wrapper.AgentController;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import org.w3c.dom.Document;
@@ -29,6 +30,8 @@ public class EnvironmentAgent extends SPAgent
 	private ArrayList<JunctionNodeAgent>	junctionList	= new ArrayList<JunctionNodeAgent>();
 	private ArrayList<NodeAgent>			nodeList		= new ArrayList<NodeAgent>();
 	private ArrayList<RoadAgent>			roadList		= new ArrayList<RoadAgent>();
+	
+	private List<AID> nodeAIDs = new ArrayList<AID>();
 
 	// path finding agent
 	private PathFindingAgent pathFndingAgent = new PathFindingAgent();
@@ -36,7 +39,6 @@ public class EnvironmentAgent extends SPAgent
 	//Environment default settings
 	private int mapWidth = 500;
 	private int mapHeight = 500;
-	private String roadBelongingType = "inbound";
 	
 	/**
 	 * This method gets called when agent is started. It loads all the settings
@@ -94,7 +96,9 @@ public class EnvironmentAgent extends SPAgent
 				StationNodeAgent tempAgent = new StationNodeAgent(tVec, Integer.parseInt(temp.getElementsByTagName("podCapacity").item(0).getTextContent()), Integer.parseInt(temp.getElementsByTagName("peopleCapacity").item(0).getTextContent()));
 				((AgentController) getContainerController().acceptNewAgent(temp.getElementsByTagName("name").item(0).getTextContent(), tempAgent)).start();
 				tempAgent.pathFindingAgent = pathFndingAgent.getAID();
+				tempAgent.setStationList(nodeAIDs);
 				stationList.add(tempAgent);
+				nodeAIDs.add(tempAgent.getAID());
 			}
 
 			//settings for roads
@@ -139,14 +143,19 @@ public class EnvironmentAgent extends SPAgent
 			
 			// testing moving of pod agents
 			
-			AID garageAID = new AID("Garaža1",false);
+			AID garageAID = new AID("Postaja1",false);
+			AID destinationAID = new AID("Postaja2",false);
+			PassengerGroupAgent testAgent2 = new PassengerGroupAgent(garageAID, destinationAID, 5000);
+			((AgentController) getContainerController().acceptNewAgent("Janez", testAgent2)).start();
+			
+//			AID garageAID = new AID("Garaža1",false);
 //			AID destinationAID = new AID("Postaja5",false);
-			for (int i = 0; i < 30; i++)
-			{
-				AID destinationAID = new AID("Postaja"+(i%6+1),false);
-				PassengerGroupAgent testAgent1 = new PassengerGroupAgent(garageAID, destinationAID, 3000+i*1000);
-				((AgentController) getContainerController().acceptNewAgent("Janez"+i, testAgent1)).start();
-			}
+//			for (int i = 0; i < 30; i++)
+//			{
+////				AID destinationAID = new AID("Postaja"+(i%6+1),false);
+//				PassengerGroupAgent testAgent1 = new PassengerGroupAgent(garageAID, destinationAID, 3000+i*500);
+//				((AgentController) getContainerController().acceptNewAgent("Janez"+i, testAgent1)).start();
+//			}
 			
 //			PassengerGroupAgent testAgent1 = new PassengerGroupAgent(garageAID, destinationAID, 100000);
 //			((AgentController) getContainerController().acceptNewAgent("Janez1234", testAgent1)).start();
