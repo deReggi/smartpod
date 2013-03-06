@@ -19,24 +19,29 @@ import java.util.List;
  */
 public class StationNodeAgent extends NodeAgent
 {
-	/***************************************************************************
+
+	/**
+	 * *************************************************************************
 	 * Variables
-	 **************************************************************************/
+	 *************************************************************************
+	 */
+	private int initialPodRequestsForPrediction = 5;
+	private RequestLearner learner = new RequestLearner(this);
 	
 	private int peopleCapacity;
 	private int peopleOnStation;
 	private List<AID> stationList = new ArrayList<AID>();
 	private int neededPods = 3;
-	
 	/**
 	 * The currently pending transport requests at the node.
 	 */
 	public ArrayList<ACLMessage> pendingRequests = new ArrayList<ACLMessage>();
 
-	/***************************************************************************
+	/**
+	 * *************************************************************************
 	 * Constructors
-	 **************************************************************************/
-	
+	 *************************************************************************
+	 */
 	/**
 	 * Constructor method for the StationNodeAgent.
 	 *
@@ -50,10 +55,11 @@ public class StationNodeAgent extends NodeAgent
 		super(position, podsCapacity);
 	}
 
-	/***************************************************************************
+	/**
+	 * *************************************************************************
 	 * Public methods
-	 **************************************************************************/
-	
+	 *************************************************************************
+	 */
 	/**
 	 * Method used for adding people to the station.
 	 *
@@ -95,18 +101,16 @@ public class StationNodeAgent extends NodeAgent
 			return false;
 		}
 	}
-	
+
 	/**
 	 * Method fulfills the pending request and removes it from the queue.
-	 * 
-	 * @param request
-	 *		The request needing fulfillment.
-	 * @param podAID 
-	 *		The agent id of the pod fulfilling the request.
+	 *
+	 * @param request The request needing fulfillment.
+	 * @param podAID The agent id of the pod fulfilling the request.
 	 */
 	public void fulfilTransportRequest(ACLMessage request, AID podAID)
 	{
-		System.out.printf("%-10s :: fulfilTransportRequest(%s,%s)\n",getLocalName(),podAID.getLocalName(),request.getUserDefinedParameter("destination"));
+		System.out.printf("%-10s :: fulfilTransportRequest(%s,%s)\n", getLocalName(), podAID.getLocalName(), request.getUserDefinedParameter("destination"));
 
 		pendingRequests.remove(request);
 		departingPods.add(podAID);
@@ -124,10 +128,11 @@ public class StationNodeAgent extends NodeAgent
 		});
 	}
 
-	/***************************************************************************
+	/**
+	 * *************************************************************************
 	 * JADE setup and behaviors
-	 **************************************************************************/
-	
+	 *************************************************************************
+	 */
 	/**
 	 * This method gets called when agent is started. It adds the desired
 	 * behaviour to the agent.
@@ -135,6 +140,10 @@ public class StationNodeAgent extends NodeAgent
 	@Override
 	protected void setup()
 	{
+		//setting initial values for prediction
+		learner.setupWithInitialValue(initialPodRequestsForPrediction);
+
+
 		//adds the desired behaviour to the agent
 		addBehaviour(new StationAgentBehaviour(this));
 	}
@@ -190,7 +199,7 @@ public class StationNodeAgent extends NodeAgent
 					{
 						// the pod has reached the final destination
 						System.out.println("\u001b[32mSUCCESS    :: " + podAID.getLocalName() + " has reached destination " + getLocalName() + "\u001b[0m");
-					
+
 						if (pendingRequests.size() > 0)
 						{
 							fulfilTransportRequest(pendingRequests.get(0), podAID);
@@ -231,7 +240,7 @@ public class StationNodeAgent extends NodeAgent
 					pendingRequests.add(transportRequest);
 					myAgent.addBehaviour(new PodBuyerBehaviour(myAgent));
 				}
-				
+
 				//testing history logging and predicting...
 //				/*podRequested();
 //				 Date temp1 = getCurrentDate();
@@ -352,7 +361,7 @@ public class StationNodeAgent extends NodeAgent
 				public void handleResult(AID roadAID, double cost, AID podAID, AID destinationAID)
 				{
 					firstRoadAID = roadAID;
-					price = cost + (registeredPods.size() > 0 ? predictNumRequestsForTimeFrame(getCurrentDate(), new Date(getCurrentTime()+3*3600)) / registeredPods.size() : 100);
+					price = cost + (registeredPods.size() > 0 ? learner.predictNumRequestsForTimeFrame(getCurrentDate(), new Date(getCurrentTime() + 3 * 3600)) / registeredPods.size() : 100);
 				}
 			});
 
@@ -399,169 +408,12 @@ public class StationNodeAgent extends NodeAgent
 		}
 	}
 	
-	/***************************************************************************
-	 * History logging and learning
-	 **************************************************************************/
-	
-	//<editor-fold defaultstate="collapsed" desc="History logging and learning">
-	
-	//variables for properties
-	int numDaysToKeepHistory = 3;
-	double[] daysPredisctionWeight =
-	{
-		1, 2, 3, 4, 5, 6, 7, 8, 9, 10
-	};
-	//other variables
-	ArrayList<Date> requestHistory = new ArrayList<Date>();
-
-	//all required methods
 	/**
-	 * This method should be called every time the station gets a request for
-	 * pod. It adds the request to the history of requests.
-	 */
-	private void podRequested()
-	{
-		requestHistory.add(getCurrentDate());
-	}
-
-	/**
-	 * This method removes the outdated history in requestHistory ArrayList.
-	 */
-	private void removeOutdatedHistory()
-	{
-		//numDaysToKeepHistory represented in milliseconds
-		long numMillis = numDaysToKeepHistory * 86400000;
-
-		for (int i = 0; i < requestHistory.size(); i++)
-		{
-			if (getCurrentTime() - requestHistory.get(i).getTime() > numMillis)
-			{
-				requestHistory.remove(i--);
-			}
-			else
-			{
-				break;
-			}
-		}
-	}
-
-	/**
-	 * This method calculates the prediction for the specified time frame. Time
-	 * frame should be defined with two Dates that differ only in time of the
-	 * day.
-	 *
-	 * @param startTime Starting time of the specified time frame
-	 * @param endTime ending time for specified time frame
-	 * @return Returns double that represents the prediction for pod requests in
-	 * specified time frame for next day.
-	 */
-	private double predictNumRequestsForTimeFrame(Date startTime, Date endTime)
-	{
-//		System.out.println("predictNumRequestForTimeFrame");
-		int[] tempArray = getNumRequestsInTimeFrame(startTime, endTime);
-
-		double result = weightedAverage(tempArray, daysPredisctionWeight);
-		return result;
-	}
-
-	/**
-	 * This method returns the array of number of requests between times(class
-	 * Date) startTime and endTime for each day the history was recorded.
-	 * startTime should always be an earlier date than endTime, they should alse
-	 * differ only in time of the day.
-	 *
-	 * @param startTime Date class representing the start time for the search.
-	 * @param endTime Date class representing the end time for the search.
-	 * @return Array of integers, that containg the number of request between
-	 * time t1 and t2 for each day the history was recorded.
-	 */
-	private int[] getNumRequestsInTimeFrame(Date startTime, Date endTime)
-	{
-//		System.out.println("getNumRequestsInTimeFrame");
-		removeOutdatedHistory();
-
-		long time = getCurrentTime();
-
-		Calendar startCal = Calendar.getInstance();
-		Calendar endCal = Calendar.getInstance();
-		Calendar tempCal = Calendar.getInstance();
-		startCal.setTime(startTime);
-		endCal.setTime(endTime);
-
-		if (!(endTime.getTime() - startTime.getTime() > 0))
-		{
-			System.err.println("startTime and endTime doesn't containg valid values! See the getNumRequestsBetweenDates method's javadoc.");
-		}
-
-		long timeDiff = endTime.getTime() - startTime.getTime();
-		long startTrackingHistoryTime = getCurrentTime() - numDaysToKeepHistory * 86400000;
-		while (startTime.getTime() >= startTrackingHistoryTime)
-		{
-			startTime.setTime(startTime.getTime() - 86400000);
-		}
-//		startTime.setTime(startTime.getTime()+86400000);
-
-		int[] result = new int[numDaysToKeepHistory];
-		for (int i = 0; i < requestHistory.size(); i++)
-		{
-			for (int j = 0; j < numDaysToKeepHistory; j++)
-			{
-				System.out.println(new Date(startTime.getTime() + 86400000 * j) + "    " + requestHistory.get(i) + "      " + new Date(startTime.getTime() + 86400000 * j + timeDiff));
-				if (isDateInTimeFrame(requestHistory.get(i), new Date(startTime.getTime() + 86400000 * j), new Date(startTime.getTime() + 86400000 * j + timeDiff)))
-				{
-					result[j]++;
-					break;
-				}
-
-			}
-		}
-
-		return result;
-	}
-
-	/**
-	 * This method calculates the weighted average for array of integers.
-	 *
-	 * @param array Array of integers, used to calculate weighted average
-	 * @param weights array of doubles that represent weights for array of
-	 * integers.
-	 * @return returns the weighted average number of integer array.
-	 */
-	private double weightedAverage(int[] array, double[] weights)
-	{
-//		System.out.println("weightedAverage");
-		double result;
-
-		if (array.length > weights.length)
-		{
-			System.err.println("Length of the array must be at least the same lenght as array of weights.");
-		}
-
-		double sumWeights = 0;
-		double sumProducts = 0;
-
-		for (int i = 0; i < array.length; i++)
-		{
-			sumWeights += weights[i];
-			sumProducts += array[i] * weights[i];
-		}
-		result = sumProducts / sumWeights;
-		return result;
-	}
-
-	private boolean isDateInTimeFrame(Date checkDate, Date startTime, Date endTime)
-	{
-		return ((checkDate.getTime() - startTime.getTime()) >= 0 && (endTime.getTime() - checkDate.getTime()) >= 0);
-	}
-
-	//</editor-fold>
-	
-	/***************************************************************************
+	 * *************************************************************************
 	 * Getters & setters
-	 **************************************************************************/
-	
+	 *************************************************************************
+	 */
 	//<editor-fold defaultstate="collapsed" desc="Getters & setters">
-	
 	/**
 	 * Method that returns the maximum number of people, that can be on this
 	 * station at a given moment.
@@ -615,7 +467,5 @@ public class StationNodeAgent extends NodeAgent
 	{
 		this.stationList = stationList;
 	}
-	
 	//</editor-fold>
-	
 }
