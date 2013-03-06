@@ -23,13 +23,48 @@ public class RequestLearner
 		parentAgent = agent;
 	}
 	
+	/**
+	 * This method sets the requests in past days, so that the initial prediction is near initialPodRequestsForPrediction.
+	 * @param initialPodRequestsForPrediction the desired initial prediction
+	 */
+	void setupWithInitialValue(int initialPodRequestsForPrediction)
+	{
+		Date currentDate = parentAgent.getCurrentDate();
+		Date tempDate = new Date();
+//		System.out.println("Current date: "+currentDate);
+
+		for (int i = 0; i < numDaysToKeepHistory; i++)
+		{
+			for (int j = 0; j < 24; j++)
+			{
+				for (int k = 0; k < initialPodRequestsForPrediction; k++)
+				{
+					tempDate = new Date();
+					tempDate.setTime(currentDate.getTime() - (i * 86400000 + j * 3600000));
+					podRequested(tempDate);
+				}
+			}
+		}
+		
+//		while(currentDate.getTime()+20000-parentAgent.getCurrentTime()>0);
+
+//		System.out.println("Testing initial prediction at "+parentAgent.getCurrentDate()+": ");
+//		System.out.println("Predikcija za postajo " + parentAgent.getLocalName() + " je: " + predictNumRequestsForTimeFrame(new Date(parentAgent.getCurrentTime()), new Date(parentAgent.getCurrentTime() + 3600000)));
+//		int[] temp = getNumRequestsInTimeFrame(new Date(currentDate.getTime()-3600000),new Date(currentDate.getTime()));
+//		for(int i=0;i<temp.length;i++)
+//		{
+//			System.out.print(temp[i]+", ");
+//		}
+//		System.out.println("");
+	}
+	
+	
 	
 	/**
 	 * *************************************************************************
 	 * History logging and learning
 	 *************************************************************************
 	 */
-	//<editor-fold defaultstate="collapsed" desc="History logging and learning">
 	//variables for properties
 	int numDaysToKeepHistory = 3;
 	double[] daysPredisctionWeight =
@@ -135,7 +170,6 @@ public class RequestLearner
 		{
 			startTime.setTime(startTime.getTime() - 86400000);
 		}
-//		startTime.setTime(startTime.getTime()+86400000);
 
 		int[] result = new int[numDaysToKeepHistory];
 		for (int i = 0; i < requestHistory.size(); i++)
@@ -145,7 +179,7 @@ public class RequestLearner
 //				System.out.println("Checking dates: "+new Date(startTime.getTime() + 86400000 * j) + "    " + requestHistory.get(i) + "      " + new Date(startTime.getTime() + 86400000 * j + timeDiff));
 				if (isDateInTimeFrame(requestHistory.get(i), new Date(startTime.getTime() + 86400000 * j), new Date(startTime.getTime() + 86400000 * j + timeDiff)))
 				{
-					System.out.println("Date ok za postajo "+parentAgent.getLocalName()+": "+new Date(startTime.getTime() + 86400000 * j) + "    " + requestHistory.get(i) + "      " + new Date(startTime.getTime() + 86400000 * j + timeDiff));
+//					System.out.println(j+"    Date ok za postajo "+parentAgent.getLocalName()+": "+new Date(startTime.getTime() + 86400000 * j) + "    " + requestHistory.get(i) + "      " + new Date(startTime.getTime() + 86400000 * j + timeDiff));
 
 					result[j]++;
 					break;
@@ -193,35 +227,5 @@ public class RequestLearner
 		return ((checkDate.getTime() - startTime.getTime()) >= 0 && (endTime.getTime() - checkDate.getTime()) >= 0);
 	}
 
-	//</editor-fold>
-
-	void setupWithInitialValue(int initialPodRequestsForPrediction)
-	{
-		Date currentDate = parentAgent.getCurrentDate();
-		Date tempDate = new Date();
-//		System.out.println(currentDate);
-
-		for (int i = 0; i < numDaysToKeepHistory; i++)
-		{
-			for (int j = 0; j < 24; j++)
-			{
-				for (int k = 0; k < initialPodRequestsForPrediction; k++)
-				{
-					tempDate = new Date();
-					tempDate.setTime(currentDate.getTime() - (numDaysToKeepHistory * 86400000 + j * 3600000));
-//					System.out.println(tempDate);
-					podRequested(tempDate);
-				}
-			}
-		}
-
-		System.out.println("Testing initial prediction: ");
-		System.out.println("Predikcija za postajo " + parentAgent.getLocalName() + " je: " + predictNumRequestsForTimeFrame(new Date(parentAgent.getCurrentTime()), new Date(parentAgent.getCurrentTime() + 3600000)));
-		int[] temp = getNumRequestsInTimeFrame(new Date(currentDate.getTime()-3600000),new Date(currentDate.getTime()));
-		for(int i=0;i<temp.length;i++)
-		{
-			System.out.print(temp[i]+", ");
-		}
-		System.out.println("");
-	}
+	
 }

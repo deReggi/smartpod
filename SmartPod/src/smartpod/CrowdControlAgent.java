@@ -24,7 +24,7 @@ public class CrowdControlAgent extends SPAgent
 	@Override
 	protected void setup()
 	{
-		lastGeneration = getCurrentDate();
+		lastGeneration = new Date(getCurrentDate().getTime());
 		nextGeneration = new Date();
 		nextGeneration = getNextGenerationTime(lastGeneration);
 		
@@ -49,7 +49,7 @@ public class CrowdControlAgent extends SPAgent
 				lastGeneration = currentDate;
 				nextGeneration = getNextGenerationTime(lastGeneration);
 				
-//				generateCrowdForOneDay();
+				generateCrowdForOneDay();
 			}
 		}
 		
@@ -66,20 +66,87 @@ public class CrowdControlAgent extends SPAgent
 	
 	public void generateCrowdForOneDay()
 	{
-		for(int i = 0;i<5;i++)
+		int oneHour = 3600;
+		int requests;
+		
+		//bufet -> dormi
+		int bufetRand = 5;
+		int bufetOff = 2;
+		requests = (int)(Math.random()*bufetRand)+bufetOff;
+		for(int i=0;i<requests;i++)
 		{
-			generatePeopleGroupAgent("Postaja1", "Postaja2", i*(int)(Math.random()*1000+100));
+			generatePeopleGroupAgent("Postaja5", "Postaja1", (int)(2.5*oneHour), (int)(oneHour));
 		}
+		
+		//dormi -> predavalnice
+		int dormiRand = 15;
+		int dormiOff = 10;
+		requests = (int)(Math.random()*dormiRand)+dormiOff;
+		for(int i=0;i<requests;i++)
+		{
+			generatePeopleGroupAgent("Postaja1", "Postaja3", (int)(7*oneHour), (int)(2*oneHour));
+		}
+		
+		//predavalnice -> menza
+		int predavalnice1Rand = 15;
+		int predavalnice1Off = 15;
+		requests = (int)(Math.random()*predavalnice1Rand)+predavalnice1Off;
+		for(int i=0;i<requests;i++)
+		{
+			generatePeopleGroupAgent("Postaja1", "Postaja3", (int)(12*oneHour), (int)(2*oneHour));
+		}
+		
+		//menza -> predavalnice
+		int menza1Rand = 10;
+		int menza1Off = 6;
+		requests = (int)(Math.random()*menza1Rand)+menza1Off;
+		for(int i=0;i<requests;i++)
+		{
+			generatePeopleGroupAgent("Postaja3", "Postaja1", (int)(13*oneHour), (int)(2*oneHour));
+		}
+		
+		//menza -> dormi
+		int menza2Rand = 10;
+		int menza2Off = 4;
+		requests = (int)(Math.random()*menza2Rand)+menza2Off;
+		for(int i=0;i<requests;i++)
+		{
+			generatePeopleGroupAgent("Postaja3", "Postaja1", (int)(13*oneHour), (int)(2*oneHour));
+		}
+		
+		//menza -> postaja
+		int menza3Rand = 3;
+		int menza3Off = 2;
+		requests = (int)(Math.random()*menza3Rand)+menza3Off;
+		for(int i=0;i<requests;i++)
+		{
+			generatePeopleGroupAgent("Postaja1", "Postaja3", (int)(13*oneHour), (int)(2*oneHour));
+		}
+		
+		//predavalnice -> dormi
+		int predavalnica3Rand = 3;
+		int predavalnica3Off = 2;
+		requests = (int)(Math.random()*predavalnica3Rand)+predavalnica3Off;
+		for(int i=0;i<requests;i++)
+		{
+			generatePeopleGroupAgent("Postaja3", "Postaja1", (int)(17*oneHour), (int)(6*oneHour));
+		}
+		
+		
 	}
 	
-	public void generatePeopleGroupAgent(String startingStation,String endingStation,int delay)
+	public void generatePeopleGroupAgent(String startingStation,String endingStation,int delay,int timeFrame)
 	{
+		
+		
 		AID garageAID = new AID(startingStation, false);
 		AID destinationAID = new AID(endingStation, false);
-		PassengerGroupAgent testAgent2 = new PassengerGroupAgent(garageAID, destinationAID, delay);
+		
+		System.out.println(delay-timeFrame/2+(int)(timeFrame*Math.random()));
+		PassengerGroupAgent group = new PassengerGroupAgent(garageAID, destinationAID, delay-timeFrame/2+(int)(timeFrame*Math.random()));
 		try
 		{
-		((AgentController) getContainerController().acceptNewAgent("PeopleGroup"+(numPodsGenerated++), testAgent2)).start();
+		((AgentController) getContainerController().acceptNewAgent("PeopleGroup"+(numPodsGenerated++), group)).start();
 		}
 		catch(Exception e)
 		{

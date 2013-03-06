@@ -15,37 +15,37 @@
 			<Station>
 				<name>Postaja1</name>
 				<position>(100,100)</position>
-				<podCapacity>10</podCapacity>
+				<podCapacity>40</podCapacity>
 				<peopleCapacity>100</peopleCapacity>
 			</Station>
 			<Station>
 				<name>Postaja2</name>
 				<position>(500,100)</position>
-				<podCapacity>10</podCapacity>
+				<podCapacity>40</podCapacity>
 				<peopleCapacity>100</peopleCapacity>
 			</Station>
 			<Station>
 				<name>Postaja3</name>
 				<position>(200,300)</position>
-				<podCapacity>10</podCapacity>
+				<podCapacity>40</podCapacity>
 				<peopleCapacity>100</peopleCapacity>
 			</Station>
 			<Station>
 				<name>Postaja4</name>
 				<position>(400,300)</position>
-				<podCapacity>10</podCapacity>
+				<podCapacity>40</podCapacity>
 				<peopleCapacity>100</peopleCapacity>
 			</Station>
 			<Station>
 				<name>Postaja5</name>
 				<position>(100,500)</position>
-				<podCapacity>30</podCapacity>
+				<podCapacity>40</podCapacity>
 				<peopleCapacity>100</peopleCapacity>
 			</Station>
 			<Station>
 				<name>Postaja6</name>
 				<position>(500,500)</position>
-				<podCapacity>10</podCapacity>
+				<podCapacity>40</podCapacity>
 				<peopleCapacity>100</peopleCapacity>
 			</Station>
 		</Stations>
