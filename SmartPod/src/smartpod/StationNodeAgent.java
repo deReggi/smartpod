@@ -374,6 +374,10 @@ public class StationNodeAgent extends NodeAgent
 								communicator.requestPodToRoadDeparture(podAID, firstRoadAID, destinationAID);
 								communicator.informNodeToNodePodArrival(podAID, destinationAID);
 							}
+							else
+							{
+								System.err.println("ERROR :: no pods to send =(");
+							}
 						}
 						else if (response.getPerformative() == ACLMessage.REFUSE)
 						{
