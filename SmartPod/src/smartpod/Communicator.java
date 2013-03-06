@@ -14,6 +14,7 @@ public class Communicator
 	/**
 	 * The message ontology.
 	 */
+	protected final String ONTOLOGY_NODE_NODE_ARRIVAL	= "node_node_arrival";
 	protected final String ONTOLOGY_POD_NODE_ARRIVAL	= "pod_node_arrival";
 	protected final String ONTOLOGY_POD_NODE_DEPARTURE	= "pod_node_departure";
 	protected final String ONTOLOGY_POD_ROAD_ATTACH		= "pod_road_attach";

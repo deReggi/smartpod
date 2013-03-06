@@ -31,6 +31,10 @@ public class NodeCommunicator extends Communicator
 			MessageTemplate.and(
 				MessageTemplate.MatchPerformative(ACLMessage.REQUEST),
 				MessageTemplate.MatchOntology(ONTOLOGY_PASSENGER_TRANSPORT));
+	private MessageTemplate podFinalArrivalTemplate = 
+			MessageTemplate.and(
+				MessageTemplate.MatchPerformative(ACLMessage.INFORM),
+				MessageTemplate.MatchOntology(ONTOLOGY_NODE_NODE_ARRIVAL));
 	
 	
 	/**
@@ -67,14 +71,14 @@ public class NodeCommunicator extends Communicator
 	}
 	
 	/**
-	 * Checks for received path finding result messages.
+	 * Checks for received pod to final destination arrival messages.
 	 * 
 	 * @return 
-	 *		ArrayList of received path finding result ACLMessages.
+	 *		ArrayList of received pod arrival ACLMessages.
 	 */
-	public ArrayList<ACLMessage> checkPathFindingResultMessages()
+	public ArrayList<ACLMessage> checkPodFromNodeArrivalMessages()
 	{
-		return checkMessageBox(pathFindResultTemplate);
+		return checkMessageBox(podFinalArrivalTemplate);
 	}
 	
 	/**
@@ -118,6 +122,25 @@ public class NodeCommunicator extends Communicator
 		msg.addReceiver(podAID);
 		msg.addUserDefinedParameter("road", roadAID.getLocalName());
 		msg.addUserDefinedParameter("destination", destinationAID.getLocalName());
+		agent.send(msg);
+	}
+	
+	/**
+	 * Sends INFORM message about the arrival of the pod to destination node.
+	 * 
+	 * @param podAID
+	 *		The agent id of the pod involved in the transfer.
+	 * @param destinationAID 
+	 *		The destination node agent id.
+	 */
+	public void informNodeToNodePodArrival(AID podAID, AID destinationAID)
+	{
+		System.out.printf("%-10s :: informNodeToNodePodArrival(%s,%s)\n",agent.getLocalName(),podAID.getLocalName(),destinationAID.getLocalName());
+		ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
+		msg.setOntology(ONTOLOGY_NODE_NODE_ARRIVAL);
+		msg.setContent("node to node pod transfer inform");
+		msg.addReceiver(destinationAID);
+		msg.addUserDefinedParameter("pod", podAID.getLocalName());
 		agent.send(msg);
 	}
 	

@@ -29,9 +29,13 @@ public class NodeAgent extends SPAgent
 	 */
 	public ArrayList<AID> registeredPods = new ArrayList<AID>();
 	/**
-	 * The currently registered pods in the process of departing the node.
+	 * The pods in the process of departing the node.
 	 */
 	public ArrayList<AID> departingPods = new ArrayList<AID>();
+	/**
+	 * The pods in the process of arriving at the node.
+	 */
+	public ArrayList<AID> arrivingPods = new ArrayList<AID>();
 	/**
 	 * The AID of the path finding agent.
 	 */
