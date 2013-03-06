@@ -100,6 +100,7 @@ public class StationNodeAgent extends NodeAgent
 
 		//adds the desired behaviour to the agent
 		addBehaviour(new StationAgentBehaviour(this));
+		addBehaviour(new CheckWeightPrediction(this, 3600));
 	}
 
 	/**
@@ -334,7 +335,7 @@ public class StationNodeAgent extends NodeAgent
 				public void handleResult(AID roadAID, double cost, AID podAID, AID destinationAID)
 				{
 					firstRoadAID = roadAID;
-					price = cost + (registeredPods.size() > 0 ? learner.predictNumRequestsForTimeFrame(getCurrentDate(), new Date(getCurrentTime() + 3 * 3600)) / registeredPods.size() : 1000);
+					price = cost + (registeredPods.size() > 0 ? neededPods / registeredPods.size() : 1000);
 				}
 			});
 
@@ -387,6 +388,30 @@ public class StationNodeAgent extends NodeAgent
 				}
 			});
 		}
+	}
+	
+	public class CheckWeightPrediction extends TickerBehaviour
+	{
+		public CheckWeightPrediction(Agent a, long period)
+		{
+			super(a, period);
+		}
+		
+		@Override
+		protected void onTick()
+		{
+			neededPods = (int)Math.ceil(learner.predictNumRequestsForTimeFrame(getCurrentDate(), new Date(getCurrentTime() + 3 * 3600)));
+			int delta = neededPods - registeredPods.size() + arrivingPods.size() + 1;
+			if (delta > 0)
+			{
+				while (delta > 0)
+				{
+					myAgent.addBehaviour(new PodBuyerBehaviour(myAgent));
+					delta--;
+				}
+			}
+		}
+		
 	}
 	
 	/***************************************************************************
