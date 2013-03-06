@@ -244,7 +244,10 @@ public class StationNodeAgent extends NodeAgent
 	{
 
 		ACLMessage msg = new ACLMessage(ACLMessage.QUERY_REF);
-		MessageTemplate template = MessageTemplate.MatchPerformative(ACLMessage.INFORM);
+		MessageTemplate template = 
+				MessageTemplate.and(
+					MessageTemplate.MatchPerformative(ACLMessage.INFORM),
+					MessageTemplate.MatchOntology("buyer_seller"));
 		double bestPrice = 9999;
 		ACLMessage bestOffer = null;
 		List<ACLMessage> offers = new ArrayList<ACLMessage>(stationList.size() - 1);
@@ -252,6 +255,8 @@ public class StationNodeAgent extends NodeAgent
 		public PodBuyerBehaviour(Agent a)
 		{
 			super(a);
+			
+			msg.setOntology("buyer_seller");
 
 			// Enquire pod prices from all the stations
 			ParallelBehaviour enquiry = new ParallelBehaviour(ParallelBehaviour.WHEN_ALL);
