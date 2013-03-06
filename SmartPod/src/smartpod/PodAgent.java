@@ -39,6 +39,7 @@ public class PodAgent extends SPAgent
 	private long currentTime = 0;
 	private double traveledPercentage = 0.0;
 	private AID currentRoad = null;
+	private double currentRoadWeight = 0.0;
 	
 	/***************************************************************************
 	 * Constructors
@@ -209,7 +210,8 @@ public class PodAgent extends SPAgent
 				currentSource		= new Vector2D(msg.getUserDefinedParameter("start_position"));
 				currentDestination	= new Vector2D(msg.getUserDefinedParameter("end_position"));
 				currentRoadLength	= currentSource.dist(currentDestination);
-				
+				currentRoadWeight	= Double.parseDouble(msg.getUserDefinedParameter("weight"));
+						
 				currentTime = getCurrentTime();
 				
 				onTheRoad = true;				
@@ -247,7 +249,7 @@ public class PodAgent extends SPAgent
 			if (!arrived)
 			{
 				// @todo neka funkcija hitrosti
-				double v = 0.0001;
+				double v = 0.0003/currentRoadWeight;
 
 				// the time needed for the whole journey with the given speed v
 				double journeyTime = currentRoadLength/v;

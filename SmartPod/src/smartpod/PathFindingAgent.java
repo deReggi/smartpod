@@ -156,8 +156,10 @@ public class PathFindingAgent extends SPAgent
 						ArrayList<PFNode> nodes = endNodeNameToNodeMap.get(child.nodeAID);
 						for (PFNode node : nodes)
 						{
+							openNodes.remove(node);
 							node.setParentNode(currentNode);
 						}
+						openNodes.add(child);
 					}
 				}
 			}

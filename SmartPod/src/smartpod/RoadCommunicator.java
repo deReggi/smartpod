@@ -78,6 +78,7 @@ public class RoadCommunicator extends Communicator
 		msg.addUserDefinedParameter("end_node", ((RoadAgent)agent).getEndNode().getLocalName());
 		msg.addUserDefinedParameter("start_position", ((RoadAgent)agent).getStartPosition().stringRepresentation());
 		msg.addUserDefinedParameter("end_position", ((RoadAgent)agent).getEndPosition().stringRepresentation());
+		msg.addUserDefinedParameter("weight", ((RoadAgent)agent).getWeightAsString());
 		agent.send(msg);
 	}
 	

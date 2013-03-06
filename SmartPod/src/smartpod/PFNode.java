@@ -14,7 +14,7 @@ public class PFNode
 	 * The weights used for cost calculation.
 	 */
 	private static final double distanceWeight	= 0.01;
-	private static final double heuristicWeight = 0.01;
+	private static final double heuristicWeight = 0.05;
 	
 	/**
 	 * The corresponding endNode position.
@@ -141,7 +141,7 @@ public class PFNode
 	public void setParentNode(PFNode parentNode)
 	{
 		this.parentNode = parentNode;
-		this.P = (parentNode != null ? parentNode.G + parentNode.C : 0.0);
+		this.P = (parentNode != null ? parentNode.G : 0.0);
 		this.G = P + C;
 		this.F = G + H;
 	}

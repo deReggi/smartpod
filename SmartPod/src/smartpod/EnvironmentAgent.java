@@ -146,7 +146,7 @@ public class EnvironmentAgent extends SPAgent
 
 //			AID garageAID = new AID("Postaja1", false);
 //			AID destinationAID = new AID("Postaja2", false);
-//			for (int i = 0; i < 13; i++)
+//			for (int i = 0; i < 5; i++)
 //			{
 //				PassengerGroupAgent testAgent2 = new PassengerGroupAgent(garageAID, destinationAID, 5000+i*500);
 //				((AgentController) getContainerController().acceptNewAgent("Janez"+i, testAgent2)).start();
@@ -156,14 +156,14 @@ public class EnvironmentAgent extends SPAgent
 
 
 
-//			AID garageAID = new AID("Garaža1",false);
-//			AID destinationAID = new AID("Postaja5",false);
-//			for (int i = 0; i < 30; i++)
-//			{
-////				AID destinationAID = new AID("Postaja"+(i%6+1),false);
-//				PassengerGroupAgent testAgent1 = new PassengerGroupAgent(garageAID, destinationAID, 3000+i*500);
-//				((AgentController) getContainerController().acceptNewAgent("Janez"+i, testAgent1)).start();
-//			}
+			AID garageAID = new AID("Garaža1",false);
+			AID destinationAID = new AID("Postaja5",false);
+			for (int i = 0; i < 30; i++)
+			{
+//				AID destinationAID = new AID("Postaja"+(i%6+1),false);
+				PassengerGroupAgent testAgent1 = new PassengerGroupAgent(garageAID, destinationAID, 3000+i*500);
+				((AgentController) getContainerController().acceptNewAgent("Janez"+i, testAgent1)).start();
+			}
 
 //			PassengerGroupAgent testAgent1 = new PassengerGroupAgent(garageAID, destinationAID, 100000);
 //			((AgentController) getContainerController().acceptNewAgent("Janez1234", testAgent1)).start();

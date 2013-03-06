@@ -8,7 +8,6 @@ import jade.core.Agent;
 import jade.core.behaviours.*;
 import jade.lang.acl.*;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -20,11 +19,10 @@ import java.util.List;
 public class StationNodeAgent extends NodeAgent
 {
 
-	/**
-	 * *************************************************************************
+	/***************************************************************************
 	 * Variables
-	 *************************************************************************
-	 */
+	 **************************************************************************/
+	
 	private int initialPodRequestsForPrediction = 5;
 	private RequestLearner learner = new RequestLearner(this);
 	
@@ -37,11 +35,10 @@ public class StationNodeAgent extends NodeAgent
 	 */
 	public ArrayList<ACLMessage> pendingRequests = new ArrayList<ACLMessage>();
 
-	/**
-	 * *************************************************************************
-	 * Constructors
-	 *************************************************************************
-	 */
+	/***************************************************************************
+	 * Constructor
+	 **************************************************************************/
+	
 	/**
 	 * Constructor method for the StationNodeAgent.
 	 *
@@ -55,52 +52,9 @@ public class StationNodeAgent extends NodeAgent
 		super(position, podsCapacity);
 	}
 
-	/**
-	 * *************************************************************************
+	/***************************************************************************
 	 * Public methods
-	 *************************************************************************
-	 */
-	/**
-	 * Method used for adding people to the station.
-	 *
-	 * @param n integer value representing the number of people to be added, if
-	 * the station has the sufficient capacity
-	 *
-	 * @return true if the adding operation succeeded or false if it failed.
-	 */
-	public boolean addPeopleToStation(int n)
-	{
-		if (peopleOnStation + n <= peopleCapacity)
-		{
-			peopleOnStation += n;
-			return true;
-		}
-		else
-		{
-			return false;
-		}
-	}
-
-	/**
-	 * Method used for removing people off the station.
-	 *
-	 * @param n integer value representing the number of people to be removed,
-	 * if the station has enough people on it.
-	 *
-	 * @return true if the adding operation succeeded or false if it failed
-	 */
-	public boolean removePeopleFromStation(int n)
-	{
-		if (peopleOnStation - n >= 0)
-		{
-			peopleOnStation -= n;
-			return true;
-		}
-		else
-		{
-			return false;
-		}
-	}
+	 **************************************************************************/
 
 	/**
 	 * Method fulfills the pending request and removes it from the queue.
@@ -124,15 +78,15 @@ public class StationNodeAgent extends NodeAgent
 			public void handleResult(AID roadAID, double cost, AID podAID, AID destinationAID)
 			{
 				communicator.requestPodToRoadDeparture(podAID, roadAID, destinationAID);
+				communicator.informNodeToNodePodArrival(podAID, destinationAID);
 			}
 		});
 	}
 
-	/**
-	 * *************************************************************************
+	/***************************************************************************
 	 * JADE setup and behaviors
-	 *************************************************************************
-	 */
+	 **************************************************************************/
+	
 	/**
 	 * This method gets called when agent is started. It adds the desired
 	 * behaviour to the agent.
@@ -141,7 +95,7 @@ public class StationNodeAgent extends NodeAgent
 	protected void setup()
 	{
 		//setting initial values for prediction
-		learner.setupWithInitialValue(initialPodRequestsForPrediction);
+//		learner.setupWithInitialValue(initialPodRequestsForPrediction);
 
 
 		//adds the desired behaviour to the agent
@@ -177,6 +131,14 @@ public class StationNodeAgent extends NodeAgent
 			{
 				departingPods.remove(msg.getSender());
 			}
+			
+			// check departure message box
+			ArrayList<ACLMessage> finalNodeMessages = communicator.checkPodFromNodeArrivalMessages();
+			for (ACLMessage msg : finalNodeMessages)
+			{
+				AID podAID = new AID(msg.getUserDefinedParameter("pod"),false);
+				arrivingPods.add(podAID);
+			}
 
 			// check arrival message box
 			ACLMessage arrivalMessage = communicator.checkPodArrivalRequests();
@@ -188,6 +150,7 @@ public class StationNodeAgent extends NodeAgent
 
 				if (!registeredPods.contains(podAID))
 				{
+					arrivingPods.remove(podAID);
 					registeredPods.add(podAID);
 
 					AID destinationAID = new AID(arrivalMessage.getUserDefinedParameter("destination"), false);
@@ -238,7 +201,11 @@ public class StationNodeAgent extends NodeAgent
 				else
 				{
 					pendingRequests.add(transportRequest);
-					myAgent.addBehaviour(new PodBuyerBehaviour(myAgent));
+
+					if (arrivingPods.size() < pendingRequests.size())
+					{
+						myAgent.addBehaviour(new PodBuyerBehaviour(myAgent));
+					}
 				}
 
 				//testing history logging and predicting...
@@ -263,6 +230,12 @@ public class StationNodeAgent extends NodeAgent
 			{
 				myAgent.addBehaviour(new PodOfferBehaviour(myAgent, podQuery));
 			}
+
+			// fetch needed pods
+//			if (predictedPodCount() < neededPods)
+//			{
+//				myAgent.addBehaviour(new PodBuyerBehaviour(myAgent));
+//			}
 		}
 	}
 
@@ -297,7 +270,7 @@ public class StationNodeAgent extends NodeAgent
 							{
 								double offer = Double.parseDouble(msg.getUserDefinedParameter("price"));
 
-								System.out.printf("%-10s :: Got offer from %s price %f\n", myAgent.getLocalName(), msg.getSender().getLocalName(), offer);
+//								System.out.printf("%-10s :: Got offer from %s price %f\n", myAgent.getLocalName(), msg.getSender().getLocalName(), offer);
 
 								if (offer < bestPrice)
 								{
@@ -361,7 +334,7 @@ public class StationNodeAgent extends NodeAgent
 				public void handleResult(AID roadAID, double cost, AID podAID, AID destinationAID)
 				{
 					firstRoadAID = roadAID;
-					price = cost + (registeredPods.size() > 0 ? learner.predictNumRequestsForTimeFrame(getCurrentDate(), new Date(getCurrentTime() + 3 * 3600)) / registeredPods.size() : 100);
+					price = cost + (registeredPods.size() > 0 ? learner.predictNumRequestsForTimeFrame(getCurrentDate(), new Date(getCurrentTime() + 3 * 3600)) / registeredPods.size() : 1000);
 				}
 			});
 
@@ -389,14 +362,18 @@ public class StationNodeAgent extends NodeAgent
 						{
 //							System.out.printf("\u001b[34m%-10s :: I am king\u001b[0m\n", myAgent.getLocalName());
 
-							AID podAID = registeredPods.get(registeredPods.size() - 1);
+							if (registeredPods.size() > 0)
+							{
+								AID podAID = registeredPods.get(registeredPods.size() - 1);
 
-							departingPods.add(podAID);
-							registeredPods.remove(podAID);
+								departingPods.add(podAID);
+								registeredPods.remove(podAID);
 
-							AID destinationAID = msg.getSender();
+								AID destinationAID = msg.getSender();
 
-							communicator.requestPodToRoadDeparture(podAID, firstRoadAID, destinationAID);
+								communicator.requestPodToRoadDeparture(podAID, firstRoadAID, destinationAID);
+								communicator.informNodeToNodePodArrival(podAID, destinationAID);
+							}
 						}
 						else if (response.getPerformative() == ACLMessage.REFUSE)
 						{
@@ -408,11 +385,10 @@ public class StationNodeAgent extends NodeAgent
 		}
 	}
 	
-	/**
-	 * *************************************************************************
+	/***************************************************************************
 	 * Getters & setters
-	 *************************************************************************
-	 */
+	 **************************************************************************/
+	
 	//<editor-fold defaultstate="collapsed" desc="Getters & setters">
 	/**
 	 * Method that returns the maximum number of people, that can be on this
@@ -468,4 +444,5 @@ public class StationNodeAgent extends NodeAgent
 		this.stationList = stationList;
 	}
 	//</editor-fold>
+	
 }

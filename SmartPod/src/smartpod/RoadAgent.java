@@ -79,7 +79,7 @@ public class RoadAgent extends SPAgent
 	public boolean recalculateWeight()
 	{
 		double oldWeight = totalWeight;
-		totalWeight = weight + registeredPods.size();
+		totalWeight = weight + 0.5*registeredPods.size();
 		return (oldWeight != totalWeight);
 	}
 	
